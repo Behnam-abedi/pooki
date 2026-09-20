@@ -65,5 +65,23 @@ class Pooki_Customizer {
 			'section'  => 'pooki_hero_section',
 			'settings' => 'pooki_hero_image',
 		] ) );
+
+		// Footer Section.
+		$wp_customize->add_section( 'pooki_footer_section', [
+			'title'       => esc_html__( 'Footer Settings', 'pooki' ),
+			'description' => esc_html__( 'Customize the global footer.', 'pooki' ),
+			'priority'    => 130,
+		] );
+
+		// Footer Copyright Text Setting.
+		$wp_customize->add_setting( 'pooki_footer_copyright', [
+			'default'           => '© 2026 Pooki. All rights reserved.',
+			'sanitize_callback' => 'sanitize_text_field',
+		] );
+		$wp_customize->add_control( 'pooki_footer_copyright', [
+			'label'   => esc_html__( 'Copyright Text', 'pooki' ),
+			'section' => 'pooki_footer_section',
+			'type'    => 'text',
+		] );
 	}
 }

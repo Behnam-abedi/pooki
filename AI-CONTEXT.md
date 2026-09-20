@@ -30,3 +30,4 @@
 - Step 17: Implemented 'Featured Products' component on the Front Page utilizing native WooCommerce shortcodes, automatically inheriting our globally injected Tailwind CSS loop wrappers.
 - Step 18: Created page.php template to render standard WordPress pages (including WooCommerce Cart and Checkout shortcode pages) with a centralized Tailwind CSS layout.
 - Step 19: Created single.php (with fetchpriority for LCP) and 404.php to complete core WordPress templates, applying semantic HTML and Tailwind CSS.
+- Step 20: Implemented global Footer component utilizing registered WP menus and native Customizer API for dynamic copyright text.

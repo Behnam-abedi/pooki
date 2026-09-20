@@ -28,6 +28,7 @@ class Pooki_Menus {
 		register_nav_menus( [
 			'primary' => esc_html__( 'Primary Desktop Menu', 'pooki' ),
 			'mobile'  => esc_html__( 'Mobile Menu', 'pooki' ),
+			'footer'  => esc_html__( 'Footer Menu', 'pooki' ),
 		] );
 	}
 }
