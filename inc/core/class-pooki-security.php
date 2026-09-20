@@ -26,6 +26,17 @@ class Pooki_Security {
 	 */
 	private function init_hooks() {
 		add_action( 'init', [ $this, 'clean_wp_head' ] );
+
+		// Disable XML-RPC to prevent DDoS and Brute-force attacks
+		add_filter( 'xmlrpc_enabled', '__return_false' );
+		
+		// Block User Enumeration
+		if ( ! is_admin() ) {
+			if ( isset( $_SERVER['QUERY_STRING'] ) && preg_match( '/author=([0-9]*)/i', $_SERVER['QUERY_STRING'] ) ) {
+				wp_redirect( home_url() );
+				exit;
+			}
+		}
 	}
 
 	/**
