@@ -34,3 +34,4 @@
 - Step 21: Created search.php template with a responsive Tailwind CSS grid to display search results uniformly, completing the core WordPress template hierarchy.
 - Step 22: Implemented SOLID WooCommerce Forms optimization (`Pooki_WooCommerce_Forms`) via native filters to remove checkout friction and globally inject Tailwind CSS input styles.
 - Step 23: Implemented Pooki_Performance class to aggressively dequeue default WooCommerce CSS bloat (including block styles), relying entirely on our local Vite/Tailwind build for maximum Core Web Vitals.
+- Step 24: Implemented WooCommerce notice template overrides (success, error, notice) to restore and modernize alert UI using Tailwind CSS after dequeueing default styles, optimized for RTL.
