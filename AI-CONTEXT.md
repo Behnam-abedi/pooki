@@ -28,3 +28,4 @@
 - Step 15: Polished Product Card UI internally using WooCommerce hooks in Pooki_WooCommerce_Loop to inject Tailwind padding wrappers, typography, and button styles without template overrides.
 - Step 16: Configured local typography architecture for Vazirmatn font and global RTL support in Tailwind CSS, maintaining our zero-CDN policy.
 - Step 17: Implemented 'Featured Products' component on the Front Page utilizing native WooCommerce shortcodes, automatically inheriting our globally injected Tailwind CSS loop wrappers.
+- Step 18: Created page.php template to render standard WordPress pages (including WooCommerce Cart and Checkout shortcode pages) with a centralized Tailwind CSS layout.
