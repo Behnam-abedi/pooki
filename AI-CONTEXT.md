@@ -43,3 +43,4 @@
 - Step 30: Enabled WooCommerce native product gallery features (Zoom, Lightbox, Slider) and successfully overrode the global quantity input template using Alpine.js and Tailwind CSS for a frictionless UI.
 - Step 31: Finalized asset pipeline and executed `npm run build` via Vite to compile Tailwind CSS and Alpine.js, successfully resolving 404 asset errors and applying the global UI design.
 - Step 32: Configured Vite Rollup options to disable filename hashing and implemented native PHP filemtime() cache-busting in theme init to resolve 404 asset errors.
+- Fixed enqueue paths in Pooki_Assets to correctly target assets/dist/style.css and assets/dist/main.js.

@@ -26,24 +26,18 @@ class Pooki_Assets {
 	 * Enqueue styles and scripts.
 	 */
 	public function enqueue_assets() {
-		$theme_version = wp_get_theme()->get( 'Version' );
+		$css_path = get_template_directory() . '/assets/dist/style.css';
+		$js_path  = get_template_directory() . '/assets/dist/main.js';
 
-		// CSS
-		$css_file = file_exists( get_template_directory() . '/assets/dist/main.css' ) ? 'main.css' : 'style.css';
-		$css_path = '/assets/dist/' . $css_file;
-		$css_uri  = get_template_directory_uri() . $css_path;
-		$css_dir  = get_template_directory() . $css_path;
-		$css_ver  = file_exists( $css_dir ) ? filemtime( $css_dir ) : $theme_version;
+		$css_uri = get_template_directory_uri() . '/assets/dist/style.css';
+		$js_uri  = get_template_directory_uri() . '/assets/dist/main.js';
 
-		wp_enqueue_style( 'pooki-main-style', $css_uri, [], $css_ver );
+		// Use filemtime for cache-busting if file exists, otherwise fallback
+		$css_ver = file_exists( $css_path ) ? filemtime( $css_path ) : '1.0.1';
+		$js_ver  = file_exists( $js_path ) ? filemtime( $js_path ) : '1.0.1';
 
-		// JS
-		$js_path = '/assets/dist/main.js';
-		$js_uri  = get_template_directory_uri() . $js_path;
-		$js_dir  = get_template_directory() . $js_path;
-		$js_ver  = file_exists( $js_dir ) ? filemtime( $js_dir ) : $theme_version;
-
-		wp_enqueue_script( 'pooki-main-script', $js_uri, [], $js_ver, true );
+		wp_enqueue_style( 'pooki-main-style', $css_uri, array(), $css_ver );
+		wp_enqueue_script( 'pooki-main-script', $js_uri, array('jquery'), $js_ver, true );
 	}
 
 	/**
