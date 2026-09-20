@@ -38,3 +38,4 @@
 - Step 25: Implemented a dedicated WooCommerce Product Search form component and integrated it seamlessly into the global Navbar using Tailwind CSS.
 - Step 26: Implemented modern 2-column sticky checkout layout (Pooki_WooCommerce_Checkout) strictly utilizing native WooCommerce actions to inject Tailwind CSS grid wrappers.
 - Step 27: Implemented modern hook-based layouts (Pooki_WooCommerce_Account) for the WooCommerce My Account dashboard and Login/Register pages utilizing Tailwind CSS.
+- Step 28: Implemented a Native Custom Theme Options Panel (Pooki_Theme_Options) using the WordPress Settings API to manage global store variables without ACF.
