@@ -47,6 +47,9 @@ final class Pooki_Theme_Init {
 	private function load_dependencies() {
 		require_once get_template_directory() . '/inc/core/class-pooki-assets.php';
 		new Pooki_Assets();
+
+		require_once get_template_directory() . '/inc/core/class-pooki-customizer.php';
+		new Pooki_Customizer();
 	}
 
 	/**
