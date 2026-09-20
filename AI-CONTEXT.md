@@ -32,3 +32,4 @@
 - Step 19: Created single.php (with fetchpriority for LCP) and 404.php to complete core WordPress templates, applying semantic HTML and Tailwind CSS.
 - Step 20: Implemented global Footer component utilizing registered WP menus and native Customizer API for dynamic copyright text.
 - Step 21: Created search.php template with a responsive Tailwind CSS grid to display search results uniformly, completing the core WordPress template hierarchy.
+- Step 22: Implemented SOLID WooCommerce Forms optimization (`Pooki_WooCommerce_Forms`) via native filters to remove checkout friction and globally inject Tailwind CSS input styles.

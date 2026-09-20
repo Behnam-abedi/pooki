@@ -65,6 +65,9 @@ final class Pooki_Theme_Init {
 
 		require_once get_template_directory() . '/inc/core/class-pooki-woocommerce-single.php';
 		new Pooki_WooCommerce_Single();
+
+		require_once get_template_directory() . '/inc/core/class-pooki-woocommerce-forms.php';
+		new Pooki_WooCommerce_Forms();
 	}
 
 	/**
