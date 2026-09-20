@@ -47,3 +47,4 @@
 - Step 33: Fixed Tailwind CSS content paths in tailwind.config.js to correctly scan all PHP template files and re-ran build to populate the final stylesheet.
 - Step 34: Migrated Tailwind configuration to v4 CSS-driven architecture (@source and @theme) and deleted tailwind.config.js, successfully generating fully populated stylesheets.
 - Step 35: Implemented Pooki_Security class to harden WordPress by removing version generators and `<head>` bloat (RSD, WLW, OEmbed), improving both security and Core Web Vitals.
+- Step 36: Implemented Pooki_SEO class to seamlessly override default WooCommerce breadcrumbs with Rank Math SEO breadcrumbs and removed WooCommerce generator tags for enhanced security and schema integrity.

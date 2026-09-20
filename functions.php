@@ -83,6 +83,9 @@ final class Pooki_Theme_Init {
 
 		require_once get_template_directory() . '/inc/core/class-pooki-security.php';
 		new Pooki_Security();
+
+		require_once get_template_directory() . '/inc/core/class-pooki-seo.php';
+		new Pooki_SEO();
 	}
 
 	/**
