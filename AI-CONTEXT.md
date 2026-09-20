@@ -17,3 +17,4 @@
 - Step 4: Created front-page.php and a reusable, niche-agnostic Hero UI component using Tailwind CSS and semantic HTML.
 - Step 5: Implemented SOLID Native Customizer API (Pooki_Customizer) to dynamically manage niche-agnostic Hero content, ensuring LCP image receives fetchpriority='high'.
 - Step 6: Implemented SOLID WooCommerce Core Support (`Pooki_WooCommerce`) to enable native WooCommerce integration and product gallery features.
+- Step 7: Configured WooCommerce layout wrappers natively using hooks to enforce Tailwind CSS container structures and semantic <main> tags, bypassing default WC wrappers.
