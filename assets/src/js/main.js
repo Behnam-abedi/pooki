@@ -8,3 +8,9 @@ document.addEventListener('alpine:init', () => {
 
 window.Alpine = Alpine;
 Alpine.start();
+
+if (typeof jQuery !== 'undefined') {
+  jQuery(document.body).on('added_to_cart', function() {
+    Alpine.store('cart').open = true;
+  });
+}

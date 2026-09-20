@@ -20,3 +20,4 @@
 - Step 7: Configured WooCommerce layout wrappers natively using hooks to enforce Tailwind CSS container structures and semantic <main> tags, bypassing default WC wrappers.
 - Step 8: Implemented SOLID Navigation system (Pooki_Menus) and integrated dynamic wp_nav_menu into the Tailwind/Alpine navbar component.
 - Step 9: Implemented Alpine.js Global Store (`Alpine.store('cart')`) and a frictionless Slide-out Cart Drawer UI component for optimized UX.
+- Step 10: Implemented SOLID WooCommerce AJAX cart fragments (Pooki_Cart_Ajax) and configured Alpine.js to auto-open the sliding drawer upon 'added_to_cart' events.

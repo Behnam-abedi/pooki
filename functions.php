@@ -56,6 +56,9 @@ final class Pooki_Theme_Init {
 
 		require_once get_template_directory() . '/inc/core/class-pooki-menus.php';
 		new Pooki_Menus();
+
+		require_once get_template_directory() . '/inc/core/class-pooki-cart-ajax.php';
+		new Pooki_Cart_Ajax();
 	}
 
 	/**
