@@ -74,6 +74,9 @@ final class Pooki_Theme_Init {
 
 		require_once get_template_directory() . '/inc/core/class-pooki-woocommerce-checkout.php';
 		new Pooki_WooCommerce_Checkout();
+
+		require_once get_template_directory() . '/inc/core/class-pooki-woocommerce-account.php';
+		new Pooki_WooCommerce_Account();
 	}
 
 	/**
