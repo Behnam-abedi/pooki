@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import './modules/single-ajax';
 
 document.addEventListener('alpine:init', () => {
   Alpine.store('cart', {
