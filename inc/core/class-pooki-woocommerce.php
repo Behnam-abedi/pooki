@@ -51,6 +51,7 @@ class Pooki_WooCommerce {
 	 */
 	public function wrapper_start() {
 		echo '<main id="primary" class="site-main container mx-auto px-4 py-8 max-w-7xl">';
+		get_template_part( 'template-parts/components/seo/breadcrumbs' );
 	}
 
 	/**

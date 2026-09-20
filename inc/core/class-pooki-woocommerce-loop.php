@@ -28,6 +28,10 @@ class Pooki_WooCommerce_Loop {
 		add_filter( 'woocommerce_product_loop_start', [ $this, 'loop_start' ], 10, 1 );
 		add_filter( 'woocommerce_product_loop_end', [ $this, 'loop_end' ], 10, 1 );
 		add_filter( 'post_class', [ $this, 'product_item_classes' ], 10, 3 );
+
+		// Optimize Archive SEO Descriptions
+		remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
+		add_action( 'woocommerce_archive_description', [ $this, 'custom_archive_description' ], 10 );
 	}
 
 	/**
@@ -75,5 +79,15 @@ class Pooki_WooCommerce_Loop {
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Output custom archive description.
+	 */
+	public function custom_archive_description() {
+		$description = get_the_archive_description();
+		if ( $description ) {
+			echo '<div class="pooki-seo-description text-gray-700 leading-relaxed mb-8 max-w-4xl">' . $description . '</div>';
+		}
 	}
 }
