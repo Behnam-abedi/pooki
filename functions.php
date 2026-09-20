@@ -37,7 +37,16 @@ final class Pooki_Theme_Init {
 	 * Constructor.
 	 */
 	private function __construct() {
+		$this->load_dependencies();
 		$this->init_hooks();
+	}
+
+	/**
+	 * Load required dependencies.
+	 */
+	private function load_dependencies() {
+		require_once get_template_directory() . '/inc/core/class-pooki-assets.php';
+		new Pooki_Assets();
 	}
 
 	/**
