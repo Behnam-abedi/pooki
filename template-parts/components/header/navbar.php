@@ -17,8 +17,19 @@
 			?>
 		</div>
 		
-		<div class="desktop-menu hidden md:flex items-center space-x-6">
-			<!-- Desktop Menu Placeholder -->
+		<div class="desktop-menu hidden md:flex items-center">
+			<?php
+			if ( has_nav_menu( 'primary' ) ) {
+				wp_nav_menu( [
+					'theme_location'  => 'primary',
+					'container'       => false,
+					'menu_class'      => 'flex space-x-6',
+					'fallback_cb'     => false,
+				] );
+			} else {
+				echo '<p class="text-sm text-gray-500">Assign a Primary Menu</p>';
+			}
+			?>
 		</div>
 
 		<button type="button" class="mobile-menu-toggle md:hidden" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle mobile menu">
@@ -29,7 +40,18 @@
 	<!-- Mobile Menu Dropdown Placeholder -->
 	<div class="mobile-menu md:hidden" x-show="mobileMenuOpen" x-transition style="display: none;">
 		<div class="px-4 py-2">
-			<!-- Mobile Menu Items Placeholder -->
+			<?php
+			if ( has_nav_menu( 'mobile' ) ) {
+				wp_nav_menu( [
+					'theme_location'  => 'mobile',
+					'container'       => false,
+					'menu_class'      => 'flex flex-col space-y-4',
+					'fallback_cb'     => false,
+				] );
+			} else {
+				echo '<p class="text-sm text-gray-500 py-2">Assign a Mobile Menu</p>';
+			}
+			?>
 		</div>
 	</div>
 </header>
