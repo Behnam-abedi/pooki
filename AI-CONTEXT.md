@@ -45,3 +45,4 @@
 - Step 32: Configured Vite Rollup options to disable filename hashing and implemented native PHP filemtime() cache-busting in theme init to resolve 404 asset errors.
 - Fixed enqueue paths in Pooki_Assets to correctly target assets/dist/style.css and assets/dist/main.js.
 - Step 33: Fixed Tailwind CSS content paths in tailwind.config.js to correctly scan all PHP template files and re-ran build to populate the final stylesheet.
+- Step 34: Migrated Tailwind configuration to v4 CSS-driven architecture (@source and @theme) and deleted tailwind.config.js, successfully generating fully populated stylesheets.
