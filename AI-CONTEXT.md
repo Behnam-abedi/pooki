@@ -40,3 +40,4 @@
 - Step 27: Implemented modern hook-based layouts (Pooki_WooCommerce_Account) for the WooCommerce My Account dashboard and Login/Register pages utilizing Tailwind CSS.
 - Step 28: Implemented a Native Custom Theme Options Panel (Pooki_Theme_Options) using the WordPress Settings API to manage global store variables without ACF.
 - Step 29: Created a dynamic frontend Top Bar component (`top-bar.php`) that securely consumes data from the native Theme Options API to display global announcements and support info.
+- Step 30: Enabled WooCommerce native product gallery features (Zoom, Lightbox, Slider) and successfully overrode the global quantity input template using Alpine.js and Tailwind CSS for a frictionless UI.
