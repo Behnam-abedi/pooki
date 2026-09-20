@@ -32,6 +32,17 @@ class Pooki_WooCommerce_Loop {
 		// Optimize Archive SEO Descriptions
 		remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
 		add_action( 'woocommerce_archive_description', [ $this, 'custom_archive_description' ], 10 );
+
+		// Product Card Content Wrapper
+		add_action( 'woocommerce_before_shop_loop_item_title', [ $this, 'card_content_wrapper_start' ], 15 );
+		add_action( 'woocommerce_after_shop_loop_item', [ $this, 'card_content_wrapper_end' ], 20 );
+
+		// Product Card Title
+		remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10 );
+		add_action( 'woocommerce_shop_loop_item_title', [ $this, 'custom_loop_product_title' ], 10 );
+
+		// Add to Cart Button Styling
+		add_filter( 'woocommerce_loop_add_to_cart_args', [ $this, 'custom_add_to_cart_args' ], 10, 2 );
 	}
 
 	/**
@@ -89,5 +100,38 @@ class Pooki_WooCommerce_Loop {
 		if ( $description ) {
 			echo '<div class="pooki-seo-description text-gray-700 leading-relaxed mb-8 max-w-4xl">' . $description . '</div>';
 		}
+	}
+
+	/**
+	 * Start product card content wrapper.
+	 */
+	public function card_content_wrapper_start() {
+		echo '<div class="p-4 flex flex-col flex-grow">';
+	}
+
+	/**
+	 * End product card content wrapper.
+	 */
+	public function card_content_wrapper_end() {
+		echo '</div>';
+	}
+
+	/**
+	 * Custom product loop title.
+	 */
+	public function custom_loop_product_title() {
+		echo '<h2 class="text-lg font-bold text-gray-800 mb-2 leading-tight">' . get_the_title() . '</h2>';
+	}
+
+	/**
+	 * Custom add to cart button args.
+	 *
+	 * @param array      $args    Arguments.
+	 * @param WC_Product $product Product object.
+	 * @return array
+	 */
+	public function custom_add_to_cart_args( $args, $product ) {
+		$args['class'] = isset( $args['class'] ) ? $args['class'] . ' mt-auto w-full block text-center bg-gray-900 text-white font-medium py-2 px-4 rounded-md hover:bg-gray-800 transition-colors' : 'mt-auto w-full block text-center bg-gray-900 text-white font-medium py-2 px-4 rounded-md hover:bg-gray-800 transition-colors';
+		return $args;
 	}
 }
