@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@config "../../../tailwind.config.js";
+
 /*
  * Vazirmatn Font
  * Note: Please manually upload the .woff2 font files to the assets/src/fonts/vazirmatn/ directory.

@@ -5,7 +5,7 @@ export default {
     "./*.php",
     "./inc/**/*.php",
     "./template-parts/**/*.php",
-    "./templates/**/*.php",
+    "./woocommerce/**/*.php",
     "./assets/src/**/*.js"
   ],
   theme: {

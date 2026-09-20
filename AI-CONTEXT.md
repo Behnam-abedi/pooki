@@ -44,3 +44,4 @@
 - Step 31: Finalized asset pipeline and executed `npm run build` via Vite to compile Tailwind CSS and Alpine.js, successfully resolving 404 asset errors and applying the global UI design.
 - Step 32: Configured Vite Rollup options to disable filename hashing and implemented native PHP filemtime() cache-busting in theme init to resolve 404 asset errors.
 - Fixed enqueue paths in Pooki_Assets to correctly target assets/dist/style.css and assets/dist/main.js.
+- Step 33: Fixed Tailwind CSS content paths in tailwind.config.js to correctly scan all PHP template files and re-ran build to populate the final stylesheet.
