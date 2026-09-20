@@ -80,6 +80,9 @@ final class Pooki_Theme_Init {
 
 		require_once get_template_directory() . '/inc/core/class-pooki-theme-options.php';
 		new Pooki_Theme_Options();
+
+		require_once get_template_directory() . '/inc/core/class-pooki-security.php';
+		new Pooki_Security();
 	}
 
 	/**
