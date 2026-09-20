@@ -29,7 +29,8 @@ class Pooki_Assets {
 		$theme_version = wp_get_theme()->get( 'Version' );
 
 		// CSS
-		$css_path = '/assets/dist/main.css';
+		$css_file = file_exists( get_template_directory() . '/assets/dist/main.css' ) ? 'main.css' : 'style.css';
+		$css_path = '/assets/dist/' . $css_file;
 		$css_uri  = get_template_directory_uri() . $css_path;
 		$css_dir  = get_template_directory() . $css_path;
 		$css_ver  = file_exists( $css_dir ) ? filemtime( $css_dir ) : $theme_version;

@@ -10,6 +10,11 @@ export default defineConfig({
       input: {
         main: resolve(import.meta.dirname, 'assets/src/js/main.js'),
         style: resolve(import.meta.dirname, 'assets/src/css/main.css')
+      },
+      output: {
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name].[ext]'
       }
     }
   }
