@@ -50,6 +50,9 @@ final class Pooki_Theme_Init {
 
 		require_once get_template_directory() . '/inc/core/class-pooki-customizer.php';
 		new Pooki_Customizer();
+
+		require_once get_template_directory() . '/inc/core/class-pooki-woocommerce.php';
+		new Pooki_WooCommerce();
 	}
 
 	/**
