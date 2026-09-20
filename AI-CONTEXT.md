@@ -36,3 +36,4 @@
 - Step 23: Implemented Pooki_Performance class to aggressively dequeue default WooCommerce CSS bloat (including block styles), relying entirely on our local Vite/Tailwind build for maximum Core Web Vitals.
 - Step 24: Implemented WooCommerce notice template overrides (success, error, notice) to restore and modernize alert UI using Tailwind CSS after dequeueing default styles, optimized for RTL.
 - Step 25: Implemented a dedicated WooCommerce Product Search form component and integrated it seamlessly into the global Navbar using Tailwind CSS.
+- Step 26: Implemented modern 2-column sticky checkout layout (Pooki_WooCommerce_Checkout) strictly utilizing native WooCommerce actions to inject Tailwind CSS grid wrappers.
