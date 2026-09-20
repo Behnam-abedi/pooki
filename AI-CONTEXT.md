@@ -12,3 +12,4 @@
 
 ## Status
 - Step 1 (Scaffolding): Complete
+- Step 2 (Core Templates & Header/Footer Components): Complete
