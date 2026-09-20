@@ -14,3 +14,4 @@
 - Step 1 (Scaffolding): Complete
 - Step 2 (Core Templates & Header/Footer Components): Complete
 - Step 3: Implemented SOLID Asset Management (`Pooki_Assets`) in `inc/core/` to enqueue Vite-compiled CSS and JS with ES Module support.
+- Step 4: Created front-page.php and a reusable, niche-agnostic Hero UI component using Tailwind CSS and semantic HTML.
