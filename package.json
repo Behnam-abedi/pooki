@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build"
   },
   "repository": {
     "type": "git",
@@ -13,12 +14,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/Behnam-abedi/pooki/issues"
   },
   "homepage": "https://github.com/Behnam-abedi/pooki#readme",
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
     "alpinejs": "^3.17.3",
     "autoprefixer": "^10.6.1",
     "postcss": "^8.5.28",
