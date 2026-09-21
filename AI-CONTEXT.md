@@ -60,4 +60,6 @@
 - Re-engineered the header (`navbar.php`) layout to centrally position a max-width responsive search bar, migrating it into an Alpine.js component (`pookiSearch`).
 - Hooked up live product searching via the `wp_ajax_nopriv_pooki_live_search` endpoint in `inc/core/class-pooki-woocommerce.php`, returning JSON arrays to dynamically render product titles, prices, and thumbnails within the header dropdown.
 - Fixed the AJAX persistence within the native Theme Options panel by properly scoping field sanitization and ensuring accurate nonce verification during `fetch()` submissions.
-- Built a dynamic CSS Variable injector hooked to `wp_head` that consumes `pooki_theme_options` and propagates `--pooki-header-height`, `--pooki-logo-height`, `--pooki-menu-color`, and `--pooki-menu-hover-color` securely into the frontend DOM (`navbar.php`).
+- Integrated the native WordPress Media Uploader (`wp.media`) into the Theme Options panel to manage custom logo selection alongside a live preview.
+- Extended the `wp_head` CSS injection to output advanced CSS variables for sticky header interactions (heights, background colors, and border colors).
+- Implemented Alpine.js `@scroll.window` tracking on `navbar.php` to dynamically swap variables and utility classes (like `shadow-md`), creating a buttery smooth sticky navigation state transition natively via Tailwind.

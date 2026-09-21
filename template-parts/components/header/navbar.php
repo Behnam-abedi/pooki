@@ -4,26 +4,69 @@
  *
  * @package Pooki
  */
+
+$opts = get_option( 'pooki_theme_options', [] );
+$sticky_enabled = isset( $opts['sticky_header_enabled'] ) && $opts['sticky_header_enabled'] ? true : false;
+$logo_url = isset( $opts['logo_url'] ) ? esc_url( $opts['logo_url'] ) : '';
+
+// Retrieve shadow options from db or fallback
+$header_shadow = isset( $opts['header_shadow'] ) ? $opts['header_shadow'] : 'sm';
+$sticky_shadow = isset( $opts['sticky_shadow'] ) ? $opts['sticky_shadow'] : 'md';
+
+// Base shadow classes
+$shadow_classes = [
+	'none' => 'shadow-none',
+	'sm'   => 'shadow-sm',
+	'md'   => 'shadow-md',
+	'lg'   => 'shadow-lg',
+];
+$base_shadow = isset( $shadow_classes[ $header_shadow ] ) ? $shadow_classes[ $header_shadow ] : 'shadow-sm';
+$stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $sticky_shadow ] : 'shadow-md';
+
 ?>
-<header class="site-header w-full bg-white shadow-sm sticky top-0 z-40" x-data="{ mobileMenuOpen: false }">
+<header 
+	class="site-header w-full sticky top-0 z-40 transition-all duration-300 border-b"
+	x-data="{ mobileMenuOpen: false, isSticky: false }"
+	<?php if ( $sticky_enabled ) : ?>
+	@scroll.window="isSticky = (window.pageYOffset > 50)"
+	<?php endif; ?>
+	:class="{
+		'<?php echo esc_attr( $stick_shadow ); ?>': isSticky,
+		'<?php echo esc_attr( $base_shadow ); ?>': !isSticky
+	}"
+	:style="{
+		backgroundColor: isSticky ? 'var(--pooki-sticky-bg)' : 'var(--pooki-header-bg)',
+		borderColor: isSticky ? 'var(--pooki-sticky-border)' : 'var(--pooki-header-border)'
+	}"
+>
 	<!-- Assume html dir="rtl", so flex row goes Right to Left -->
-	<nav class="container mx-auto px-4 flex justify-between items-center" aria-label="Main Navigation" style="min-height: var(--pooki-header-height, 80px);">
+	<nav 
+		class="container mx-auto px-4 flex justify-between items-center transition-all duration-300" 
+		aria-label="Main Navigation" 
+		:style="{ minHeight: isSticky ? 'var(--pooki-sticky-h)' : 'var(--pooki-header-h)' }"
+	>
 		
 		<!-- Right: Logo & Optional Nav -->
 		<div class="flex items-center gap-x-8 flex-shrink-0">
 			<!-- Logo -->
-			<div class="site-branding flex items-center" style="height: var(--pooki-logo-height, 48px);">
-				<?php
-				if ( has_custom_logo() ) {
-					$custom_logo_id = get_theme_mod( 'custom_logo' );
-					$logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
-					echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="h-full block">';
-					echo '<img src="' . esc_url( $logo[0] ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="h-full w-auto object-contain">';
-					echo '</a>';
-				} else {
-					echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-2xl font-black text-pooki-pink hover:text-pooki-pink-dark transition-colors">' . esc_html( get_bloginfo( 'name' ) ) . '</a>';
-				}
-				?>
+			<div class="site-branding flex items-center transition-all duration-300" :style="{ height: isSticky ? 'var(--pooki-sticky-logo-h)' : 'var(--pooki-logo-h)' }">
+				<?php if ( ! empty( $logo_url ) ) : ?>
+					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="h-full block">
+						<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" class="h-full w-auto object-contain" fetchpriority="high">
+					</a>
+				<?php else : ?>
+					<?php
+					if ( has_custom_logo() ) {
+						$custom_logo_id = get_theme_mod( 'custom_logo' );
+						$logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+						echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="h-full block">';
+						echo '<img src="' . esc_url( $logo[0] ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="h-full w-auto object-contain" fetchpriority="high">';
+						echo '</a>';
+					} else {
+						echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-2xl font-black text-pooki-pink hover:text-pooki-pink-dark transition-colors">' . esc_html( get_bloginfo( 'name' ) ) . '</a>';
+					}
+					?>
+				<?php endif; ?>
 			</div>
 			
 			<!-- Desktop Navigation (Moved next to logo) -->
