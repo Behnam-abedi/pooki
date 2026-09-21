@@ -164,18 +164,61 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
 			</button>
 
-			<!-- Login Icon -->
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full text-gray-700 hover:bg-pooki-blue hover:text-white transition-colors" aria-label="My Account">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-			</a>
+			<!-- Dynamic Header Actions -->
+			<?php
+			$action_items = isset( $opts['header_action_items'] ) && is_array( $opts['header_action_items'] ) ? $opts['header_action_items'] : [];
+			if ( empty( $action_items ) ) {
+				$action_items = [
+					[ 'type' => 'account', 'label' => '', 'icon_svg' => '' ],
+					[ 'type' => 'cart', 'label' => '', 'icon_svg' => '' ],
+				];
+			}
 
-			<!-- Cart Icon (Triggers Alpine Drawer) -->
-			<button type="button" class="relative flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full text-gray-700 hover:bg-pooki-blue hover:text-white transition-colors" @click="$store.cart.toggle()" aria-label="Open cart">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-				<span id="pooki-cart-count" class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-pooki-pink text-[10px] font-bold text-white shadow-sm">
-					<?php echo esc_html( class_exists( 'WooCommerce' ) ? WC()->cart->get_cart_contents_count() : 0 ); ?>
-				</span>
-			</button>
+			foreach ( $action_items as $action ) {
+				$type  = $action['type'];
+				$label = ! empty( $action['label'] ) ? esc_html( $action['label'] ) : '';
+				$url   = ! empty( $action['url'] ) ? esc_url( $action['url'] ) : '#';
+				$svg   = ! empty( $action['icon_svg'] ) ? $action['icon_svg'] : '';
+
+				if ( empty( $svg ) ) {
+					// Fallback SVGs
+					if ( 'cart' === $type ) {
+						$svg = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>';
+					} elseif ( 'account' === $type ) {
+						$svg = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>';
+					} else {
+						$svg = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>';
+					}
+				}
+
+				if ( 'cart' === $type ) {
+					?>
+					<button type="button" class="relative pooki-action-btn" @click="$store.cart.toggle()" aria-label="Cart">
+						<?php echo $svg; ?>
+						<?php if ( $label ) echo '<span>' . $label . '</span>'; ?>
+						<span id="pooki-cart-count" class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-pooki-pink text-[10px] font-bold text-white shadow-sm">
+							<?php echo esc_html( pooki_to_persian_num( class_exists( 'WooCommerce' ) ? WC()->cart->get_cart_contents_count() : 0 ) ); ?>
+						</span>
+					</button>
+					<?php
+				} elseif ( 'account' === $type ) {
+					$account_url = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url();
+					?>
+					<a href="<?php echo esc_url( $account_url ); ?>" class="pooki-action-btn" aria-label="Account">
+						<?php echo $svg; ?>
+						<?php if ( $label ) echo '<span>' . $label . '</span>'; ?>
+					</a>
+					<?php
+				} else {
+					?>
+					<a href="<?php echo esc_url( $url ); ?>" class="pooki-action-btn" aria-label="Link">
+						<?php echo $svg; ?>
+						<?php if ( $label ) echo '<span>' . $label . '</span>'; ?>
+					</a>
+					<?php
+				}
+			}
+			?>
 
 			<!-- Mobile Menu Toggle -->
 			<button type="button" class="lg:hidden flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full text-gray-700 hover:bg-pooki-blue hover:text-white transition-colors" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle mobile menu">

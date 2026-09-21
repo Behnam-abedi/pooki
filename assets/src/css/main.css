@@ -35,6 +35,7 @@
     .pooki-search-input {
         height: var(--pooki-search-h, 44px);
         font-size: var(--pooki-search-font-size, 14px);
+        color: var(--pooki-search-color, #111827);
         background-color: var(--pooki-search-bg, #f3f4f6);
         border-radius: var(--pooki-search-radius, 9999px);
         border-width: var(--pooki-search-border-w, 1px);
@@ -42,11 +43,43 @@
         border-style: solid;
         transition: all 200ms ease-in-out;
     }
+
+    .pooki-search-input::placeholder {
+        color: var(--pooki-search-placeholder, #9ca3af);
+    }
     
     .pooki-search-input:focus {
         background-color: var(--pooki-search-focus-bg, #ffffff);
         border-width: var(--pooki-search-focus-border-w, 2px);
         border-color: var(--pooki-search-focus-border-c, #ec4899);
         outline: none;
+    }
+
+    .pooki-action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background-color: var(--pooki-action-bg, transparent);
+        border: 1px solid var(--pooki-action-border, transparent);
+        border-radius: var(--pooki-action-radius, 8px);
+        color: var(--pooki-action-text-c, #374151);
+        font-size: var(--pooki-action-font-size, 13px);
+        padding: 0.5rem 0.75rem;
+        transition: all 200ms ease-in-out;
+        font-weight: 500;
+    }
+    .pooki-action-btn:hover {
+        background-color: var(--pooki-action-bg-hover, #f3f4f6);
+        color: var(--pooki-action-text-hover-c, #ec4899);
+    }
+    .pooki-action-btn svg {
+        width: var(--pooki-action-icon-size, 20px);
+        height: var(--pooki-action-icon-size, 20px);
+        color: var(--pooki-action-icon-c, #374151);
+        transition: all 200ms ease-in-out;
+    }
+    .pooki-action-btn:hover svg {
+        color: var(--pooki-action-icon-hover-c, #ec4899);
     }
 }

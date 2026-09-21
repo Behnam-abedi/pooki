@@ -126,3 +126,14 @@ if ( ! function_exists( 'pooki_the_breadcrumbs' ) ) {
 		}
 	}
 }
+
+/**
+ * Convert english numbers to persian.
+ */
+if ( ! function_exists( 'pooki_to_persian_num' ) ) {
+	function pooki_to_persian_num( $number ) {
+		$en = ['0','1','2','3','4','5','6','7','8','9'];
+		$fa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+		return str_replace( $en, $fa, (string) $number );
+	}
+}

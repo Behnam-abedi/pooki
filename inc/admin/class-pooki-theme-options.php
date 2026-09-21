@@ -111,6 +111,8 @@ class Pooki_Theme_Options {
 
 		add_settings_field( 'search_height', 'ارتفاع فرم (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_height', 'default' => 44 ] );
 		add_settings_field( 'search_font_size', 'اندازه متن (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_font_size', 'default' => 14 ] );
+		add_settings_field( 'search_text_color', 'رنگ متن', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_text_color', 'default' => '#111827' ] );
+		add_settings_field( 'search_placeholder_color', 'رنگ متغیر (Placeholder)', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_placeholder_color', 'default' => '#9ca3af' ] );
 		add_settings_field( 'search_bg_color', 'رنگ پس‌زمینه عادی', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_bg_color', 'default' => '#f3f4f6' ] );
 		add_settings_field( 'search_focus_bg_color', 'رنگ پس‌زمینه فوکوس', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_focus_bg_color', 'default' => '#ffffff' ] );
 		add_settings_field( 'search_border_radius', 'گردی گوشه‌ها (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_radius', 'default' => 9999 ] );
@@ -118,6 +120,27 @@ class Pooki_Theme_Options {
 		add_settings_field( 'search_focus_border_width', 'ضخامت حاشیه فوکوس (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_focus_border_width', 'default' => 2 ] );
 		add_settings_field( 'search_border_color', 'رنگ حاشیه عادی', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_color', 'default' => '#e5e7eb' ] );
 		add_settings_field( 'search_focus_border_color', 'رنگ حاشیه فوکوس', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_focus_border_color', 'default' => '#ec4899' ] );
+
+		// Header Actions Section
+		add_settings_section( 'pooki_actions_section', 'تنظیمات دکمه‌های سربرگ', null, 'pooki-settings-header' );
+
+		add_settings_field( 'header_action_icon_size', 'اندازه آیکون (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_icon_size', 'default' => 20 ] );
+		add_settings_field( 'header_action_font_size', 'اندازه متن (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_font_size', 'default' => 13 ] );
+		add_settings_field( 'header_action_radius', 'گردی گوشه‌ها (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_radius', 'default' => 8 ] );
+		
+		add_settings_field( 'header_action_icon_color', 'رنگ آیکون', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_icon_color', 'default' => '#374151' ] );
+		add_settings_field( 'header_action_icon_hover_color', 'رنگ هاور آیکون', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_icon_hover_color', 'default' => '#ec4899' ] );
+		
+		add_settings_field( 'header_action_text_color', 'رنگ متن', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_text_color', 'default' => '#374151' ] );
+		add_settings_field( 'header_action_text_hover_color', 'رنگ هاور متن', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_text_hover_color', 'default' => '#ec4899' ] );
+		
+		add_settings_field( 'header_action_bg_color', 'رنگ پس‌زمینه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_bg_color', 'default' => 'transparent' ] );
+		add_settings_field( 'header_action_bg_hover_color', 'رنگ هاور پس‌زمینه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_bg_hover_color', 'default' => '#f3f4f6' ] );
+		
+		add_settings_field( 'header_action_border_color', 'رنگ حاشیه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_border_color', 'default' => 'transparent' ] );
+		
+		add_settings_field( 'header_action_items', 'مدیریت دکمه‌ها', [ $this, 'render_repeater_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_items' ] );
+
 	}
 
 	/**
@@ -191,6 +214,21 @@ class Pooki_Theme_Options {
 	}
 
 	/**
+	 * Render Repeater Field (JSON Based)
+	 */
+	public function render_repeater_field( $args ) {
+		$options = get_option( 'pooki_theme_options' );
+		$id      = $args['id'];
+		$value   = isset( $options[ $id ] ) && is_array( $options[ $id ] ) ? $options[ $id ] : [];
+		$json_value = wp_json_encode( $value );
+
+		echo '<input type="hidden" id="pooki_repeater_' . esc_attr( $id ) . '" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $json_value ) . '" />';
+		echo '<div id="pooki_repeater_ui_' . esc_attr( $id ) . '"></div>';
+
+		// We will inject a script inside the render_admin_page to handle this securely.
+	}
+
+	/**
 	 * Handle AJAX save of theme options.
 	 */
 	public function ajax_save_options() {
@@ -217,14 +255,18 @@ class Pooki_Theme_Options {
 				'header_shadow'         => 'key',
 				'menu_text_color'       => 'color',
 				'menu_hover_color'      => 'color',
+				
 				'sticky_header_enabled' => 'bool',
 				'sticky_header_height'  => 'int',
 				'sticky_logo_height'    => 'int',
 				'sticky_bg_color'       => 'color',
 				'sticky_border_color'   => 'color',
 				'sticky_shadow'         => 'key',
+				
 				'search_height'         => 'int',
 				'search_font_size'      => 'int',
+				'search_text_color'     => 'color',
+				'search_placeholder_color' => 'color',
 				'search_bg_color'       => 'color',
 				'search_focus_bg_color' => 'color',
 				'search_border_radius'  => 'int',
@@ -232,6 +274,18 @@ class Pooki_Theme_Options {
 				'search_focus_border_width' => 'int',
 				'search_border_color'   => 'color',
 				'search_focus_border_color' => 'color',
+
+				'header_action_icon_size'          => 'int',
+				'header_action_font_size'          => 'int',
+				'header_action_radius'             => 'int',
+				'header_action_icon_color'         => 'color',
+				'header_action_icon_hover_color'   => 'color',
+				'header_action_text_color'         => 'color',
+				'header_action_text_hover_color'   => 'color',
+				'header_action_bg_color'           => 'color',
+				'header_action_bg_hover_color'     => 'color',
+				'header_action_border_color'       => 'color',
+				'header_action_items'              => 'repeater',
 			];
 
 			foreach ( $fields as $field => $type ) {
@@ -244,11 +298,61 @@ class Pooki_Theme_Options {
 					if ( 'int' === $type ) {
 						$options[ $field ] = absint( $posted[ $field ] );
 					} elseif ( 'color' === $type ) {
-						$options[ $field ] = sanitize_hex_color( $posted[ $field ] );
+						// 'transparent' is valid in CSS
+						if ( $posted[ $field ] === 'transparent' ) {
+							$options[ $field ] = 'transparent';
+						} else {
+							$options[ $field ] = sanitize_hex_color( $posted[ $field ] );
+						}
 					} elseif ( 'url' === $type ) {
 						$options[ $field ] = esc_url_raw( $posted[ $field ] );
 					} elseif ( 'key' === $type ) {
 						$options[ $field ] = sanitize_key( $posted[ $field ] );
+					} elseif ( 'repeater' === $type ) {
+						// Process repeater JSON string securely
+						$json_data = json_decode( wp_unslash( $posted[ $field ] ), true );
+						$items = [];
+						if ( is_array( $json_data ) ) {
+							// Allowed SVG tags
+							$svg_args = [
+								'svg' => [
+									'class'           => true,
+									'fill'            => true,
+									'viewbox'         => true,
+									'xmlns'           => true,
+									'stroke'          => true,
+									'stroke-width'    => true,
+									'stroke-linecap'  => true,
+									'stroke-linejoin' => true,
+								],
+								'path' => [
+									'd'               => true,
+									'fill'            => true,
+									'stroke'          => true,
+									'stroke-width'    => true,
+									'stroke-linecap'  => true,
+									'stroke-linejoin' => true,
+								],
+								'circle' => [
+									'cx'              => true,
+									'cy'              => true,
+									'r'               => true,
+									'fill'            => true,
+									'stroke'          => true,
+									'stroke-width'    => true,
+								]
+							];
+							
+							foreach ( $json_data as $item ) {
+								$items[] = [
+									'type'     => isset( $item['type'] ) ? sanitize_key( $item['type'] ) : '',
+									'label'    => isset( $item['label'] ) ? sanitize_text_field( $item['label'] ) : '',
+									'url'      => isset( $item['url'] ) ? esc_url_raw( $item['url'] ) : '',
+									'icon_svg' => isset( $item['icon_svg'] ) ? wp_kses( $item['icon_svg'], $svg_args ) : '',
+								];
+							}
+						}
+						$options[ $field ] = $items;
 					}
 				}
 			}
@@ -281,6 +385,8 @@ class Pooki_Theme_Options {
 
 		$search_height         = absint( isset( $opts['search_height'] ) ? $opts['search_height'] : 44 );
 		$search_font_size      = absint( isset( $opts['search_font_size'] ) ? $opts['search_font_size'] : 14 );
+		$search_text_color     = sanitize_hex_color( isset( $opts['search_text_color'] ) ? $opts['search_text_color'] : '#111827' );
+		$search_placeholder    = sanitize_hex_color( isset( $opts['search_placeholder_color'] ) ? $opts['search_placeholder_color'] : '#9ca3af' );
 		$search_bg             = sanitize_hex_color( isset( $opts['search_bg_color'] ) ? $opts['search_bg_color'] : '#f3f4f6' );
 		$search_focus_bg       = sanitize_hex_color( isset( $opts['search_focus_bg_color'] ) ? $opts['search_focus_bg_color'] : '#ffffff' );
 		$search_radius         = absint( isset( $opts['search_border_radius'] ) ? $opts['search_border_radius'] : 9999 );
@@ -288,6 +394,18 @@ class Pooki_Theme_Options {
 		$search_focus_border_w = absint( isset( $opts['search_focus_border_width'] ) ? $opts['search_focus_border_width'] : 2 );
 		$search_border_c       = sanitize_hex_color( isset( $opts['search_border_color'] ) ? $opts['search_border_color'] : '#e5e7eb' );
 		$search_focus_border_c = sanitize_hex_color( isset( $opts['search_focus_border_color'] ) ? $opts['search_focus_border_color'] : '#ec4899' );
+
+		$action_icon_size  = absint( isset( $opts['header_action_icon_size'] ) ? $opts['header_action_icon_size'] : 20 );
+		$action_font_size  = absint( isset( $opts['header_action_font_size'] ) ? $opts['header_action_font_size'] : 13 );
+		$action_radius     = absint( isset( $opts['header_action_radius'] ) ? $opts['header_action_radius'] : 8 );
+		
+		$action_icon_c       = esc_attr( isset( $opts['header_action_icon_color'] ) ? $opts['header_action_icon_color'] : '#374151' );
+		$action_icon_hover_c = esc_attr( isset( $opts['header_action_icon_hover_color'] ) ? $opts['header_action_icon_hover_color'] : '#ec4899' );
+		$action_text_c       = esc_attr( isset( $opts['header_action_text_color'] ) ? $opts['header_action_text_color'] : '#374151' );
+		$action_text_hover_c = esc_attr( isset( $opts['header_action_text_hover_color'] ) ? $opts['header_action_text_hover_color'] : '#ec4899' );
+		$action_bg           = esc_attr( isset( $opts['header_action_bg_color'] ) ? $opts['header_action_bg_color'] : 'transparent' );
+		$action_bg_hover     = esc_attr( isset( $opts['header_action_bg_hover_color'] ) ? $opts['header_action_bg_hover_color'] : '#f3f4f6' );
+		$action_border       = esc_attr( isset( $opts['header_action_border_color'] ) ? $opts['header_action_border_color'] : 'transparent' );
 
 		echo '<style id="pooki-header-dynamic-vars">';
 		echo ':root {';
@@ -306,6 +424,8 @@ class Pooki_Theme_Options {
 
 		echo '--pooki-search-h: ' . esc_attr( $search_height ) . 'px;';
 		echo '--pooki-search-font-size: ' . esc_attr( $search_font_size ) . 'px;';
+		echo '--pooki-search-color: ' . esc_attr( $search_text_color ) . ';';
+		echo '--pooki-search-placeholder: ' . esc_attr( $search_placeholder ) . ';';
 		echo '--pooki-search-bg: ' . esc_attr( $search_bg ) . ';';
 		echo '--pooki-search-focus-bg: ' . esc_attr( $search_focus_bg ) . ';';
 		echo '--pooki-search-radius: ' . esc_attr( $search_radius ) . 'px;';
@@ -314,6 +434,16 @@ class Pooki_Theme_Options {
 		echo '--pooki-search-border-c: ' . esc_attr( $search_border_c ) . ';';
 		echo '--pooki-search-focus-border-c: ' . esc_attr( $search_focus_border_c ) . ';';
 
+		echo '--pooki-action-icon-size: ' . esc_attr( $action_icon_size ) . 'px;';
+		echo '--pooki-action-font-size: ' . esc_attr( $action_font_size ) . 'px;';
+		echo '--pooki-action-radius: ' . esc_attr( $action_radius ) . 'px;';
+		echo '--pooki-action-icon-c: ' . esc_attr( $action_icon_c ) . ';';
+		echo '--pooki-action-icon-hover-c: ' . esc_attr( $action_icon_hover_c ) . ';';
+		echo '--pooki-action-text-c: ' . esc_attr( $action_text_c ) . ';';
+		echo '--pooki-action-text-hover-c: ' . esc_attr( $action_text_hover_c ) . ';';
+		echo '--pooki-action-bg: ' . esc_attr( $action_bg ) . ';';
+		echo '--pooki-action-bg-hover: ' . esc_attr( $action_bg_hover ) . ';';
+		echo '--pooki-action-border: ' . esc_attr( $action_border ) . ';';
 		echo '}';
 		echo '</style>';
 	}
@@ -399,6 +529,86 @@ class Pooki_Theme_Options {
 					previewDiv.innerHTML = '<span style="color: #999; font-size: 12px;">بدون تصویر</span>';
 				});
 			});
+
+			// Header Actions Repeater Logic
+			const repeaterInput = document.getElementById('pooki_repeater_header_action_items');
+			if (repeaterInput) {
+				const repeaterUI = document.getElementById('pooki_repeater_ui_header_action_items');
+				let items = [];
+				try {
+					items = JSON.parse(repeaterInput.value) || [];
+				} catch(e) {
+					items = [];
+				}
+
+				function renderRepeater() {
+					repeaterUI.innerHTML = '';
+					items.forEach((item, index) => {
+						const box = document.createElement('div');
+						box.style.border = '1px solid #ccc';
+						box.style.background = '#f9f9f9';
+						box.style.padding = '15px';
+						box.style.marginBottom = '10px';
+						box.innerHTML = `
+							<div style="display: flex; gap: 10px; margin-bottom: 10px;">
+								<select class="item-type" data-index="${index}">
+									<option value="cart" ${item.type === 'cart' ? 'selected' : ''}>سبد خرید (Cart)</option>
+									<option value="account" ${item.type === 'account' ? 'selected' : ''}>حساب کاربری (Account)</option>
+									<option value="custom" ${item.type === 'custom' ? 'selected' : ''}>سفارشی (Custom)</option>
+								</select>
+								<input type="text" class="item-label regular-text" placeholder="عنوان (اختیاری)" data-index="${index}" value="${item.label ? item.label.replace(/"/g, '&quot;') : ''}">
+								<input type="text" class="item-url regular-text" placeholder="آدرس لینک (برای سفارشی)" data-index="${index}" value="${item.url ? item.url.replace(/"/g, '&quot;') : ''}">
+							</div>
+							<div>
+								<textarea class="item-svg large-text" placeholder="کد SVG آیکون (اختیاری - پیش‌فرض استفاده خواهد شد)" data-index="${index}" style="height:60px;">${item.icon_svg ? item.icon_svg : ''}</textarea>
+							</div>
+							<div style="text-align: left; margin-top: 10px;">
+								<button type="button" class="button button-link-delete remove-item" data-index="${index}">حذف این دکمه</button>
+							</div>
+						`;
+						repeaterUI.appendChild(box);
+					});
+
+					const addBtn = document.createElement('button');
+					addBtn.type = 'button';
+					addBtn.className = 'button button-secondary';
+					addBtn.innerText = '+ افزودن دکمه جدید';
+					addBtn.addEventListener('click', () => {
+						items.push({ type: 'custom', label: '', url: '', icon_svg: '' });
+						updateHiddenAndRender();
+					});
+					repeaterUI.appendChild(addBtn);
+
+					// Bind events
+					repeaterUI.querySelectorAll('.item-type').forEach(el => el.addEventListener('change', updateItem));
+					repeaterUI.querySelectorAll('.item-label').forEach(el => el.addEventListener('input', updateItem));
+					repeaterUI.querySelectorAll('.item-url').forEach(el => el.addEventListener('input', updateItem));
+					repeaterUI.querySelectorAll('.item-svg').forEach(el => el.addEventListener('input', updateItem));
+					repeaterUI.querySelectorAll('.remove-item').forEach(el => {
+						el.addEventListener('click', (e) => {
+							const idx = e.target.dataset.index;
+							items.splice(idx, 1);
+							updateHiddenAndRender();
+						});
+					});
+				}
+
+				function updateItem(e) {
+					const idx = e.target.dataset.index;
+					if (e.target.classList.contains('item-type')) items[idx].type = e.target.value;
+					if (e.target.classList.contains('item-label')) items[idx].label = e.target.value;
+					if (e.target.classList.contains('item-url')) items[idx].url = e.target.value;
+					if (e.target.classList.contains('item-svg')) items[idx].icon_svg = e.target.value;
+					repeaterInput.value = JSON.stringify(items);
+				}
+
+				function updateHiddenAndRender() {
+					repeaterInput.value = JSON.stringify(items);
+					renderRepeater();
+				}
+
+				renderRepeater();
+			}
 
 			// AJAX Save
 			document.getElementById('pooki-settings-form').addEventListener('submit', function(e) {

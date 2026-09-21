@@ -62,5 +62,7 @@
 - Fixed the AJAX persistence within the native Theme Options panel by properly scoping field sanitization and ensuring accurate nonce verification during `fetch()` submissions.
 - Integrated the native WordPress Media Uploader (`wp.media`) into the Theme Options panel to manage custom logo selection alongside a live preview.
 - Extended the `wp_head` CSS injection to output advanced CSS variables for sticky header interactions (heights, background colors, and border colors).
-- Added comprehensive live search input customizations (height, typography, backgrounds, borders, and focus states) to the Theme Options panel, injected as root CSS variables and applied dynamically via `.pooki-search-input` class in Tailwind's `@layer components`.
+- Added comprehensive live search input customizations (height, typography, backgrounds, borders, text color, placeholder color, and focus states) to the Theme Options panel, injected as root CSS variables and applied dynamically via `.pooki-search-input` class in Tailwind's `@layer components`.
+- Added a "Header Actions" repeater field in Theme Options powered by a pure vanilla JS builder, allowing unlimited dynamic header buttons (Cart, Account, Custom) with custom SVGs, sizes, colors, and borders securely injected into the frontend.
+- Created `pooki_to_persian_num()` helper in `functions.php` to securely convert integers like the WooCommerce Cart badge into Persian digits.
 - Implemented Alpine.js `@scroll.window` tracking on `navbar.php` to dynamically swap variables and utility classes (like `shadow-md`), creating a buttery smooth sticky navigation state transition natively via Tailwind.
