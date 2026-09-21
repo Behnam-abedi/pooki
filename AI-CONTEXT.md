@@ -51,3 +51,4 @@
 - Step 37: Implemented advanced security (disabled XML-RPC, blocked User Enumeration) and deep performance fixes (dequeued WC Cart Fragments on non-shop pages, set up preconnects) in their respective SOLID classes.
 - Step 39: Refined WordPress lifecycle hook for user enumeration security (template_redirect) and injected custom brand colors for Pooki into Tailwind v4 configuration.
 - Resolved font 404 pathing errors and successfully integrated Vazirmatn base typography with Tailwind v4, ensuring fonts are processed and bundled into `assets/dist/`.
+- Configured Vite with `base: './'` to enforce relative URL paths for compiled assets in CSS, resolving WordPress subdirectory routing issues.
