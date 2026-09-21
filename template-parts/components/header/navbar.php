@@ -183,20 +183,32 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 				if ( empty( $svg ) ) {
 					// Fallback SVGs
 					if ( 'cart' === $type ) {
-						$svg = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>';
+						$svg = '<svg class="leading-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>';
 					} elseif ( 'account' === $type ) {
-						$svg = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>';
+						$svg = '<svg class="leading-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>';
 					} else {
-						$svg = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>';
+						$svg = '<svg class="leading-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>';
 					}
+				}
+
+				$base_classes = 'relative pooki-action-btn cursor-pointer transition-colors';
+				if ( empty( $label ) ) {
+					$base_classes .= ' aspect-square justify-center rounded-full p-2';
+				} else {
+					$base_classes .= ' inline-flex items-center gap-x-2';
+				}
+				
+				$label_html = '';
+				if ( $label ) {
+					$label_html = '<span class="leading-none font-sans">' . esc_html( pooki_to_persian_num( $label ) ) . '</span>';
 				}
 
 				if ( 'cart' === $type ) {
 					?>
-					<button type="button" class="relative pooki-action-btn" @click="$store.cart.toggle()" aria-label="Cart">
+					<button type="button" class="<?php echo esc_attr( $base_classes ); ?>" @click="$store.cart.toggle()" aria-label="Cart">
 						<?php echo $svg; ?>
-						<?php if ( $label ) echo '<span>' . $label . '</span>'; ?>
-						<span id="pooki-cart-count" class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-pooki-pink text-[10px] font-bold text-white shadow-sm">
+						<?php echo $label_html; ?>
+						<span id="pooki-cart-count" class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-pooki-pink text-[10px] font-bold text-white shadow-sm leading-none">
 							<?php echo esc_html( pooki_to_persian_num( class_exists( 'WooCommerce' ) ? WC()->cart->get_cart_contents_count() : 0 ) ); ?>
 						</span>
 					</button>
@@ -204,16 +216,16 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 				} elseif ( 'account' === $type ) {
 					$account_url = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url();
 					?>
-					<a href="<?php echo esc_url( $account_url ); ?>" class="pooki-action-btn" aria-label="Account">
+					<a href="<?php echo esc_url( $account_url ); ?>" class="<?php echo esc_attr( $base_classes ); ?>" aria-label="Account">
 						<?php echo $svg; ?>
-						<?php if ( $label ) echo '<span>' . $label . '</span>'; ?>
+						<?php echo $label_html; ?>
 					</a>
 					<?php
 				} else {
 					?>
-					<a href="<?php echo esc_url( $url ); ?>" class="pooki-action-btn" aria-label="Link">
+					<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $base_classes ); ?>" aria-label="Link">
 						<?php echo $svg; ?>
-						<?php if ( $label ) echo '<span>' . $label . '</span>'; ?>
+						<?php echo $label_html; ?>
 					</a>
 					<?php
 				}

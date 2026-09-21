@@ -460,6 +460,63 @@ class Pooki_Theme_Options {
 		?>
 		<div class="wrap pooki-admin-wrap">
 			<h1>تنظیمات قالب پوکی</h1>
+
+			<style>
+				.pooki-admin-wrap { font-family: Tahoma, sans-serif; }
+				.pooki-admin-wrap .form-table {
+					display: grid;
+					grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+					gap: 20px;
+					background: #fff;
+					padding: 24px;
+					border-radius: 12px;
+					border: 1px solid #e2e8f0;
+					box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+					margin-bottom: 30px;
+					margin-top: 15px;
+				}
+				.pooki-admin-wrap .form-table tbody { display: contents; }
+				.pooki-admin-wrap .form-table tr {
+					display: flex;
+					flex-direction: column;
+					background: #f8fafc;
+					padding: 16px;
+					border-radius: 8px;
+					border: 1px solid #e2e8f0;
+				}
+				.pooki-admin-wrap .form-table th {
+					padding: 0 0 10px 0;
+					width: auto;
+					font-weight: 600;
+					color: #1e293b;
+				}
+				.pooki-admin-wrap .form-table td { padding: 0; }
+				.pooki-admin-wrap > h2:not(.nav-tab-wrapper) {
+					background: #1e293b;
+					color: #fff;
+					display: inline-block;
+					padding: 6px 16px;
+					border-radius: 9999px;
+					font-size: 14px;
+					margin-top: 2rem;
+					margin-bottom: 0;
+				}
+				.pooki-admin-wrap input[type="number"], 
+				.pooki-admin-wrap input[type="text"], 
+				.pooki-admin-wrap select {
+					width: 100%;
+					border-radius: 6px;
+					border: 1px solid #cbd5e1;
+					padding: 6px 12px;
+				}
+				.pooki-admin-wrap input[type="color"] {
+					height: 36px;
+					width: 100%;
+					padding: 2px;
+					border-radius: 6px;
+					cursor: pointer;
+				}
+			</style>
 			
 			<h2 class="nav-tab-wrapper">
 				<a href="?page=pooki-settings&tab=header" class="nav-tab <?php echo $active_tab == 'header' ? 'nav-tab-active' : ''; ?>">سربرگ</a>
@@ -467,6 +524,14 @@ class Pooki_Theme_Options {
 
 			<!-- Success Toast Container -->
 			<div id="pooki-toast" style="display: none; padding: 12px 20px; background: #4caf50; color: white; border-radius: 4px; margin-top: 15px; font-weight: bold;"></div>
+
+			<div class="pooki-json-importer" style="margin-top: 20px; background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+				<h3 style="margin-top:0; color: #1e293b;">درون‌ریزی پالت رنگ (JSON)</h3>
+				<p style="color: #64748b; font-size: 13px;">یک شیء JSON حاوی کلید رنگ‌ها و مقادیر Hex وارد کنید.</p>
+				<textarea id="pooki-json-palette" rows="3" style="width: 100%; font-family: monospace; direction: ltr; border-radius: 6px; border: 1px solid #cbd5e1; padding: 10px;" placeholder='{"header_bg_color":"#ffffff", "menu_text_color":"#1f2937"}'></textarea>
+				<button type="button" id="pooki-import-json-btn" class="button button-secondary" style="margin-top: 10px;">اعمال رنگ‌ها</button>
+				<span id="pooki-json-status" style="margin-right: 10px; font-weight: bold;"></span>
+			</div>
 
 			<form id="pooki-settings-form" action="options.php" method="post">
 				<?php
@@ -478,7 +543,7 @@ class Pooki_Theme_Options {
 					do_settings_sections( 'pooki-settings' );
 				}
 				
-				submit_button( 'ذخیره تنظیمات' );
+				submit_button( 'ذخیره تنظیمات', 'primary', 'submit', true, [ 'style' => 'font-size: 16px; padding: 8px 24px; border-radius: 8px; margin-top: 20px;' ] );
 				?>
 			</form>
 		</div>
@@ -545,13 +610,14 @@ class Pooki_Theme_Options {
 					repeaterUI.innerHTML = '';
 					items.forEach((item, index) => {
 						const box = document.createElement('div');
-						box.style.border = '1px solid #ccc';
-						box.style.background = '#f9f9f9';
+						box.style.border = '1px solid #cbd5e1';
+						box.style.background = '#fff';
 						box.style.padding = '15px';
 						box.style.marginBottom = '10px';
+						box.style.borderRadius = '8px';
 						box.innerHTML = `
 							<div style="display: flex; gap: 10px; margin-bottom: 10px;">
-								<select class="item-type" data-index="${index}">
+								<select class="item-type" data-index="${index}" style="min-width: 150px;">
 									<option value="cart" ${item.type === 'cart' ? 'selected' : ''}>سبد خرید (Cart)</option>
 									<option value="account" ${item.type === 'account' ? 'selected' : ''}>حساب کاربری (Account)</option>
 									<option value="custom" ${item.type === 'custom' ? 'selected' : ''}>سفارشی (Custom)</option>
@@ -560,9 +626,13 @@ class Pooki_Theme_Options {
 								<input type="text" class="item-url regular-text" placeholder="آدرس لینک (برای سفارشی)" data-index="${index}" value="${item.url ? item.url.replace(/"/g, '&quot;') : ''}">
 							</div>
 							<div>
-								<textarea class="item-svg large-text" placeholder="کد SVG آیکون (اختیاری - پیش‌فرض استفاده خواهد شد)" data-index="${index}" style="height:60px;">${item.icon_svg ? item.icon_svg : ''}</textarea>
+								<textarea class="item-svg large-text" placeholder="کد SVG آیکون (اختیاری - پیش‌فرض استفاده خواهد شد)" data-index="${index}" style="height:60px; font-family: monospace; direction: ltr;">${item.icon_svg ? item.icon_svg : ''}</textarea>
 							</div>
-							<div style="text-align: left; margin-top: 10px;">
+							<div style="text-align: left; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+								<div style="display: flex; gap: 5px;">
+									<button type="button" class="button button-secondary move-up" data-index="${index}" ${index === 0 ? 'disabled' : ''}>▲ بالا</button>
+									<button type="button" class="button button-secondary move-down" data-index="${index}" ${index === items.length - 1 ? 'disabled' : ''}>▼ پایین</button>
+								</div>
 								<button type="button" class="button button-link-delete remove-item" data-index="${index}">حذف این دکمه</button>
 							</div>
 						`;
@@ -571,7 +641,7 @@ class Pooki_Theme_Options {
 
 					const addBtn = document.createElement('button');
 					addBtn.type = 'button';
-					addBtn.className = 'button button-secondary';
+					addBtn.className = 'button button-primary';
 					addBtn.innerText = '+ افزودن دکمه جدید';
 					addBtn.addEventListener('click', () => {
 						items.push({ type: 'custom', label: '', url: '', icon_svg: '' });
@@ -586,15 +656,37 @@ class Pooki_Theme_Options {
 					repeaterUI.querySelectorAll('.item-svg').forEach(el => el.addEventListener('input', updateItem));
 					repeaterUI.querySelectorAll('.remove-item').forEach(el => {
 						el.addEventListener('click', (e) => {
-							const idx = e.target.dataset.index;
+							const idx = parseInt(e.target.dataset.index, 10);
 							items.splice(idx, 1);
 							updateHiddenAndRender();
+						});
+					});
+					repeaterUI.querySelectorAll('.move-up').forEach(el => {
+						el.addEventListener('click', (e) => {
+							const idx = parseInt(e.target.dataset.index, 10);
+							if (idx > 0) {
+								const temp = items[idx - 1];
+								items[idx - 1] = items[idx];
+								items[idx] = temp;
+								updateHiddenAndRender();
+							}
+						});
+					});
+					repeaterUI.querySelectorAll('.move-down').forEach(el => {
+						el.addEventListener('click', (e) => {
+							const idx = parseInt(e.target.dataset.index, 10);
+							if (idx < items.length - 1) {
+								const temp = items[idx + 1];
+								items[idx + 1] = items[idx];
+								items[idx] = temp;
+								updateHiddenAndRender();
+							}
 						});
 					});
 				}
 
 				function updateItem(e) {
-					const idx = e.target.dataset.index;
+					const idx = parseInt(e.target.dataset.index, 10);
 					if (e.target.classList.contains('item-type')) items[idx].type = e.target.value;
 					if (e.target.classList.contains('item-label')) items[idx].label = e.target.value;
 					if (e.target.classList.contains('item-url')) items[idx].url = e.target.value;
@@ -608,6 +700,33 @@ class Pooki_Theme_Options {
 				}
 
 				renderRepeater();
+			}
+
+			// JSON Importer
+			const jsonImportBtn = document.getElementById('pooki-import-json-btn');
+			if (jsonImportBtn) {
+				jsonImportBtn.addEventListener('click', function() {
+					const val = document.getElementById('pooki-json-palette').value;
+					const status = document.getElementById('pooki-json-status');
+					try {
+						const data = JSON.parse(val);
+						let count = 0;
+						for (const key in data) {
+							const input = document.querySelector(`input[name="pooki_theme_options[${key}]"]`);
+							if (input && input.type === 'color') {
+								input.value = data[key];
+								input.style.boxShadow = '0 0 0 2px #4caf50';
+								setTimeout(() => input.style.boxShadow = 'none', 2000);
+								count++;
+							}
+						}
+						status.style.color = '#4caf50';
+						status.innerText = `${count} رنگ با موفقیت اعمال شد. فراموش نکنید تنظیمات را ذخیره کنید.`;
+					} catch (e) {
+						status.style.color = '#f44336';
+						status.innerText = 'خطا در فرمت JSON';
+					}
+				});
 			}
 
 			// AJAX Save
