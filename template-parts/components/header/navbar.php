@@ -225,8 +225,15 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 		</div>
 
 		<!-- Navigation Row (Row 2) -->
-		<div class="hidden lg:block w-full border-t border-gray-100 py-2.5 transition-all duration-300">
-			<div class="container mx-auto px-4">
+		<div 
+			class="hidden lg:block w-full py-2.5 transition-all duration-300"
+			:style="{
+				backgroundColor: isSticky ? 'var(--pooki-nav-sticky-bg)' : 'var(--pooki-nav-bg)',
+				borderTopWidth: 'var(--pooki-nav-border-top-w)',
+				borderTopColor: 'var(--pooki-nav-border-top-c)'
+			}"
+		>
+			<div class="container mx-auto px-4 flex justify-center items-center w-full">
 				<nav class="desktop-menu flex items-center">
 					<style>
 						.pooki-dynamic-menu-link {

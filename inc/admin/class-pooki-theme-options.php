@@ -105,6 +105,14 @@ class Pooki_Theme_Options {
 		add_settings_field( 'menu_text_color', 'رنگ متن منو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'menu_text_color', 'default' => '#374151' ] );
 		add_settings_field( 'menu_hover_color', 'رنگ هاور منو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'menu_hover_color', 'default' => '#ec4899' ] );
 
+		// Navigation Row Section
+		add_settings_section( 'pooki_nav_section', 'نوار ناوبری (منو)', null, 'pooki-settings-header' );
+
+		add_settings_field( 'nav_bg_color', 'رنگ پس‌زمینه نوار', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_bg_color', 'default' => 'transparent' ] );
+		add_settings_field( 'nav_sticky_bg_color', 'رنگ پس‌زمینه در حالت چسبان', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_sticky_bg_color', 'default' => 'transparent' ] );
+		add_settings_field( 'nav_border_top_width', 'ضخامت حاشیه بالا (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_border_top_width', 'default' => 1 ] );
+		add_settings_field( 'nav_border_top_color', 'رنگ حاشیه بالا', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_border_top_color', 'default' => '#f3f4f6' ] );
+
 		// Sticky Header Section
 		add_settings_section( 'pooki_sticky_header_section', 'تنظیمات هدر چسبان', null, 'pooki-settings-header' );
 
@@ -281,6 +289,11 @@ class Pooki_Theme_Options {
 				'menu_text_color'       => 'color',
 				'menu_hover_color'      => 'color',
 				
+				'nav_bg_color'          => 'color',
+				'nav_sticky_bg_color'   => 'color',
+				'nav_border_top_width'  => 'int',
+				'nav_border_top_color'  => 'color',
+				
 				'sticky_header_enabled' => 'bool',
 				'sticky_header_height'  => 'int',
 				'sticky_logo_height'    => 'int',
@@ -414,6 +427,11 @@ class Pooki_Theme_Options {
 		$menu_text_color  = sanitize_hex_color( isset( $opts['menu_text_color'] ) ? $opts['menu_text_color'] : '#374151' );
 		$menu_hover_color = sanitize_hex_color( isset( $opts['menu_hover_color'] ) ? $opts['menu_hover_color'] : '#ec4899' );
 
+		$nav_bg           = esc_attr( isset( $opts['nav_bg_color'] ) ? $opts['nav_bg_color'] : 'transparent' );
+		$nav_sticky_bg    = esc_attr( isset( $opts['nav_sticky_bg_color'] ) ? $opts['nav_sticky_bg_color'] : 'transparent' );
+		$nav_border_top_w = absint( isset( $opts['nav_border_top_width'] ) ? $opts['nav_border_top_width'] : 1 );
+		$nav_border_top_c = sanitize_hex_color( isset( $opts['nav_border_top_color'] ) ? $opts['nav_border_top_color'] : '#f3f4f6' );
+
 		$search_height         = absint( isset( $opts['search_height'] ) ? $opts['search_height'] : 44 );
 		$search_font_size      = absint( isset( $opts['search_font_size'] ) ? $opts['search_font_size'] : 14 );
 		$search_text_color     = sanitize_hex_color( isset( $opts['search_text_color'] ) ? $opts['search_text_color'] : '#111827' );
@@ -456,6 +474,11 @@ class Pooki_Theme_Options {
 
 		echo '--pooki-menu-color: ' . esc_attr( $menu_text_color ) . ';';
 		echo '--pooki-menu-hover-color: ' . esc_attr( $menu_hover_color ) . ';';
+
+		echo '--pooki-nav-bg: ' . esc_attr( $nav_bg ) . ';';
+		echo '--pooki-nav-sticky-bg: ' . esc_attr( $nav_sticky_bg ) . ';';
+		echo '--pooki-nav-border-top-w: ' . esc_attr( $nav_border_top_w ) . 'px;';
+		echo '--pooki-nav-border-top-c: ' . esc_attr( $nav_border_top_c ) . ';';
 
 		echo '--pooki-search-h: ' . esc_attr( $search_height ) . 'px;';
 		echo '--pooki-search-font-size: ' . esc_attr( $search_font_size ) . 'px;';
@@ -529,12 +552,18 @@ class Pooki_Theme_Options {
 				.pooki-admin-wrap > h2:not(.nav-tab-wrapper) {
 					background: #1e293b;
 					color: #fff;
-					display: inline-block;
-					padding: 6px 16px;
-					border-radius: 9999px;
-					font-size: 14px;
+					display: block;
+					padding: 12px 16px;
+					border-radius: 8px;
+					font-size: 16px;
 					margin-top: 2rem;
-					margin-bottom: 0;
+					margin-bottom: -10px;
+					box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+				}
+				@media (max-width: 1024px) {
+					.pooki-admin-wrap .form-table {
+						grid-template-columns: 1fr;
+					}
 				}
 				.pooki-admin-wrap input[type="number"], 
 				.pooki-admin-wrap input[type="text"], 
@@ -568,7 +597,7 @@ class Pooki_Theme_Options {
 				<span id="pooki-json-status" style="margin-right: 10px; font-weight: bold;"></span>
 			</div>
 
-			<form id="pooki-settings-form" action="options.php" method="post">
+			<form id="pooki-settings-form" action="options.php" method="post" style="padding-bottom: 80px;">
 				<?php
 				settings_fields( 'pooki_options_group' );
 				
@@ -577,9 +606,11 @@ class Pooki_Theme_Options {
 				} else {
 					do_settings_sections( 'pooki-settings' );
 				}
-				
-				submit_button( 'ذخیره تنظیمات', 'primary', 'submit', true, [ 'style' => 'font-size: 16px; padding: 8px 24px; border-radius: 8px; margin-top: 20px;' ] );
 				?>
+				<div class="pooki-sticky-save-bar" style="position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 30px; border-top: 1px solid #e2e8f0; box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.05); z-index: 50; display: flex; justify-content: flex-end; align-items: center; margin-right: 160px;">
+					<span id="pooki-save-status" style="margin-left: 15px; font-weight: bold; display: none;"></span>
+					<?php submit_button( 'ذخیره تغییرات', 'primary', 'submit', false, [ 'style' => 'font-size: 16px; padding: 8px 32px; border-radius: 8px;' ] ); ?>
+				</div>
 			</form>
 		</div>
 
@@ -782,18 +813,25 @@ class Pooki_Theme_Options {
 				.then(res => res.json())
 				.then(response => {
 					const toast = document.getElementById('pooki-toast');
+					const status = document.getElementById('pooki-save-status');
 					toast.style.display = 'block';
+					status.style.display = 'inline-block';
 					
 					if (response.success) {
 						toast.style.background = '#4caf50';
 						toast.innerText = response.data.message || 'تنظیمات ذخیره شد.';
+						status.style.color = '#4caf50';
+						status.innerText = 'تغییرات ذخیره شد!';
 					} else {
 						toast.style.background = '#f44336';
 						toast.innerText = response.data || 'خطایی رخ داده است.';
+						status.style.color = '#f44336';
+						status.innerText = 'خطا در ذخیره‌سازی';
 					}
 
 					setTimeout(() => {
 						toast.style.display = 'none';
+						status.style.display = 'none';
 					}, 3000);
 				})
 				.catch(err => {
@@ -802,7 +840,7 @@ class Pooki_Theme_Options {
 				})
 				.finally(() => {
 					submitBtn.disabled = false;
-					submitBtn.value = 'ذخیره تنظیمات';
+					submitBtn.value = 'ذخیره تغییرات';
 				});
 			});
 		});
