@@ -70,5 +70,6 @@
 - Enhanced the Admin Theme Options UX with a sticky floating save bar for improved ergonomics without scrolling, and added responsive grid column stacking for smaller screens.
 - Created `pooki_to_persian_num()` helper in `functions.php` to securely convert integers like the WooCommerce Cart badge into Persian digits.
 - Implemented Alpine.js `@scroll.window` tracking on `navbar.php` to dynamically swap variables and utility classes (like `shadow-md`), creating a buttery smooth sticky navigation state transition natively via Tailwind.
-- Eliminated header scroll jitter by introducing hysteresis logic to the Alpine.js scroll listener (`window.pageYOffset > 80` to stick, `< 20` to unstick), preventing infinite scroll jump loops when the sticky bar activates and collapses.
-- Redesigned the Theme Options panel with a Vanilla JS Horizontal/Vertical Tabbed Layout, organizing settings into isolated sub-tabs (Top Bar, Header & Logo, Sticky Header, Navigation Row, Live Search, Header Actions, Color Palette) to drastically reduce cognitive load and visual clutter.
+- Eliminated header scroll jitter by applying `sticky top-0 z-50` to the root `<header>` wrapper, and dynamically collapsing the Top Bar via opacity and negative margins (`max-h-0 -translate-y-full`) when `window.pageYOffset > 100`.
+- Redesigned the Theme Options panel with a custom HTML/PHP tabbed layout (`do_settings_fields` mapped directly into isolated `.pooki-tab-pane` containers) to resolve structural DOM nesting issues.
+- Fixed HTML5 Color Input compatibility by ensuring empty or transparent values default to `#ffffff` preventing console errors.

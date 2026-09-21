@@ -108,8 +108,8 @@ class Pooki_Theme_Options {
 		// Navigation Row Section
 		add_settings_section( 'pooki_nav_section', 'نوار ناوبری (منو)', null, 'pooki-settings-header' );
 
-		add_settings_field( 'nav_bg_color', 'رنگ پس‌زمینه نوار', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_bg_color', 'default' => 'transparent' ] );
-		add_settings_field( 'nav_sticky_bg_color', 'رنگ پس‌زمینه در حالت چسبان', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_sticky_bg_color', 'default' => 'transparent' ] );
+		add_settings_field( 'nav_bg_color', 'رنگ پس‌زمینه نوار', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_bg_color', 'default' => '#ffffff' ] );
+		add_settings_field( 'nav_sticky_bg_color', 'رنگ پس‌زمینه در حالت چسبان', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_sticky_bg_color', 'default' => '#ffffff' ] );
 		add_settings_field( 'nav_border_top_width', 'ضخامت حاشیه بالا (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_border_top_width', 'default' => 1 ] );
 		add_settings_field( 'nav_border_top_color', 'رنگ حاشیه بالا', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_border_top_color', 'default' => '#f3f4f6' ] );
 
@@ -151,10 +151,10 @@ class Pooki_Theme_Options {
 		add_settings_field( 'header_action_text_color', 'رنگ متن', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_text_color', 'default' => '#374151' ] );
 		add_settings_field( 'header_action_text_hover_color', 'رنگ هاور متن', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_text_hover_color', 'default' => '#ec4899' ] );
 		
-		add_settings_field( 'header_action_bg_color', 'رنگ پس‌زمینه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_bg_color', 'default' => 'transparent' ] );
+		add_settings_field( 'header_action_bg_color', 'رنگ پس‌زمینه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_bg_color', 'default' => '#ffffff' ] );
 		add_settings_field( 'header_action_bg_hover_color', 'رنگ هاور پس‌زمینه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_bg_hover_color', 'default' => '#f3f4f6' ] );
 		
-		add_settings_field( 'header_action_border_color', 'رنگ حاشیه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_border_color', 'default' => 'transparent' ] );
+		add_settings_field( 'header_action_border_color', 'رنگ حاشیه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_border_color', 'default' => '#ffffff' ] );
 		
 		add_settings_field( 'header_action_items', 'مدیریت دکمه‌ها', [ $this, 'render_repeater_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_items' ] );
 
@@ -196,7 +196,7 @@ class Pooki_Theme_Options {
 	public function render_color_field( $args ) {
 		$options = get_option( 'pooki_theme_options' );
 		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) && ! empty( $options[ $id ] ) ? $options[ $id ] : $args['default'];
+		$value   = isset( $options[ $id ] ) && ! empty( $options[ $id ] ) && $options[ $id ] !== 'transparent' ? $options[ $id ] : $args['default'];
 		echo '<input type="color" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" class="regular-text" />';
 	}
 
@@ -657,24 +657,77 @@ class Pooki_Theme_Options {
 			<!-- Success Toast Container -->
 			<div id="pooki-toast" style="display: none; padding: 12px 20px; background: #4caf50; color: white; border-radius: 4px; margin-top: 15px; font-weight: bold;"></div>
 
-			<div class="pooki-json-importer" style="margin-top: 20px; background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-				<h3 style="margin-top:0; color: #1e293b;">درون‌ریزی پالت رنگ (JSON)</h3>
-				<p style="color: #64748b; font-size: 13px;">یک شیء JSON حاوی کلید رنگ‌ها و مقادیر Hex وارد کنید.</p>
-				<textarea id="pooki-json-palette" rows="3" style="width: 100%; font-family: monospace; direction: ltr; border-radius: 6px; border: 1px solid #cbd5e1; padding: 10px;" placeholder='{"header_bg_color":"#ffffff", "menu_text_color":"#1f2937"}'></textarea>
-				<button type="button" id="pooki-import-json-btn" class="button button-secondary" style="margin-top: 10px;">اعمال رنگ‌ها</button>
-				<span id="pooki-json-status" style="margin-right: 10px; font-weight: bold;"></span>
-			</div>
-
 			<form id="pooki-settings-form" action="options.php" method="post" style="padding-bottom: 80px;">
-				<?php
-				settings_fields( 'pooki_options_group' );
+				<?php settings_fields( 'pooki_options_group' ); ?>
 				
-				if ( $active_tab == 'header' ) {
-					do_settings_sections( 'pooki-settings-header' );
-				} else {
-					do_settings_sections( 'pooki-settings' );
-				}
-				?>
+				<div class="pooki-tabs-layout">
+					<div class="pooki-tabs-sidebar">
+						<ul id="pooki-tabs-nav">
+							<li><a href="#pooki-tab-topbar" class="active" data-target="pooki-tab-topbar">نوار اعلان (Top Bar)</a></li>
+							<li><a href="#pooki-tab-header" data-target="pooki-tab-header">ساختار هدر و لوگو</a></li>
+							<li><a href="#pooki-tab-nav" data-target="pooki-tab-nav">نوار ناوبری (منو)</a></li>
+							<li><a href="#pooki-tab-sticky" data-target="pooki-tab-sticky">هدر چسبان</a></li>
+							<li><a href="#pooki-tab-search" data-target="pooki-tab-search">جستجوی زنده</a></li>
+							<li><a href="#pooki-tab-actions" data-target="pooki-tab-actions">دکمه‌های هدر</a></li>
+							<li><a href="#pooki-tab-palette" data-target="pooki-tab-palette">پالت رنگ و JSON</a></li>
+						</ul>
+					</div>
+					
+					<div class="pooki-tabs-content">
+						<div id="pooki-tab-topbar" class="pooki-tab-pane active">
+							<h2>نوار اعلان بالای سایت (Top Bar)</h2>
+							<table class="form-table" role="presentation">
+								<?php do_settings_fields( 'pooki-settings-header', 'pooki_topbar_section' ); ?>
+							</table>
+						</div>
+						
+						<div id="pooki-tab-header" class="pooki-tab-pane">
+							<h2>تنظیمات سربرگ</h2>
+							<table class="form-table" role="presentation">
+								<?php do_settings_fields( 'pooki-settings-header', 'pooki_header_section' ); ?>
+							</table>
+						</div>
+						
+						<div id="pooki-tab-nav" class="pooki-tab-pane">
+							<h2>نوار ناوبری (منو)</h2>
+							<table class="form-table" role="presentation">
+								<?php do_settings_fields( 'pooki-settings-header', 'pooki_nav_section' ); ?>
+							</table>
+						</div>
+						
+						<div id="pooki-tab-sticky" class="pooki-tab-pane">
+							<h2>تنظیمات هدر چسبان</h2>
+							<table class="form-table" role="presentation">
+								<?php do_settings_fields( 'pooki-settings-header', 'pooki_sticky_header_section' ); ?>
+							</table>
+						</div>
+						
+						<div id="pooki-tab-search" class="pooki-tab-pane">
+							<h2>تنظیمات فرم جستجو</h2>
+							<table class="form-table" role="presentation">
+								<?php do_settings_fields( 'pooki-settings-header', 'pooki_search_section' ); ?>
+							</table>
+						</div>
+						
+						<div id="pooki-tab-actions" class="pooki-tab-pane">
+							<h2>تنظیمات دکمه‌های سربرگ</h2>
+							<table class="form-table" role="presentation">
+								<?php do_settings_fields( 'pooki-settings-header', 'pooki_actions_section' ); ?>
+							</table>
+						</div>
+						
+						<div id="pooki-tab-palette" class="pooki-tab-pane">
+							<h2>درون‌ریزی پالت رنگ (JSON)</h2>
+							<div class="pooki-json-importer" style="padding: 20px;">
+								<p style="color: #64748b; font-size: 13px; margin-top:0;">یک شیء JSON حاوی کلید رنگ‌ها و مقادیر Hex وارد کنید.</p>
+								<textarea id="pooki-json-palette" rows="3" style="width: 100%; font-family: monospace; direction: ltr; border-radius: 6px; border: 1px solid #cbd5e1; padding: 10px;" placeholder='{"header_bg_color":"#ffffff", "menu_text_color":"#1f2937"}'></textarea>
+								<button type="button" id="pooki-import-json-btn" class="button button-secondary" style="margin-top: 10px;">اعمال رنگ‌ها</button>
+								<span id="pooki-json-status" style="margin-right: 10px; font-weight: bold;"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<div class="pooki-sticky-save-bar" style="position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 30px; border-top: 1px solid #e2e8f0; box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.05); z-index: 50; display: flex; justify-content: flex-end; align-items: center; margin-right: 160px;">
 					<span id="pooki-save-status" style="margin-left: 15px; font-weight: bold; display: none;"></span>
 					<?php submit_button( 'ذخیره تغییرات', 'primary', 'submit', false, [ 'style' => 'font-size: 16px; padding: 8px 32px; border-radius: 8px;' ] ); ?>
@@ -685,104 +738,36 @@ class Pooki_Theme_Options {
 		<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			
-			// Build Tab Layout
-			const form = document.getElementById('pooki-settings-form');
-			if (form) {
-				const headings = form.querySelectorAll('h2:not(.nav-tab-wrapper)');
-				if (headings.length > 0) {
-					const layout = document.createElement('div');
-					layout.className = 'pooki-tabs-layout';
+			// Simple Tab Switcher
+			const tabNav = document.getElementById('pooki-tabs-nav');
+			if (tabNav) {
+				const links = tabNav.querySelectorAll('a');
+				const panes = document.querySelectorAll('.pooki-tab-pane');
 
-					const sidebar = document.createElement('div');
-					sidebar.className = 'pooki-tabs-sidebar';
-					const ul = document.createElement('ul');
-					sidebar.appendChild(ul);
-
-					const content = document.createElement('div');
-					content.className = 'pooki-tabs-content';
-
-					layout.appendChild(sidebar);
-					layout.appendChild(content);
-
-					form.insertBefore(layout, headings[0]);
-
-					headings.forEach((h2, index) => {
-						const pane = document.createElement('div');
-						pane.className = 'pooki-tab-pane';
-						pane.id = 'pooki-tab-' + index;
-						
-						const li = document.createElement('li');
-						const a = document.createElement('a');
-						a.href = '#' + pane.id;
-						a.innerText = h2.innerText;
-						a.dataset.target = pane.id;
-						li.appendChild(a);
-						ul.appendChild(li);
-
-						let node = h2;
-						while(node) {
-							let next = node.nextSibling;
-							if (next && next.tagName === 'H2') break;
-							if (next && next.classList && next.classList.contains('pooki-sticky-save-bar')) break;
-							
-							pane.appendChild(node);
-							node = next;
-						}
-						content.appendChild(pane);
-
-						a.addEventListener('click', (e) => {
-							e.preventDefault();
-							switchTab(a);
-						});
-					});
-
-					// Move json importer into a new tab pane
-					const jsonImporter = document.querySelector('.pooki-json-importer');
-					if (jsonImporter) {
-						const index = headings.length;
-						const pane = document.createElement('div');
-						pane.className = 'pooki-tab-pane';
-						pane.id = 'pooki-tab-' + index;
-
-						const li = document.createElement('li');
-						const a = document.createElement('a');
-						a.href = '#' + pane.id;
-						a.innerText = 'پالت رنگ و JSON';
-						a.dataset.target = pane.id;
-						li.appendChild(a);
-						ul.appendChild(li);
-
-						// Create a wrapper for visual consistency
-						const importerHeader = document.createElement('h2');
-						importerHeader.innerText = 'درون‌ریزی پالت رنگ (JSON)';
-						pane.appendChild(importerHeader);
-
-						jsonImporter.style.boxShadow = 'none';
-						jsonImporter.style.border = 'none';
-						jsonImporter.style.marginTop = '0';
-						pane.appendChild(jsonImporter);
-
-						content.appendChild(pane);
-
-						a.addEventListener('click', (e) => {
-							e.preventDefault();
-							switchTab(a);
-						});
+				function switchTab(link) {
+					links.forEach(l => l.classList.remove('active'));
+					panes.forEach(p => p.classList.remove('active'));
+					
+					link.classList.add('active');
+					const targetId = link.dataset.target;
+					const targetPane = document.getElementById(targetId);
+					if (targetPane) {
+						targetPane.classList.add('active');
 					}
-
-					function switchTab(link) {
-						ul.querySelectorAll('a').forEach(l => l.classList.remove('active'));
-						content.querySelectorAll('.pooki-tab-pane').forEach(p => p.classList.remove('active'));
-						link.classList.add('active');
-						document.getElementById(link.dataset.target).classList.add('active');
-						localStorage.setItem('pooki_active_tab', link.dataset.target);
-					}
-
-					const savedTab = localStorage.getItem('pooki_active_tab');
-					let targetLink = ul.querySelector(`a[data-target="${savedTab}"]`);
-					if (!targetLink) targetLink = ul.querySelector('a');
-					if (targetLink) switchTab(targetLink);
+					localStorage.setItem('pooki_active_tab', targetId);
 				}
+
+				links.forEach(link => {
+					link.addEventListener('click', (e) => {
+						e.preventDefault();
+						switchTab(link);
+					});
+				});
+
+				const savedTab = localStorage.getItem('pooki_active_tab');
+				let targetLink = tabNav.querySelector(`a[data-target="${savedTab}"]`);
+				if (!targetLink) targetLink = links[0];
+				if (targetLink) switchTab(targetLink);
 			}
 
 			// Media Uploader

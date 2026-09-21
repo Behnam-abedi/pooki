@@ -25,10 +25,10 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 
 ?>
 <header 
-	class="site-header w-full sticky top-0 z-40 transition-all duration-300 border-b"
+	class="site-header w-full sticky top-0 z-50 transition-all duration-300 border-b"
 	x-data="{ mobileMenuOpen: false, isSticky: false }"
 	<?php if ( $sticky_enabled ) : ?>
-	@scroll.window="if (window.pageYOffset > 80) { isSticky = true; } else if (window.pageYOffset < 20) { isSticky = false; }"
+	@scroll.window="isSticky = (window.pageYOffset > 100)"
 	<?php endif; ?>
 	:class="{
 		'<?php echo esc_attr( $stick_shadow ); ?>': isSticky,
@@ -43,9 +43,9 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 	<?php if ( ! isset( $opts['topbar_enabled'] ) || $opts['topbar_enabled'] ) : ?>
 		<div 
 			class="w-full transition-all duration-300 overflow-hidden flex items-center" 
+			:class="isSticky ? 'opacity-0 -translate-y-full max-h-0' : 'opacity-100 translate-y-0 max-h-screen'"
 			:style="{ 
-				height: isSticky ? '0' : 'var(--pooki-topbar-h)',
-				opacity: isSticky ? '0' : '1',
+				minHeight: isSticky ? '0' : 'var(--pooki-topbar-h)',
 				backgroundColor: 'var(--pooki-topbar-bg)',
 				color: 'var(--pooki-topbar-color)'
 			}"
