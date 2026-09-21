@@ -28,7 +28,7 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 	class="site-header w-full sticky top-0 z-40 transition-all duration-300 border-b"
 	x-data="{ mobileMenuOpen: false, isSticky: false }"
 	<?php if ( $sticky_enabled ) : ?>
-	@scroll.window="isSticky = (window.pageYOffset > 50)"
+	@scroll.window="if (window.pageYOffset > 80) { isSticky = true; } else if (window.pageYOffset < 20) { isSticky = false; }"
 	<?php endif; ?>
 	:class="{
 		'<?php echo esc_attr( $stick_shadow ); ?>': isSticky,

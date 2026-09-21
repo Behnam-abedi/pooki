@@ -550,20 +550,88 @@ class Pooki_Theme_Options {
 				}
 				.pooki-admin-wrap .form-table td { padding: 0; }
 				.pooki-admin-wrap > h2:not(.nav-tab-wrapper) {
-					background: #1e293b;
-					color: #fff;
+					background: #f8fafc;
+					color: #1e293b;
 					display: block;
-					padding: 12px 16px;
+					padding: 16px 20px;
+					border-radius: 12px 12px 0 0;
+					font-size: 18px;
+					margin-top: 0;
+					margin-bottom: 0;
+					border-bottom: 1px solid #e2e8f0;
+				}
+				
+				/* Sub-Tabs Layout */
+				.pooki-tabs-layout {
+					display: flex;
+					gap: 30px;
+					margin-top: 20px;
+					align-items: flex-start;
+				}
+				.pooki-tabs-sidebar {
+					width: 250px;
+					flex-shrink: 0;
+					background: #fff;
+					border-radius: 12px;
+					border: 1px solid #e2e8f0;
+					padding: 10px;
+					box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+					position: sticky;
+					top: 40px;
+				}
+				.pooki-tabs-sidebar ul { margin: 0; padding: 0; list-style: none; }
+				.pooki-tabs-sidebar li { margin-bottom: 5px; }
+				.pooki-tabs-sidebar a {
+					display: block;
+					padding: 10px 15px;
+					color: #475569;
+					text-decoration: none;
 					border-radius: 8px;
-					font-size: 16px;
-					margin-top: 2rem;
-					margin-bottom: -10px;
-					box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+					font-weight: 600;
+					transition: all 0.2s;
+				}
+				.pooki-tabs-sidebar a:hover {
+					background: #f1f5f9;
+					color: #0f172a;
+				}
+				.pooki-tabs-sidebar a.active {
+					background: #4f46e5;
+					color: #fff;
+				}
+				.pooki-tabs-content {
+					flex-grow: 1;
+					min-width: 0;
+					background: #fff;
+					border-radius: 12px;
+					border: 1px solid #e2e8f0;
+					box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+					overflow: hidden;
+				}
+				.pooki-tab-pane {
+					display: none;
+					animation: pookiFadeIn 0.3s ease;
+				}
+				.pooki-tab-pane.active {
+					display: block;
+				}
+				/* Override table styles inside tabs to fit flush */
+				.pooki-admin-wrap .pooki-tabs-content .form-table {
+					border: none;
+					box-shadow: none;
+					margin: 0;
+					border-radius: 0;
+				}
+				
+				@keyframes pookiFadeIn {
+					from { opacity: 0; transform: translateY(5px); }
+					to { opacity: 1; transform: translateY(0); }
 				}
 				@media (max-width: 1024px) {
 					.pooki-admin-wrap .form-table {
 						grid-template-columns: 1fr;
 					}
+					.pooki-tabs-layout { flex-direction: column; }
+					.pooki-tabs-sidebar { width: 100%; position: static; }
 				}
 				.pooki-admin-wrap input[type="number"], 
 				.pooki-admin-wrap input[type="text"], 
@@ -617,6 +685,106 @@ class Pooki_Theme_Options {
 		<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			
+			// Build Tab Layout
+			const form = document.getElementById('pooki-settings-form');
+			if (form) {
+				const headings = form.querySelectorAll('h2:not(.nav-tab-wrapper)');
+				if (headings.length > 0) {
+					const layout = document.createElement('div');
+					layout.className = 'pooki-tabs-layout';
+
+					const sidebar = document.createElement('div');
+					sidebar.className = 'pooki-tabs-sidebar';
+					const ul = document.createElement('ul');
+					sidebar.appendChild(ul);
+
+					const content = document.createElement('div');
+					content.className = 'pooki-tabs-content';
+
+					layout.appendChild(sidebar);
+					layout.appendChild(content);
+
+					form.insertBefore(layout, headings[0]);
+
+					headings.forEach((h2, index) => {
+						const pane = document.createElement('div');
+						pane.className = 'pooki-tab-pane';
+						pane.id = 'pooki-tab-' + index;
+						
+						const li = document.createElement('li');
+						const a = document.createElement('a');
+						a.href = '#' + pane.id;
+						a.innerText = h2.innerText;
+						a.dataset.target = pane.id;
+						li.appendChild(a);
+						ul.appendChild(li);
+
+						let node = h2;
+						while(node) {
+							let next = node.nextSibling;
+							if (next && next.tagName === 'H2') break;
+							if (next && next.classList && next.classList.contains('pooki-sticky-save-bar')) break;
+							
+							pane.appendChild(node);
+							node = next;
+						}
+						content.appendChild(pane);
+
+						a.addEventListener('click', (e) => {
+							e.preventDefault();
+							switchTab(a);
+						});
+					});
+
+					// Move json importer into a new tab pane
+					const jsonImporter = document.querySelector('.pooki-json-importer');
+					if (jsonImporter) {
+						const index = headings.length;
+						const pane = document.createElement('div');
+						pane.className = 'pooki-tab-pane';
+						pane.id = 'pooki-tab-' + index;
+
+						const li = document.createElement('li');
+						const a = document.createElement('a');
+						a.href = '#' + pane.id;
+						a.innerText = 'پالت رنگ و JSON';
+						a.dataset.target = pane.id;
+						li.appendChild(a);
+						ul.appendChild(li);
+
+						// Create a wrapper for visual consistency
+						const importerHeader = document.createElement('h2');
+						importerHeader.innerText = 'درون‌ریزی پالت رنگ (JSON)';
+						pane.appendChild(importerHeader);
+
+						jsonImporter.style.boxShadow = 'none';
+						jsonImporter.style.border = 'none';
+						jsonImporter.style.marginTop = '0';
+						pane.appendChild(jsonImporter);
+
+						content.appendChild(pane);
+
+						a.addEventListener('click', (e) => {
+							e.preventDefault();
+							switchTab(a);
+						});
+					}
+
+					function switchTab(link) {
+						ul.querySelectorAll('a').forEach(l => l.classList.remove('active'));
+						content.querySelectorAll('.pooki-tab-pane').forEach(p => p.classList.remove('active'));
+						link.classList.add('active');
+						document.getElementById(link.dataset.target).classList.add('active');
+						localStorage.setItem('pooki_active_tab', link.dataset.target);
+					}
+
+					const savedTab = localStorage.getItem('pooki_active_tab');
+					let targetLink = ul.querySelector(`a[data-target="${savedTab}"]`);
+					if (!targetLink) targetLink = ul.querySelector('a');
+					if (targetLink) switchTab(targetLink);
+				}
+			}
+
 			// Media Uploader
 			let file_frame;
 			const uploadButtons = document.querySelectorAll('.pooki-upload-button');
