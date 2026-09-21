@@ -31,6 +31,13 @@ class Pooki_Security {
 		add_filter( 'xmlrpc_enabled', '__return_false' );
 		
 		// Block User Enumeration
+		add_action( 'template_redirect', [ $this, 'block_user_enumeration' ] );
+	}
+
+	/**
+	 * Block User Enumeration via author URL parameter.
+	 */
+	public function block_user_enumeration() {
 		if ( ! is_admin() ) {
 			if ( isset( $_SERVER['QUERY_STRING'] ) && preg_match( '/author=([0-9]*)/i', $_SERVER['QUERY_STRING'] ) ) {
 				wp_redirect( home_url() );

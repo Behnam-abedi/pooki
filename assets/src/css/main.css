@@ -3,6 +3,11 @@
 
 @theme {
     --font-sans: "Vazirmatn", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    
+    --color-pooki-pink: #f43f5e; /* Rose 500 */
+    --color-pooki-pink-dark: #e11d48; /* Rose 600 */
+    --color-pooki-blue: #0ea5e9; /* Sky 500 */
+    --color-pooki-cream: #fffbeb; /* Amber 50 */
 }
 
 /*

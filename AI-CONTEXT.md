@@ -49,3 +49,4 @@
 - Step 35: Implemented Pooki_Security class to harden WordPress by removing version generators and `<head>` bloat (RSD, WLW, OEmbed), improving both security and Core Web Vitals.
 - Step 36: Implemented Pooki_SEO class to seamlessly override default WooCommerce breadcrumbs with Rank Math SEO breadcrumbs and removed WooCommerce generator tags for enhanced security and schema integrity.
 - Step 37: Implemented advanced security (disabled XML-RPC, blocked User Enumeration) and deep performance fixes (dequeued WC Cart Fragments on non-shop pages, set up preconnects) in their respective SOLID classes.
+- Step 39: Refined WordPress lifecycle hook for user enumeration security (template_redirect) and injected custom brand colors for Pooki into Tailwind v4 configuration.
