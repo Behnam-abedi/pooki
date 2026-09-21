@@ -3,7 +3,10 @@ import './modules/single-ajax';
 
 document.addEventListener('alpine:init', () => {
   Alpine.store('cart', {
-    open: false
+    isOpen: false,
+    toggle() {
+      this.isOpen = !this.isOpen;
+    }
   });
 });
 
@@ -12,6 +15,6 @@ Alpine.start();
 
 if (typeof jQuery !== 'undefined') {
   jQuery(document.body).on('added_to_cart', function() {
-    Alpine.store('cart').open = true;
+    Alpine.store('cart').isOpen = true;
   });
 }

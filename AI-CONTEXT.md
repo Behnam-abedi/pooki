@@ -52,3 +52,5 @@
 - Step 39: Refined WordPress lifecycle hook for user enumeration security (template_redirect) and injected custom brand colors for Pooki into Tailwind v4 configuration.
 - Resolved font 404 pathing errors and successfully integrated Vazirmatn base typography with Tailwind v4, ensuring fonts are processed and bundled into `assets/dist/`.
 - Configured Vite with `base: './'` to enforce relative URL paths for compiled assets in CSS, resolving WordPress subdirectory routing issues.
+- Built a semantic, RTL-compliant global Header containing the brand logo, center navigation, and left-aligned actions (Search, Cart, Login).
+- Implemented an off-canvas Cart Drawer sliding from the left (RTL) powered natively by an Alpine.js global store (`$store.cart.isOpen`) and styled with Tailwind CSS.
