@@ -39,76 +39,61 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 		borderColor: isSticky ? 'var(--pooki-sticky-border)' : 'var(--pooki-header-border)'
 	}"
 >
-	<!-- Assume html dir="rtl", so flex row goes Right to Left -->
-	<nav 
-		class="container mx-auto px-4 flex justify-between items-center transition-all duration-300" 
-		aria-label="Main Navigation" 
-		:style="{ minHeight: isSticky ? 'var(--pooki-sticky-h)' : 'var(--pooki-header-h)' }"
-	>
-		
-		<!-- Right: Logo & Optional Nav -->
-		<div class="flex items-center gap-x-8 flex-shrink-0">
-			<!-- Logo -->
-			<div class="site-branding flex items-center transition-all duration-300" :style="{ height: isSticky ? 'var(--pooki-sticky-logo-h)' : 'var(--pooki-logo-h)' }">
-				<?php if ( ! empty( $logo_url ) ) : ?>
-					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="h-full block">
-						<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" class="h-full w-auto object-contain" fetchpriority="high">
-					</a>
-				<?php else : ?>
-					<?php
-					if ( has_custom_logo() ) {
-						$custom_logo_id = get_theme_mod( 'custom_logo' );
-						$logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
-						echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="h-full block">';
-						echo '<img src="' . esc_url( $logo[0] ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="h-full w-auto object-contain" fetchpriority="high">';
-						echo '</a>';
-					} else {
-						echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-2xl font-black text-pooki-pink hover:text-pooki-pink-dark transition-colors">' . esc_html( get_bloginfo( 'name' ) ) . '</a>';
-					}
-					?>
-				<?php endif; ?>
-			</div>
-			
-			<!-- Desktop Navigation (Moved next to logo) -->
-			<div class="desktop-menu hidden xl:flex items-center">
-				<style>
-					.pooki-dynamic-menu-link {
-						color: var(--pooki-menu-color, #374151);
-						transition: color 0.2s ease-in-out;
-					}
-					.pooki-dynamic-menu-link:hover {
-						color: var(--pooki-menu-hover-color, #ec4899);
-					}
-					.desktop-menu ul li a {
-						color: var(--pooki-menu-color, #374151);
-						transition: color 0.2s ease-in-out;
-					}
-					.desktop-menu ul li a:hover {
-						color: var(--pooki-menu-hover-color, #ec4899);
-					}
-				</style>
-				<?php
-				if ( has_nav_menu( 'primary' ) ) {
-					wp_nav_menu( [
-						'theme_location'  => 'primary',
-						'container'       => false,
-						'menu_class'      => 'flex gap-x-8 font-medium',
-						'fallback_cb'     => false,
-					] );
-				} else {
-					echo '<ul class="flex gap-x-8 font-medium">';
-					echo '<li><a href="#" class="pooki-dynamic-menu-link">خانه</a></li>';
-					echo '<li><a href="#" class="pooki-dynamic-menu-link">فروشگاه</a></li>';
-					echo '<li><a href="#" class="pooki-dynamic-menu-link">تماس با ما</a></li>';
-					echo '</ul>';
-				}
+	<!-- Top Bar -->
+	<?php if ( ! isset( $opts['topbar_enabled'] ) || $opts['topbar_enabled'] ) : ?>
+		<div 
+			class="w-full transition-all duration-300 overflow-hidden flex items-center" 
+			:style="{ 
+				height: isSticky ? '0' : 'var(--pooki-topbar-h)',
+				opacity: isSticky ? '0' : '1',
+				backgroundColor: 'var(--pooki-topbar-bg)',
+				color: 'var(--pooki-topbar-color)'
+			}"
+		>
+			<div class="container mx-auto px-4 w-full text-center text-sm font-medium leading-none flex items-center justify-center">
+				<?php 
+				$topbar_content = isset( $opts['topbar_content'] ) ? $opts['topbar_content'] : 'تلفن تماس: ۰۲۱-۱۲۳۴۵۶۷۸ | ارسال رایگان برای خریدهای بالای ۱ میلیون تومان';
+				echo wp_kses_post( pooki_to_persian_num( $topbar_content ) ); 
 				?>
 			</div>
 		</div>
+	<?php endif; ?>
 
-		<!-- Center: Live Search -->
-		<div class="hidden lg:block w-full max-w-xl mx-4 relative" x-data="pookiSearch()">
-			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="relative flex items-center w-full" @submit.prevent>
+	<div class="w-full">
+		<!-- Main Header Row (Row 1) -->
+		<div 
+			class="container mx-auto px-4 flex justify-between items-center py-2 transition-all duration-300" 
+			aria-label="Main Header" 
+			:style="{ minHeight: isSticky ? 'var(--pooki-sticky-h)' : 'var(--pooki-header-h)' }"
+		>
+			
+			<!-- Right: Logo -->
+			<div class="flex items-center flex-shrink-0">
+				<!-- Logo -->
+				<div class="site-branding flex items-center transition-all duration-300" :style="{ height: isSticky ? 'var(--pooki-sticky-logo-h)' : 'var(--pooki-logo-h)' }">
+					<?php if ( ! empty( $logo_url ) ) : ?>
+						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="h-full block">
+							<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" class="h-full w-auto object-contain" fetchpriority="high">
+						</a>
+					<?php else : ?>
+						<?php
+						if ( has_custom_logo() ) {
+							$custom_logo_id = get_theme_mod( 'custom_logo' );
+							$logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+							echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="h-full block">';
+							echo '<img src="' . esc_url( $logo[0] ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="h-full w-auto object-contain" fetchpriority="high">';
+							echo '</a>';
+						} else {
+							echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-2xl font-black text-pooki-pink hover:text-pooki-pink-dark transition-colors">' . esc_html( get_bloginfo( 'name' ) ) . '</a>';
+						}
+						?>
+					<?php endif; ?>
+				</div>
+			</div>
+
+			<!-- Center: Live Search -->
+			<div class="hidden lg:block w-full max-w-2xl mx-6 relative" x-data="pookiSearch()">
+				<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="relative flex items-center w-full" @submit.prevent>
 				<input type="hidden" name="post_type" value="product" />
 				<input type="search" name="s" x-model="query" @input.debounce.300ms="fetchResults" placeholder="جستجو در محصولات..." class="w-full pooki-search-input pr-12 pl-4">
 				<button type="button" class="absolute right-4 text-gray-500 hover:text-pooki-blue">
@@ -237,7 +222,48 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
 			</button>
 		</div>
-	</nav>
+		</div>
+
+		<!-- Navigation Row (Row 2) -->
+		<div class="hidden lg:block w-full border-t border-gray-100 py-2.5 transition-all duration-300">
+			<div class="container mx-auto px-4">
+				<nav class="desktop-menu flex items-center">
+					<style>
+						.pooki-dynamic-menu-link {
+							color: var(--pooki-menu-color, #374151);
+							transition: color 0.2s ease-in-out;
+						}
+						.pooki-dynamic-menu-link:hover {
+							color: var(--pooki-menu-hover-color, #ec4899);
+						}
+						.desktop-menu ul li a {
+							color: var(--pooki-menu-color, #374151);
+							transition: color 0.2s ease-in-out;
+						}
+						.desktop-menu ul li a:hover {
+							color: var(--pooki-menu-hover-color, #ec4899);
+						}
+					</style>
+					<?php
+					if ( has_nav_menu( 'primary' ) ) {
+						wp_nav_menu( [
+							'theme_location'  => 'primary',
+							'container'       => false,
+							'menu_class'      => 'flex gap-x-8 font-medium',
+							'fallback_cb'     => false,
+						] );
+					} else {
+						echo '<ul class="flex gap-x-8 font-medium">';
+						echo '<li><a href="#" class="pooki-dynamic-menu-link">خانه</a></li>';
+						echo '<li><a href="#" class="pooki-dynamic-menu-link">فروشگاه</a></li>';
+						echo '<li><a href="#" class="pooki-dynamic-menu-link">تماس با ما</a></li>';
+						echo '</ul>';
+					}
+					?>
+				</nav>
+			</div>
+		</div>
+	</div>
 	
 	<!-- Mobile Menu Dropdown -->
 	<div class="lg:hidden bg-gray-50 border-t border-gray-100" x-show="mobileMenuOpen" x-transition style="display: none;">

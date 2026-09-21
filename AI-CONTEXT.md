@@ -65,6 +65,8 @@
 - Added comprehensive live search input customizations (height, typography, backgrounds, borders, text color, placeholder color, and focus states) to the Theme Options panel, injected as root CSS variables and applied dynamically via `.pooki-search-input` class in Tailwind's `@layer components`.
 - Added a "Header Actions" repeater field in Theme Options powered by a pure vanilla JS builder, allowing unlimited dynamic header buttons (Cart, Account, Custom) with custom SVGs, sizes, colors, borders securely injected into the frontend, plus dynamic Move Up/Down ordering.
 - Redesigned the native Theme Options panel using modern card-based CSS layouts, CSS grids, and section badges to create a premium admin experience.
+- Refactored `navbar.php` into an industry-standard two-tier architecture: Row 1 holds the Logo, a dedicated wide Live Search bar, and Header Actions; Row 2 acts as a dedicated Navigation Bar.
+- Added a highly configurable "Top Bar" (نوار اعلان بالای سایت) via Theme Options, supporting custom HTML with Persian digit injection, custom colors, and an automatic collapse animation when the sticky header activates.
 - Created a JSON Palette Importer tool inside Theme Options to instantly bulk-apply JSON configuration strings directly to color input fields with visual highlight confirmation.
 - Created `pooki_to_persian_num()` helper in `functions.php` to securely convert integers like the WooCommerce Cart badge into Persian digits.
 - Implemented Alpine.js `@scroll.window` tracking on `navbar.php` to dynamically swap variables and utility classes (like `shadow-md`), creating a buttery smooth sticky navigation state transition natively via Tailwind.
