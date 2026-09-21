@@ -6,7 +6,19 @@
       "style.css"
     ],
     "src": "assets/src/css/main.css",
-    "isEntry": true
+    "isEntry": true,
+    "assets": [
+      "Vazirmatn-Regular.woff2",
+      "Vazirmatn-Bold.woff2"
+    ]
+  },
+  "assets/src/fonts/Vazirmatn-Bold.woff2": {
+    "file": "Vazirmatn-Bold.woff2",
+    "src": "assets/src/fonts/Vazirmatn-Bold.woff2"
+  },
+  "assets/src/fonts/Vazirmatn-Regular.woff2": {
+    "file": "Vazirmatn-Regular.woff2",
+    "src": "assets/src/fonts/Vazirmatn-Regular.woff2"
   },
   "assets/src/js/main.js": {
     "file": "main.js",
