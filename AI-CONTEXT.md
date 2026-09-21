@@ -56,3 +56,6 @@
 - Implemented an off-canvas Cart Drawer sliding from the left (RTL) powered natively by an Alpine.js global store (`$store.cart.isOpen`) and styled with Tailwind CSS.
 - Refined the header UI spacing (`gap-x-10`) and styled the minimalist Search input and User/Cart action icons according to the mockup design using Tailwind CSS.
 - Scaffolded a professional, OOP native Theme Options panel using the Singleton design pattern in `inc/admin/class-pooki-theme-options.php` (no ACF bloat).
+- Registered AJAX persistence (`wp_ajax_pooki_save_theme_options`) for the Theme Options panel with a seamless `fetch()` submission to save the Sticky Header, Logo Width, and Colors securely via nonces.
+- Re-engineered the header (`navbar.php`) layout to centrally position a max-width responsive search bar, migrating it into an Alpine.js component (`pookiSearch`).
+- Hooked up live product searching via the `wp_ajax_nopriv_pooki_live_search` endpoint in `inc/core/class-pooki-woocommerce.php`, returning JSON arrays to dynamically render product titles, prices, and thumbnails within the header dropdown.
