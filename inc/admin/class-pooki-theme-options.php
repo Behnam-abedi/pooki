@@ -48,6 +48,7 @@ class Pooki_Theme_Options {
 		add_action( 'admin_menu', [ $this, 'register_admin_menu' ] );
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'wp_ajax_pooki_save_theme_options', [ $this, 'ajax_save_options' ] );
+		add_action( 'wp_head', [ $this, 'inject_dynamic_css' ], 100 );
 	}
 
 	/**
@@ -74,20 +75,10 @@ class Pooki_Theme_Options {
 		// Header Section
 		add_settings_section( 'pooki_header_section', 'تنظیمات سربرگ', null, 'pooki-settings-header' );
 
-		add_settings_field( 'sticky_header', 'هدر چسبان (Sticky)', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'sticky_header' ] );
-		add_settings_field( 'logo_width', 'عرض لوگو (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'logo_width', 'default' => 150 ] );
-		add_settings_field( 'header_bg_color', 'رنگ پس‌زمینه سربرگ', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'header_bg_color' ] );
-		add_settings_field( 'nav_hover_color', 'رنگ هاور منو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'nav_hover_color' ] );
-	}
-
-	/**
-	 * Render Checkbox Field.
-	 */
-	public function render_checkbox_field( $args ) {
-		$options = get_option( 'pooki_theme_options' );
-		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) ? $options[ $id ] : 0;
-		echo '<input type="checkbox" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="1" ' . checked( 1, $value, false ) . ' />';
+		add_settings_field( 'header_height', 'ارتفاع سربرگ (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'header_height', 'default' => 80 ] );
+		add_settings_field( 'logo_height', 'ارتفاع لوگو (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'logo_height', 'default' => 48 ] );
+		add_settings_field( 'menu_text_color', 'رنگ متن منو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'menu_text_color', 'default' => '#374151' ] );
+		add_settings_field( 'menu_hover_color', 'رنگ هاور منو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'menu_hover_color', 'default' => '#ec4899' ] );
 	}
 
 	/**
@@ -106,7 +97,7 @@ class Pooki_Theme_Options {
 	public function render_color_field( $args ) {
 		$options = get_option( 'pooki_theme_options' );
 		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) ? $options[ $id ] : '';
+		$value   = isset( $options[ $id ] ) && ! empty( $options[ $id ] ) ? $options[ $id ] : $args['default'];
 		echo '<input type="color" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" class="regular-text" />';
 	}
 
@@ -129,29 +120,48 @@ class Pooki_Theme_Options {
 			$posted  = wp_unslash( $_POST['pooki_theme_options'] );
 
 			// Sanitize specific fields
-			if ( isset( $posted['sticky_header'] ) ) {
-				$options['sticky_header'] = absint( $posted['sticky_header'] );
-			} else {
-				$options['sticky_header'] = 0; // Checkbox unchecked
+			if ( isset( $posted['header_height'] ) ) {
+				$options['header_height'] = absint( $posted['header_height'] );
 			}
 
-			if ( isset( $posted['logo_width'] ) ) {
-				$options['logo_width'] = absint( $posted['logo_width'] );
+			if ( isset( $posted['logo_height'] ) ) {
+				$options['logo_height'] = absint( $posted['logo_height'] );
 			}
 
-			if ( isset( $posted['header_bg_color'] ) ) {
-				$options['header_bg_color'] = sanitize_hex_color( $posted['header_bg_color'] );
+			if ( isset( $posted['menu_text_color'] ) ) {
+				$options['menu_text_color'] = sanitize_hex_color( $posted['menu_text_color'] );
 			}
 
-			if ( isset( $posted['nav_hover_color'] ) ) {
-				$options['nav_hover_color'] = sanitize_hex_color( $posted['nav_hover_color'] );
+			if ( isset( $posted['menu_hover_color'] ) ) {
+				$options['menu_hover_color'] = sanitize_hex_color( $posted['menu_hover_color'] );
 			}
 
 			update_option( 'pooki_theme_options', $options );
-			wp_send_json_success( 'تنظیمات با موفقیت ذخیره شد!' );
+			wp_send_json_success( [ 'message' => 'تنظیمات با موفقیت ذخیره شد!' ] );
 		}
 
 		wp_send_json_error( 'اطلاعاتی ارسال نشد.' );
+	}
+
+	/**
+	 * Inject Dynamic CSS Variables to frontend.
+	 */
+	public function inject_dynamic_css() {
+		$options = get_option( 'pooki_theme_options', [] );
+
+		$header_height    = isset( $options['header_height'] ) && $options['header_height'] ? absint( $options['header_height'] ) : 80;
+		$logo_height      = isset( $options['logo_height'] ) && $options['logo_height'] ? absint( $options['logo_height'] ) : 48;
+		$menu_text_color  = isset( $options['menu_text_color'] ) && $options['menu_text_color'] ? sanitize_hex_color( $options['menu_text_color'] ) : '#374151';
+		$menu_hover_color = isset( $options['menu_hover_color'] ) && $options['menu_hover_color'] ? sanitize_hex_color( $options['menu_hover_color'] ) : '#ec4899';
+
+		echo '<style id="pooki-dynamic-header-styles">';
+		echo ':root {';
+		echo '--pooki-header-height: ' . esc_attr( $header_height ) . 'px;';
+		echo '--pooki-logo-height: ' . esc_attr( $logo_height ) . 'px;';
+		echo '--pooki-menu-color: ' . esc_attr( $menu_text_color ) . ';';
+		echo '--pooki-menu-hover-color: ' . esc_attr( $menu_hover_color ) . ';';
+		echo '}';
+		echo '</style>';
 	}
 
 	/**
@@ -162,16 +172,13 @@ class Pooki_Theme_Options {
 			return;
 		}
 
-		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
+		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'header';
 		?>
 		<div class="wrap pooki-admin-wrap">
 			<h1>تنظیمات قالب پوکی</h1>
 			
 			<h2 class="nav-tab-wrapper">
-				<a href="?page=pooki-settings&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>">عمومی</a>
 				<a href="?page=pooki-settings&tab=header" class="nav-tab <?php echo $active_tab == 'header' ? 'nav-tab-active' : ''; ?>">سربرگ</a>
-				<a href="?page=pooki-settings&tab=colors" class="nav-tab <?php echo $active_tab == 'colors' ? 'nav-tab-active' : ''; ?>">رنگ‌ها</a>
-				<a href="?page=pooki-settings&tab=typography" class="nav-tab <?php echo $active_tab == 'typography' ? 'nav-tab-active' : ''; ?>">تایپوگرافی</a>
 			</h2>
 
 			<!-- Success Toast Container -->
@@ -214,7 +221,7 @@ class Pooki_Theme_Options {
 				
 				if (response.success) {
 					toast.style.background = '#4caf50';
-					toast.innerText = response.data;
+					toast.innerText = response.data.message || 'تنظیمات ذخیره شد.';
 				} else {
 					toast.style.background = '#f44336';
 					toast.innerText = response.data || 'خطایی رخ داده است.';

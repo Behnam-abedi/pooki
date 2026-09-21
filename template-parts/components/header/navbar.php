@@ -7,15 +7,19 @@
 ?>
 <header class="site-header w-full bg-white shadow-sm sticky top-0 z-40" x-data="{ mobileMenuOpen: false }">
 	<!-- Assume html dir="rtl", so flex row goes Right to Left -->
-	<nav class="container mx-auto px-4 py-4 flex justify-between items-center" aria-label="Main Navigation">
+	<nav class="container mx-auto px-4 flex justify-between items-center" aria-label="Main Navigation" style="min-height: var(--pooki-header-height, 80px);">
 		
 		<!-- Right: Logo & Optional Nav -->
 		<div class="flex items-center gap-x-8 flex-shrink-0">
 			<!-- Logo -->
-			<div class="site-branding">
+			<div class="site-branding flex items-center" style="height: var(--pooki-logo-height, 48px);">
 				<?php
 				if ( has_custom_logo() ) {
-					the_custom_logo();
+					$custom_logo_id = get_theme_mod( 'custom_logo' );
+					$logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+					echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="h-full block">';
+					echo '<img src="' . esc_url( $logo[0] ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="h-full w-auto object-contain">';
+					echo '</a>';
 				} else {
 					echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-2xl font-black text-pooki-pink hover:text-pooki-pink-dark transition-colors">' . esc_html( get_bloginfo( 'name' ) ) . '</a>';
 				}
@@ -24,19 +28,35 @@
 			
 			<!-- Desktop Navigation (Moved next to logo) -->
 			<div class="desktop-menu hidden xl:flex items-center">
+				<style>
+					.pooki-dynamic-menu-link {
+						color: var(--pooki-menu-color, #374151);
+						transition: color 0.2s ease-in-out;
+					}
+					.pooki-dynamic-menu-link:hover {
+						color: var(--pooki-menu-hover-color, #ec4899);
+					}
+					.desktop-menu ul li a {
+						color: var(--pooki-menu-color, #374151);
+						transition: color 0.2s ease-in-out;
+					}
+					.desktop-menu ul li a:hover {
+						color: var(--pooki-menu-hover-color, #ec4899);
+					}
+				</style>
 				<?php
 				if ( has_nav_menu( 'primary' ) ) {
 					wp_nav_menu( [
 						'theme_location'  => 'primary',
 						'container'       => false,
-						'menu_class'      => 'flex gap-x-8 font-medium text-gray-700',
+						'menu_class'      => 'flex gap-x-8 font-medium',
 						'fallback_cb'     => false,
 					] );
 				} else {
-					echo '<ul class="flex gap-x-8 font-medium text-gray-700">';
-					echo '<li><a href="#" class="hover:text-pooki-blue transition-colors">خانه</a></li>';
-					echo '<li><a href="#" class="hover:text-pooki-blue transition-colors">فروشگاه</a></li>';
-					echo '<li><a href="#" class="hover:text-pooki-blue transition-colors">تماس با ما</a></li>';
+					echo '<ul class="flex gap-x-8 font-medium">';
+					echo '<li><a href="#" class="pooki-dynamic-menu-link">خانه</a></li>';
+					echo '<li><a href="#" class="pooki-dynamic-menu-link">فروشگاه</a></li>';
+					echo '<li><a href="#" class="pooki-dynamic-menu-link">تماس با ما</a></li>';
 					echo '</ul>';
 				}
 				?>

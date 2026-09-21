@@ -59,3 +59,5 @@
 - Registered AJAX persistence (`wp_ajax_pooki_save_theme_options`) for the Theme Options panel with a seamless `fetch()` submission to save the Sticky Header, Logo Width, and Colors securely via nonces.
 - Re-engineered the header (`navbar.php`) layout to centrally position a max-width responsive search bar, migrating it into an Alpine.js component (`pookiSearch`).
 - Hooked up live product searching via the `wp_ajax_nopriv_pooki_live_search` endpoint in `inc/core/class-pooki-woocommerce.php`, returning JSON arrays to dynamically render product titles, prices, and thumbnails within the header dropdown.
+- Fixed the AJAX persistence within the native Theme Options panel by properly scoping field sanitization and ensuring accurate nonce verification during `fetch()` submissions.
+- Built a dynamic CSS Variable injector hooked to `wp_head` that consumes `pooki_theme_options` and propagates `--pooki-header-height`, `--pooki-logo-height`, `--pooki-menu-color`, and `--pooki-menu-hover-color` securely into the frontend DOM (`navbar.php`).
