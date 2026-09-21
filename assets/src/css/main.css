@@ -30,3 +30,23 @@
     font-style: normal;
     font-display: swap;
 }
+
+@layer components {
+    .pooki-search-input {
+        height: var(--pooki-search-h, 44px);
+        font-size: var(--pooki-search-font-size, 14px);
+        background-color: var(--pooki-search-bg, #f3f4f6);
+        border-radius: var(--pooki-search-radius, 9999px);
+        border-width: var(--pooki-search-border-w, 1px);
+        border-color: var(--pooki-search-border-c, #e5e7eb);
+        border-style: solid;
+        transition: all 200ms ease-in-out;
+    }
+    
+    .pooki-search-input:focus {
+        background-color: var(--pooki-search-focus-bg, #ffffff);
+        border-width: var(--pooki-search-focus-border-w, 2px);
+        border-color: var(--pooki-search-focus-border-c, #ec4899);
+        outline: none;
+    }
+}

@@ -105,6 +105,19 @@ class Pooki_Theme_Options {
 		add_settings_field( 'sticky_bg_color', 'رنگ پس‌زمینه چسبان', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_sticky_header_section', [ 'id' => 'sticky_bg_color', 'default' => '#ffffff' ] );
 		add_settings_field( 'sticky_border_color', 'رنگ حاشیه چسبان', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_sticky_header_section', [ 'id' => 'sticky_border_color', 'default' => '#e5e7eb' ] );
 		add_settings_field( 'sticky_shadow', 'سایه هدر چسبان', [ $this, 'render_select_field' ], 'pooki-settings-header', 'pooki_sticky_header_section', [ 'id' => 'sticky_shadow', 'options' => [ 'none' => 'بدون سایه', 'sm' => 'کوچک', 'md' => 'متوسط', 'lg' => 'بزرگ' ], 'default' => 'md' ] );
+
+		// Search Bar Section
+		add_settings_section( 'pooki_search_section', 'تنظیمات فرم جستجو', null, 'pooki-settings-header' );
+
+		add_settings_field( 'search_height', 'ارتفاع فرم (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_height', 'default' => 44 ] );
+		add_settings_field( 'search_font_size', 'اندازه متن (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_font_size', 'default' => 14 ] );
+		add_settings_field( 'search_bg_color', 'رنگ پس‌زمینه عادی', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_bg_color', 'default' => '#f3f4f6' ] );
+		add_settings_field( 'search_focus_bg_color', 'رنگ پس‌زمینه فوکوس', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_focus_bg_color', 'default' => '#ffffff' ] );
+		add_settings_field( 'search_border_radius', 'گردی گوشه‌ها (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_radius', 'default' => 9999 ] );
+		add_settings_field( 'search_border_width', 'ضخامت حاشیه عادی (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_width', 'default' => 1 ] );
+		add_settings_field( 'search_focus_border_width', 'ضخامت حاشیه فوکوس (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_focus_border_width', 'default' => 2 ] );
+		add_settings_field( 'search_border_color', 'رنگ حاشیه عادی', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_color', 'default' => '#e5e7eb' ] );
+		add_settings_field( 'search_focus_border_color', 'رنگ حاشیه فوکوس', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_focus_border_color', 'default' => '#ec4899' ] );
 	}
 
 	/**
@@ -210,6 +223,15 @@ class Pooki_Theme_Options {
 				'sticky_bg_color'       => 'color',
 				'sticky_border_color'   => 'color',
 				'sticky_shadow'         => 'key',
+				'search_height'         => 'int',
+				'search_font_size'      => 'int',
+				'search_bg_color'       => 'color',
+				'search_focus_bg_color' => 'color',
+				'search_border_radius'  => 'int',
+				'search_border_width'   => 'int',
+				'search_focus_border_width' => 'int',
+				'search_border_color'   => 'color',
+				'search_focus_border_color' => 'color',
 			];
 
 			foreach ( $fields as $field => $type ) {
@@ -257,6 +279,16 @@ class Pooki_Theme_Options {
 		$menu_text_color  = sanitize_hex_color( isset( $opts['menu_text_color'] ) ? $opts['menu_text_color'] : '#374151' );
 		$menu_hover_color = sanitize_hex_color( isset( $opts['menu_hover_color'] ) ? $opts['menu_hover_color'] : '#ec4899' );
 
+		$search_height         = absint( isset( $opts['search_height'] ) ? $opts['search_height'] : 44 );
+		$search_font_size      = absint( isset( $opts['search_font_size'] ) ? $opts['search_font_size'] : 14 );
+		$search_bg             = sanitize_hex_color( isset( $opts['search_bg_color'] ) ? $opts['search_bg_color'] : '#f3f4f6' );
+		$search_focus_bg       = sanitize_hex_color( isset( $opts['search_focus_bg_color'] ) ? $opts['search_focus_bg_color'] : '#ffffff' );
+		$search_radius         = absint( isset( $opts['search_border_radius'] ) ? $opts['search_border_radius'] : 9999 );
+		$search_border_w       = absint( isset( $opts['search_border_width'] ) ? $opts['search_border_width'] : 1 );
+		$search_focus_border_w = absint( isset( $opts['search_focus_border_width'] ) ? $opts['search_focus_border_width'] : 2 );
+		$search_border_c       = sanitize_hex_color( isset( $opts['search_border_color'] ) ? $opts['search_border_color'] : '#e5e7eb' );
+		$search_focus_border_c = sanitize_hex_color( isset( $opts['search_focus_border_color'] ) ? $opts['search_focus_border_color'] : '#ec4899' );
+
 		echo '<style id="pooki-header-dynamic-vars">';
 		echo ':root {';
 		echo '--pooki-header-h: ' . esc_attr( $header_height ) . 'px;';
@@ -271,6 +303,17 @@ class Pooki_Theme_Options {
 
 		echo '--pooki-menu-color: ' . esc_attr( $menu_text_color ) . ';';
 		echo '--pooki-menu-hover-color: ' . esc_attr( $menu_hover_color ) . ';';
+
+		echo '--pooki-search-h: ' . esc_attr( $search_height ) . 'px;';
+		echo '--pooki-search-font-size: ' . esc_attr( $search_font_size ) . 'px;';
+		echo '--pooki-search-bg: ' . esc_attr( $search_bg ) . ';';
+		echo '--pooki-search-focus-bg: ' . esc_attr( $search_focus_bg ) . ';';
+		echo '--pooki-search-radius: ' . esc_attr( $search_radius ) . 'px;';
+		echo '--pooki-search-border-w: ' . esc_attr( $search_border_w ) . 'px;';
+		echo '--pooki-search-focus-border-w: ' . esc_attr( $search_focus_border_w ) . 'px;';
+		echo '--pooki-search-border-c: ' . esc_attr( $search_border_c ) . ';';
+		echo '--pooki-search-focus-border-c: ' . esc_attr( $search_focus_border_c ) . ';';
+
 		echo '}';
 		echo '</style>';
 	}
