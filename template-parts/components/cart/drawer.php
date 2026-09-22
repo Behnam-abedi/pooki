@@ -13,7 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div 
 	x-data
 	x-show="$store.cart.isOpen"
-	class="relative z-50" 
+	@pooki:open-cart.window="$store.cart.isOpen = true"
+	class="relative z-[110]" 
 	aria-labelledby="slide-over-title" 
 	role="dialog" 
 	aria-modal="true"
