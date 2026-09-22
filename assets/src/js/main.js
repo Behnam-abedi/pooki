@@ -18,7 +18,7 @@ document.addEventListener('alpine:init', () => {
   });
 
   Alpine.effect(() => {
-    if (Alpine.store('nav').mobileMenuOpen) {
+    if (Alpine.store('nav').mobileMenuOpen || Alpine.store('nav').searchOpen || Alpine.store('cart').isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';

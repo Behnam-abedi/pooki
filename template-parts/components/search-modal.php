@@ -13,16 +13,15 @@
 	style="display: none; background-color: var(--pooki-search-modal-bg);"
 	x-data="pookiLiveSearch()"
 	x-cloak
+	x-transition:enter="transition ease-out duration-300 transform"
+	x-transition:enter-start="-translate-y-full opacity-0"
+	x-transition:enter-end="translate-y-0 opacity-100"
+	x-transition:leave="transition ease-in duration-200 transform"
+	x-transition:leave-start="translate-y-0 opacity-100"
+	x-transition:leave-end="-translate-y-full opacity-0"
 >
 	<div 
 		class="relative w-full h-full flex flex-col transition-transform"
-		x-show="$store.nav.searchOpen"
-		x-transition:enter="transform transition ease-out duration-300"
-		x-transition:enter-start="-translate-y-full"
-		x-transition:enter-end="translate-y-0"
-		x-transition:leave="transform transition ease-in duration-200"
-		x-transition:leave-start="translate-y-0"
-		x-transition:leave-end="-translate-y-full"
 	>
 		<!-- Header -->
 		<div class="flex items-center justify-between mb-6">
@@ -41,7 +40,7 @@
 				x-model.debounce.300ms="query" 
 				x-ref="searchInput" 
 				placeholder="نام محصول را وارد کنید..." 
-				class="w-full rounded-full py-3.5 pr-14 pl-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8C6D53]/30 transition-colors text-base font-medium"
+				class="w-full rounded-full py-3.5 pr-14 pl-6 focus:outline-none focus:ring-2 focus:ring-[#8C6D53]/30 transition-colors text-base font-medium"
 				style="background-color: var(--pooki-search-modal-input-bg); border: 1px solid var(--pooki-search-modal-input-border); color: var(--pooki-search-modal-text);"
 			>
 			

@@ -191,6 +191,20 @@ class Pooki_Theme_Options {
 		add_settings_field( 'mobile_bottom_bar_search', 'نمایش جستجو', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_search', 'default' => 0 ] );
 		add_settings_field( 'bottom_bar_label_search', 'برچسب جستجو', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_label_search', 'default' => 'جستجو' ] );
 
+		add_settings_field( 'bottom_bar_shadow', 'سایه نوار پایین', [ $this, 'render_select_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 
+			'id' => 'bottom_bar_shadow', 
+			'default' => 'shadow-lg',
+			'options' => [
+				'none' => 'بدون سایه',
+				'shadow-sm' => 'نرم (Soft)',
+				'shadow-md' => 'متوسط (Medium)',
+				'shadow-lg' => 'بزرگ (Strong)',
+				'shadow-xl' => 'خیلی بزرگ (Extra Strong)'
+			]
+		] );
+		add_settings_field( 'bottom_bar_dividers', 'فعال‌سازی جداکننده‌های عمودی', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_dividers', 'default' => 0 ] );
+		add_settings_field( 'bottom_bar_divider_color', 'رنگ جداکننده‌ها', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_divider_color', 'default' => '#EBE4D8' ] );
+
 		// Mobile Search Modal Settings
 		add_settings_field( 'search_modal_bg_color', 'رنگ پس‌زمینه مدال جستجو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'search_modal_bg_color', 'default' => '#FAF7F2' ] );
 		add_settings_field( 'search_modal_input_bg_color', 'رنگ پس‌زمینه فیلد جستجو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'search_modal_input_bg_color', 'default' => '#FDFBF7' ] );
@@ -397,6 +411,10 @@ class Pooki_Theme_Options {
 				'mobile_bottom_bar_search'         => 'bool',
 				'bottom_bar_label_search'          => 'text',
 				
+				'bottom_bar_shadow'                => 'text',
+				'bottom_bar_dividers'              => 'bool',
+				'bottom_bar_divider_color'         => 'color',
+				
 				'search_modal_bg_color'            => 'color',
 				'search_modal_input_bg_color'      => 'color',
 				'search_modal_input_border_color'  => 'color',
@@ -542,6 +560,9 @@ class Pooki_Theme_Options {
 		$bottom_bar_icon     = sanitize_hex_color( isset( $opts['bottom_bar_icon_color'] ) ? $opts['bottom_bar_icon_color'] : '#6b7280' );
 		$bottom_bar_icon_a   = sanitize_hex_color( isset( $opts['bottom_bar_icon_active_color'] ) ? $opts['bottom_bar_icon_active_color'] : '#8b5cf6' );
 
+		$bottom_bar_shadow   = esc_attr( isset( $opts['bottom_bar_shadow'] ) ? $opts['bottom_bar_shadow'] : 'shadow-lg' );
+		$bottom_bar_divider_color = sanitize_hex_color( isset( $opts['bottom_bar_divider_color'] ) ? $opts['bottom_bar_divider_color'] : '#EBE4D8' );
+
 		$search_modal_bg       = sanitize_hex_color( isset( $opts['search_modal_bg_color'] ) ? $opts['search_modal_bg_color'] : '#FAF7F2' );
 		$search_modal_input_bg = sanitize_hex_color( isset( $opts['search_modal_input_bg_color'] ) ? $opts['search_modal_input_bg_color'] : '#FDFBF7' );
 		$search_modal_input_border = sanitize_hex_color( isset( $opts['search_modal_input_border_color'] ) ? $opts['search_modal_input_border_color'] : '#EBE4D8' );
@@ -599,6 +620,18 @@ class Pooki_Theme_Options {
 		echo '--pooki-bottom-bar-bg: ' . esc_attr( $bottom_bar_bg ) . ';';
 		echo '--pooki-bottom-bar-icon-c: ' . esc_attr( $bottom_bar_icon ) . ';';
 		echo '--pooki-bottom-bar-icon-active-c: ' . esc_attr( $bottom_bar_icon_a ) . ';';
+		echo '--pooki-bottom-bar-divider: ' . esc_attr( $bottom_bar_divider_color ) . ';';
+
+		// Shadow map helper
+		$shadow_map = [
+			'none' => 'none',
+			'shadow-sm' => '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+			'shadow-md' => '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+			'shadow-lg' => '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+			'shadow-xl' => '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+		];
+		$shadow_val = isset($shadow_map[$bottom_bar_shadow]) ? $shadow_map[$bottom_bar_shadow] : $shadow_map['shadow-lg'];
+		echo '--pooki-bottom-nav-shadow: ' . esc_attr( $shadow_val ) . ';';
 
 		echo '--pooki-search-modal-bg: ' . esc_attr( $search_modal_bg ) . ';';
 		echo '--pooki-search-modal-input-bg: ' . esc_attr( $search_modal_input_bg ) . ';';
