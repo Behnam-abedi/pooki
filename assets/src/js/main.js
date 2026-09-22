@@ -6,7 +6,6 @@ document.addEventListener('alpine:init', () => {
     isOpen: false,
     toggle() {
       this.isOpen = !this.isOpen;
-      console.log('[Pooki Debug] Cart toggle triggered. Current state:', this.isOpen);
     }
   });
 
