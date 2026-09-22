@@ -9,6 +9,22 @@ document.addEventListener('alpine:init', () => {
     }
   });
 
+  Alpine.store('nav', {
+    mobileMenuOpen: false,
+    searchOpen: false,
+    toggleMobileMenu() {
+      this.mobileMenuOpen = !this.mobileMenuOpen;
+    }
+  });
+
+  Alpine.effect(() => {
+    if (Alpine.store('nav').mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  });
+
   Alpine.data('pookiSearch', () => ({
     query: '',
     results: [],

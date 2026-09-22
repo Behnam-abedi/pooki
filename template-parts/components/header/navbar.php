@@ -24,11 +24,30 @@ $base_shadow = isset( $shadow_classes[ $header_shadow ] ) ? $shadow_classes[ $he
 $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $sticky_shadow ] : 'shadow-md';
 
 ?>
+<!-- Top Bar (Scrolls away naturally) -->
+<?php if ( ! isset( $opts['topbar_enabled'] ) || $opts['topbar_enabled'] ) : ?>
+	<div 
+		class="w-full transition-colors duration-300 flex items-center relative z-40" 
+		style="
+			min-height: var(--pooki-topbar-h);
+			background-color: var(--pooki-topbar-bg);
+			color: var(--pooki-topbar-color);
+		"
+	>
+		<div class="container mx-auto px-4 w-full text-center text-sm font-medium leading-none flex items-center justify-center">
+			<?php 
+			$topbar_content = isset( $opts['topbar_content'] ) ? $opts['topbar_content'] : 'تلفن تماس: ۰۲۱-۱۲۳۴۵۶۷۸ | ارسال رایگان برای خریدهای بالای ۱ میلیون تومان';
+			echo wp_kses_post( pooki_to_persian_num( $topbar_content ) ); 
+			?>
+		</div>
+	</div>
+<?php endif; ?>
+
 <header 
 	class="site-header w-full sticky top-0 z-50 transition-all duration-300 border-b"
 	x-data="{ mobileMenuOpen: false, isSticky: false }"
 	<?php if ( $sticky_enabled ) : ?>
-	@scroll.window="isSticky = (window.pageYOffset > 100)"
+	@scroll.window="if (window.pageYOffset > 150) { isSticky = true; } else if (window.pageYOffset < 30) { isSticky = false; }"
 	<?php endif; ?>
 	:class="{
 		'<?php echo esc_attr( $stick_shadow ); ?>': isSticky,
@@ -39,36 +58,25 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 		borderColor: isSticky ? 'var(--pooki-sticky-border)' : 'var(--pooki-header-border)'
 	}"
 >
-	<!-- Top Bar -->
-	<?php if ( ! isset( $opts['topbar_enabled'] ) || $opts['topbar_enabled'] ) : ?>
-		<div 
-			class="w-full transition-all duration-300 overflow-hidden flex items-center" 
-			:class="isSticky ? 'opacity-0 -translate-y-full max-h-0' : 'opacity-100 translate-y-0 max-h-screen'"
-			:style="{ 
-				minHeight: isSticky ? '0' : 'var(--pooki-topbar-h)',
-				backgroundColor: 'var(--pooki-topbar-bg)',
-				color: 'var(--pooki-topbar-color)'
-			}"
-		>
-			<div class="container mx-auto px-4 w-full text-center text-sm font-medium leading-none flex items-center justify-center">
-				<?php 
-				$topbar_content = isset( $opts['topbar_content'] ) ? $opts['topbar_content'] : 'تلفن تماس: ۰۲۱-۱۲۳۴۵۶۷۸ | ارسال رایگان برای خریدهای بالای ۱ میلیون تومان';
-				echo wp_kses_post( pooki_to_persian_num( $topbar_content ) ); 
-				?>
-			</div>
-		</div>
-	<?php endif; ?>
+
 
 	<div class="w-full">
 		<!-- Main Header Row (Row 1) -->
 		<div 
-			class="container mx-auto px-4 flex justify-between items-center py-2 transition-all duration-300" 
+			class="container mx-auto px-4 grid grid-cols-3 lg:flex lg:justify-between items-center py-2 transition-all duration-300" 
 			aria-label="Main Header" 
 			:style="{ minHeight: isSticky ? 'var(--pooki-sticky-h)' : 'var(--pooki-header-h)' }"
 		>
 			
-			<!-- Right: Logo -->
-			<div class="flex items-center flex-shrink-0">
+			<!-- Right Side Mobile: Search Trigger (Hidden on Desktop) -->
+			<div class="flex items-center justify-start lg:hidden">
+				<button type="button" class="relative pooki-action-btn bg-gray-100 cursor-pointer transition-colors aspect-square justify-center rounded-full p-2 text-gray-700 hover:bg-pooki-blue hover:text-white" aria-label="Search" @click="$store.nav.searchOpen = !$store.nav.searchOpen">
+					<svg class="w-5 h-5 leading-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+				</button>
+			</div>
+
+			<!-- Center Mobile / Right Desktop: Logo -->
+			<div class="flex items-center justify-center lg:justify-start lg:flex-shrink-0">
 				<!-- Logo -->
 				<div class="site-branding flex items-center transition-all duration-300" :style="{ height: isSticky ? 'var(--pooki-sticky-logo-h)' : 'var(--pooki-logo-h)' }">
 					<?php if ( ! empty( $logo_url ) ) : ?>
@@ -141,13 +149,8 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 			</div>
 		</div>
 
-		<!-- Left: Cart, Login, Mobile Toggle -->
-		<div class="flex items-center gap-x-4 flex-shrink-0">
-			
-			<!-- Mobile Search Toggle (Optional, minimal implementation) -->
-			<button type="button" class="lg:hidden flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full text-gray-700 hover:bg-pooki-blue hover:text-white transition-colors" aria-label="Search">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-			</button>
+		<!-- Left Side: Cart, Login, Mobile Toggle -->
+		<div class="flex items-center justify-end gap-x-2 lg:gap-x-4 lg:flex-shrink-0">
 
 			<!-- Dynamic Header Actions -->
 			<?php
@@ -176,11 +179,11 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 					}
 				}
 
-				$base_classes = 'relative pooki-action-btn cursor-pointer transition-colors';
+				$base_classes = 'relative pooki-action-btn cursor-pointer transition-colors hidden md:inline-flex';
 				if ( empty( $label ) ) {
 					$base_classes .= ' aspect-square justify-center rounded-full p-2';
 				} else {
-					$base_classes .= ' inline-flex items-center gap-x-2';
+					$base_classes .= ' items-center gap-x-2';
 				}
 				
 				$label_html = '';
@@ -218,8 +221,8 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 			?>
 
 			<!-- Mobile Menu Toggle -->
-			<button type="button" class="lg:hidden flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full text-gray-700 hover:bg-pooki-blue hover:text-white transition-colors" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle mobile menu">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+			<button type="button" class="lg:hidden relative pooki-action-btn bg-gray-100 cursor-pointer transition-colors aspect-square justify-center rounded-full p-2 text-gray-700 hover:bg-pooki-blue hover:text-white" @click="$store.nav.toggleMobileMenu()" aria-label="Toggle mobile menu" aria-expanded="false" :aria-expanded="$store.nav.mobileMenuOpen.toString()">
+				<svg class="w-5 h-5 leading-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
 			</button>
 		</div>
 		</div>
@@ -271,26 +274,7 @@ $stick_shadow = isset( $shadow_classes[ $sticky_shadow ] ) ? $shadow_classes[ $s
 			</div>
 		</div>
 	</div>
-	
-	<!-- Mobile Menu Dropdown -->
-	<div class="lg:hidden bg-gray-50 border-t border-gray-100" x-show="mobileMenuOpen" x-transition style="display: none;">
-		<div class="px-4 py-4">
-			<?php
-			if ( has_nav_menu( 'mobile' ) ) {
-				wp_nav_menu( [
-					'theme_location'  => 'mobile',
-					'container'       => false,
-					'menu_class'      => 'flex flex-col space-y-4 text-gray-700 font-medium',
-					'fallback_cb'     => false,
-				] );
-			} else {
-				echo '<ul class="flex flex-col space-y-4 text-gray-700 font-medium">';
-				echo '<li><a href="#" class="block hover:text-pooki-blue">خانه</a></li>';
-				echo '<li><a href="#" class="block hover:text-pooki-blue">فروشگاه</a></li>';
-				echo '<li><a href="#" class="block hover:text-pooki-blue">تماس با ما</a></li>';
-				echo '</ul>';
-			}
-			?>
-		</div>
-	</div>
+	<!-- Off-Canvas Mobile Drawer -->
+	<?php get_template_part( 'template-parts/components/mobile-drawer' ); ?>
+
 </header>

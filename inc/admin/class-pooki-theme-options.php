@@ -90,7 +90,7 @@ class Pooki_Theme_Options {
 		add_settings_field( 'topbar_height', 'ارتفاع (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_topbar_section', [ 'id' => 'topbar_height', 'default' => 36 ] );
 		add_settings_field( 'topbar_bg_color', 'رنگ پس‌زمینه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_topbar_section', [ 'id' => 'topbar_bg_color', 'default' => '#4f46e5' ] );
 		add_settings_field( 'topbar_text_color', 'رنگ متن', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_topbar_section', [ 'id' => 'topbar_text_color', 'default' => '#ffffff' ] );
-		add_settings_field( 'topbar_content', 'محتوای نوار اعلان (HTML مجاز است)', [ $this, 'render_textarea_field' ], 'pooki-settings-header', 'pooki_topbar_section', [ 'id' => 'topbar_content', 'default' => 'تلفن تماس: ۰۲۱-۱۲۳۴۵۶۷۸ | ارسال رایگان برای خریدهای بالای ۱ میلیون تومان' ] );
+		add_settings_field( 'topbar_content', 'محتوای نوار اعلان (HTML مجاز است)', [ $this, 'render_textarea_field' ], 'pooki-settings-header', 'pooki_topbar_section', [ 'id' => 'topbar_content', 'default' => 'تلفن تماس: ۰۲۱-۱۲۳۴۵۶۷۸ | ارسال رایگان برای خریدهای بالای ۱ میلیون تومان', 'class' => 'pooki-full-width-field' ] );
 
 		// Header Section
 		add_settings_section( 'pooki_header_section', 'تنظیمات سربرگ', null, 'pooki-settings-header' );
@@ -156,7 +156,7 @@ class Pooki_Theme_Options {
 		
 		add_settings_field( 'header_action_border_color', 'رنگ حاشیه', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_border_color', 'default' => '#ffffff' ] );
 		
-		add_settings_field( 'header_action_items', 'مدیریت دکمه‌ها', [ $this, 'render_repeater_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_items' ] );
+		add_settings_field( 'header_action_items', 'مدیریت دکمه‌ها', [ $this, 'render_repeater_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_items', 'class' => 'pooki-full-width-field' ] );
 
 	}
 
@@ -542,6 +542,10 @@ class Pooki_Theme_Options {
 					border-radius: 8px;
 					border: 1px solid #e2e8f0;
 				}
+				.pooki-admin-wrap .form-table tr.pooki-full-width-field {
+					grid-column: 1 / -1;
+					width: 100%;
+				}
 				.pooki-admin-wrap .form-table th {
 					padding: 0 0 10px 0;
 					width: auto;
@@ -635,11 +639,12 @@ class Pooki_Theme_Options {
 				}
 				.pooki-admin-wrap input[type="number"], 
 				.pooki-admin-wrap input[type="text"], 
-				.pooki-admin-wrap select {
+				.pooki-admin-wrap select,
+				.pooki-admin-wrap textarea {
 					width: 100%;
 					border-radius: 6px;
 					border: 1px solid #cbd5e1;
-					padding: 6px 12px;
+					padding: 8px 12px;
 				}
 				.pooki-admin-wrap input[type="color"] {
 					height: 36px;
@@ -720,9 +725,25 @@ class Pooki_Theme_Options {
 							<h2>درون‌ریزی پالت رنگ (JSON)</h2>
 							<div class="pooki-json-importer" style="padding: 20px;">
 								<p style="color: #64748b; font-size: 13px; margin-top:0;">یک شیء JSON حاوی کلید رنگ‌ها و مقادیر Hex وارد کنید.</p>
-								<textarea id="pooki-json-palette" rows="3" style="width: 100%; font-family: monospace; direction: ltr; border-radius: 6px; border: 1px solid #cbd5e1; padding: 10px;" placeholder='{"header_bg_color":"#ffffff", "menu_text_color":"#1f2937"}'></textarea>
+								<textarea id="pooki-json-palette" rows="4" style="width: 100%; font-family: monospace; direction: ltr; border-radius: 6px; border: 1px solid #cbd5e1; padding: 10px;" placeholder='{"header_bg_color":"#ffffff", "menu_text_color":"#1f2937"}'></textarea>
 								<button type="button" id="pooki-import-json-btn" class="button button-secondary" style="margin-top: 10px;">اعمال رنگ‌ها</button>
 								<span id="pooki-json-status" style="margin-right: 10px; font-weight: bold;"></span>
+							</div>
+							
+							<h2 style="margin-top: 30px;">استخراج پالت رنگ (Export JSON برای هوش مصنوعی)</h2>
+							<div class="pooki-json-exporter" style="padding: 20px;">
+								<p style="color: #64748b; font-size: 13px; margin-top:0;">رنگ‌های فعلی شما. این کد را کپی کرده و به هوش مصنوعی بدهید.</p>
+								<textarea id="pooki-json-export" readonly rows="8" style="width: 100%; font-family: monospace; direction: ltr; border-radius: 6px; border: 1px solid #cbd5e1; padding: 10px; background: #f8fafc; color: #333; resize: vertical;" onclick="this.select();"><?php
+									$opts = get_option('pooki_theme_options', []);
+									$colors = [];
+									foreach($opts as $k => $v) {
+										if (strpos($k, 'color') !== false) {
+											$colors[$k] = $v;
+										}
+									}
+									echo esc_textarea(wp_json_encode($colors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+								?></textarea>
+								<button type="button" id="pooki-copy-json-btn" class="button button-primary" style="margin-top: 10px;" onclick="navigator.clipboard.writeText(document.getElementById('pooki-json-export').value); this.innerText='کپی شد!'; setTimeout(()=>this.innerText='کپی JSON در کلیپبورد', 2000);">کپی JSON در کلیپبورد</button>
 							</div>
 						</div>
 					</div>
