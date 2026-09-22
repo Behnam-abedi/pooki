@@ -10,6 +10,8 @@
 
 <?php get_template_part( 'template-parts/components/cart/drawer' ); ?>
 
+<?php get_template_part( 'template-parts/components/bottom-nav' ); ?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

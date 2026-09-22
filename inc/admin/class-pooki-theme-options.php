@@ -50,6 +50,7 @@ class Pooki_Theme_Options {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
 		add_action( 'wp_ajax_pooki_save_theme_options', [ $this, 'ajax_save_options' ] );
 		add_action( 'wp_head', [ $this, 'inject_dynamic_css' ], 100 );
+		add_filter( 'body_class', [ $this, 'mobile_bottom_bar_body_class' ] );
 	}
 
 	/**
@@ -158,6 +159,22 @@ class Pooki_Theme_Options {
 		
 		add_settings_field( 'header_action_items', 'مدیریت دکمه‌ها', [ $this, 'render_repeater_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_items', 'class' => 'pooki-full-width-field' ] );
 
+		// Mobile Navigation Section
+		add_settings_section( 'pooki_mobile_nav_section', 'تنظیمات موبایل و نوار پایینی', null, 'pooki-settings-header' );
+
+		// Mobile Header Actions
+		add_settings_field( 'mobile_nav_header_search', 'نمایش جستجو در هدر موبایل', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_search', 'default' => 1 ] );
+		add_settings_field( 'mobile_nav_header_phone', 'نمایش دکمه تماس در هدر موبایل', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_phone', 'default' => 0 ] );
+		add_settings_field( 'mobile_nav_header_phone_number', 'شماره تماس', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_phone_number', 'default' => '02112345678' ] );
+		add_settings_field( 'mobile_nav_header_hamburger', 'نمایش منوی همبرگری', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_hamburger', 'default' => 1 ] );
+
+		// Mobile Bottom Bar Actions
+		add_settings_field( 'mobile_bottom_bar_home', 'دکمه خانه (نوار پایین)', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_home', 'default' => 1 ] );
+		add_settings_field( 'mobile_bottom_bar_shop', 'دکمه فروشگاه (نوار پایین)', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_shop', 'default' => 1 ] );
+		add_settings_field( 'mobile_bottom_bar_cart', 'دکمه سبد خرید (نوار پایین)', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_cart', 'default' => 1 ] );
+		add_settings_field( 'mobile_bottom_bar_account', 'دکمه حساب کاربری (نوار پایین)', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_account', 'default' => 1 ] );
+		add_settings_field( 'mobile_bottom_bar_search', 'دکمه جستجو (نوار پایین)', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_search', 'default' => 0 ] );
+
 	}
 
 	/**
@@ -178,6 +195,16 @@ class Pooki_Theme_Options {
 		$id      = $args['id'];
 		$value   = isset( $options[ $id ] ) ? $options[ $id ] : $args['default'];
 		echo '<input type="number" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" class="regular-text" />';
+	}
+
+	/**
+	 * Render Text Field.
+	 */
+	public function render_text_field( $args ) {
+		$options = get_option( 'pooki_theme_options' );
+		$id      = $args['id'];
+		$value   = isset( $options[ $id ] ) ? $options[ $id ] : $args['default'];
+		echo '<input type="text" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" class="regular-text" />';
 	}
 
 	/**
@@ -324,6 +351,17 @@ class Pooki_Theme_Options {
 				'header_action_bg_hover_color'     => 'color',
 				'header_action_border_color'       => 'color',
 				'header_action_items'              => 'repeater',
+
+				'mobile_nav_header_search'         => 'bool',
+				'mobile_nav_header_phone'          => 'bool',
+				'mobile_nav_header_phone_number'   => 'text',
+				'mobile_nav_header_hamburger'      => 'bool',
+				
+				'mobile_bottom_bar_home'           => 'bool',
+				'mobile_bottom_bar_shop'           => 'bool',
+				'mobile_bottom_bar_cart'           => 'bool',
+				'mobile_bottom_bar_account'        => 'bool',
+				'mobile_bottom_bar_search'         => 'bool',
 			];
 
 			foreach ( $fields as $field => $type ) {
@@ -335,6 +373,8 @@ class Pooki_Theme_Options {
 				if ( isset( $posted[ $field ] ) ) {
 					if ( 'int' === $type ) {
 						$options[ $field ] = absint( $posted[ $field ] );
+					} elseif ( 'text' === $type ) {
+						$options[ $field ] = sanitize_text_field( $posted[ $field ] );
 					} elseif ( 'color' === $type ) {
 						// 'transparent' is valid in CSS
 						if ( $posted[ $field ] === 'transparent' ) {
@@ -507,6 +547,23 @@ class Pooki_Theme_Options {
 	}
 
 	/**
+	 * Add body padding for mobile bottom bar
+	 */
+	public function mobile_bottom_bar_body_class( $classes ) {
+		$opts = get_option( 'pooki_theme_options', [] );
+		$has_home = isset($opts['mobile_bottom_bar_home']) ? $opts['mobile_bottom_bar_home'] : 1;
+		$has_shop = isset($opts['mobile_bottom_bar_shop']) ? $opts['mobile_bottom_bar_shop'] : 1;
+		$has_cart = isset($opts['mobile_bottom_bar_cart']) ? $opts['mobile_bottom_bar_cart'] : 1;
+		$has_acc  = isset($opts['mobile_bottom_bar_account']) ? $opts['mobile_bottom_bar_account'] : 1;
+		$has_srch = isset($opts['mobile_bottom_bar_search']) ? $opts['mobile_bottom_bar_search'] : 0;
+
+		if ( $has_home || $has_shop || $has_cart || $has_acc || $has_srch ) {
+			$classes[] = 'pb-16 md:pb-0';
+		}
+		return $classes;
+	}
+
+	/**
 	 * Render the Admin Page UI.
 	 */
 	public function render_admin_page() {
@@ -674,6 +731,7 @@ class Pooki_Theme_Options {
 							<li><a href="#pooki-tab-sticky" data-target="pooki-tab-sticky">هدر چسبان</a></li>
 							<li><a href="#pooki-tab-search" data-target="pooki-tab-search">جستجوی زنده</a></li>
 							<li><a href="#pooki-tab-actions" data-target="pooki-tab-actions">دکمه‌های هدر</a></li>
+							<li><a href="#pooki-tab-mobile-nav" data-target="pooki-tab-mobile-nav">موبایل و نوار پایینی</a></li>
 							<li><a href="#pooki-tab-palette" data-target="pooki-tab-palette">پالت رنگ و JSON</a></li>
 						</ul>
 					</div>
@@ -718,6 +776,13 @@ class Pooki_Theme_Options {
 							<h2>تنظیمات دکمه‌های سربرگ</h2>
 							<table class="form-table" role="presentation">
 								<?php do_settings_fields( 'pooki-settings-header', 'pooki_actions_section' ); ?>
+							</table>
+						</div>
+						
+						<div id="pooki-tab-mobile-nav" class="pooki-tab-pane">
+							<h2>تنظیمات موبایل و نوار پایینی</h2>
+							<table class="form-table" role="presentation">
+								<?php do_settings_fields( 'pooki-settings-header', 'pooki_mobile_nav_section' ); ?>
 							</table>
 						</div>
 						
