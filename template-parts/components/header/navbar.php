@@ -121,7 +121,7 @@ $topbar_hide_mobile = isset( $opts['topbar_hide_mobile'] ) ? $opts['topbar_hide_
 			<!-- Center: Live Search (Desktop Only) -->
 			<div 
 				class="hidden lg:block w-full max-w-2xl mx-6 relative" 
-				x-data="pookiSearch()"
+				x-data="pookiLiveSearch()"
 			>
 				<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="relative flex items-center w-full" @submit.prevent>
 				<input type="hidden" name="post_type" value="product" />

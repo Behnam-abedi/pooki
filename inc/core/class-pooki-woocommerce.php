@@ -79,7 +79,7 @@ class Pooki_WooCommerce {
 			'post_type'      => 'product',
 			'post_status'    => 'publish',
 			's'              => $search_query,
-			'posts_per_page' => 5,
+			'posts_per_page' => 6,
 			'no_found_rows'  => true,
 		];
 
@@ -97,6 +97,7 @@ class Pooki_WooCommerce {
 					'url'        => get_permalink(),
 					'thumbnail'  => get_the_post_thumbnail( get_the_ID(), 'thumbnail', [ 'class' => 'w-full h-full object-cover' ] ),
 					'price_html' => $product->get_price_html(),
+					'out_of_stock' => ! $product->is_in_stock(),
 				];
 			}
 			wp_reset_postdata();

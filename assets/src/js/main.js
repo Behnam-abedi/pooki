@@ -25,7 +25,7 @@ document.addEventListener('alpine:init', () => {
     }
   });
 
-  Alpine.data('pookiSearch', () => ({
+  Alpine.data('pookiLiveSearch', () => ({
     query: '',
     results: [],
     isLoading: false,

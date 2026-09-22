@@ -191,6 +191,12 @@ class Pooki_Theme_Options {
 		add_settings_field( 'mobile_bottom_bar_search', 'نمایش جستجو', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_search', 'default' => 0 ] );
 		add_settings_field( 'bottom_bar_label_search', 'برچسب جستجو', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_label_search', 'default' => 'جستجو' ] );
 
+		// Mobile Search Modal Settings
+		add_settings_field( 'search_modal_bg_color', 'رنگ پس‌زمینه مدال جستجو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'search_modal_bg_color', 'default' => '#FAF7F2' ] );
+		add_settings_field( 'search_modal_input_bg_color', 'رنگ پس‌زمینه فیلد جستجو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'search_modal_input_bg_color', 'default' => '#FDFBF7' ] );
+		add_settings_field( 'search_modal_input_border_color', 'رنگ حاشیه فیلد جستجو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'search_modal_input_border_color', 'default' => '#EBE4D8' ] );
+		add_settings_field( 'search_modal_text_color', 'رنگ متن و عنوان مدال جستجو', [ $this, 'render_color_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'search_modal_text_color', 'default' => '#1f2937' ] );
+
 	}
 
 	/**
@@ -390,6 +396,11 @@ class Pooki_Theme_Options {
 				'bottom_bar_label_account'         => 'text',
 				'mobile_bottom_bar_search'         => 'bool',
 				'bottom_bar_label_search'          => 'text',
+				
+				'search_modal_bg_color'            => 'color',
+				'search_modal_input_bg_color'      => 'color',
+				'search_modal_input_border_color'  => 'color',
+				'search_modal_text_color'          => 'color',
 			];
 
 			foreach ( $fields as $field => $type ) {
@@ -531,6 +542,11 @@ class Pooki_Theme_Options {
 		$bottom_bar_icon     = sanitize_hex_color( isset( $opts['bottom_bar_icon_color'] ) ? $opts['bottom_bar_icon_color'] : '#6b7280' );
 		$bottom_bar_icon_a   = sanitize_hex_color( isset( $opts['bottom_bar_icon_active_color'] ) ? $opts['bottom_bar_icon_active_color'] : '#8b5cf6' );
 
+		$search_modal_bg       = sanitize_hex_color( isset( $opts['search_modal_bg_color'] ) ? $opts['search_modal_bg_color'] : '#FAF7F2' );
+		$search_modal_input_bg = sanitize_hex_color( isset( $opts['search_modal_input_bg_color'] ) ? $opts['search_modal_input_bg_color'] : '#FDFBF7' );
+		$search_modal_input_border = sanitize_hex_color( isset( $opts['search_modal_input_border_color'] ) ? $opts['search_modal_input_border_color'] : '#EBE4D8' );
+		$search_modal_text     = sanitize_hex_color( isset( $opts['search_modal_text_color'] ) ? $opts['search_modal_text_color'] : '#1f2937' );
+
 		echo '<style id="pooki-header-dynamic-vars">';
 		echo ':root {';
 		echo '--pooki-topbar-h: ' . esc_attr( $topbar_height ) . 'px;';
@@ -583,6 +599,11 @@ class Pooki_Theme_Options {
 		echo '--pooki-bottom-bar-bg: ' . esc_attr( $bottom_bar_bg ) . ';';
 		echo '--pooki-bottom-bar-icon-c: ' . esc_attr( $bottom_bar_icon ) . ';';
 		echo '--pooki-bottom-bar-icon-active-c: ' . esc_attr( $bottom_bar_icon_a ) . ';';
+
+		echo '--pooki-search-modal-bg: ' . esc_attr( $search_modal_bg ) . ';';
+		echo '--pooki-search-modal-input-bg: ' . esc_attr( $search_modal_input_bg ) . ';';
+		echo '--pooki-search-modal-input-border: ' . esc_attr( $search_modal_input_border ) . ';';
+		echo '--pooki-search-modal-text: ' . esc_attr( $search_modal_text ) . ';';
 		echo '}';
 		echo '</style>';
 	}
