@@ -117,3 +117,4 @@
 	<!-- Auto-focus handling -->
 	<div x-effect="if($store.nav.searchOpen) { $nextTick(() => $refs.searchInput.focus()) }"></div>
 </div>
+</div>
