@@ -29,23 +29,19 @@
 		aria-hidden="true"
 	></div>
 
-	<div class="fixed inset-0 overflow-hidden pointer-events-none">
-		<div class="absolute inset-0 overflow-hidden">
-			<!-- Drawer Container -->
-			<div class="pointer-events-none fixed inset-y-0 right-0 z-[110] flex w-[85vw] sm:w-96">
-				<!-- Drawer Panel -->
-				<div
-					x-show="$store.nav.mobileMenuOpen"
-					x-transition:enter="transform transition-transform duration-300 ease-out"
-					x-transition:enter-start="translate-x-full"
-					x-transition:enter-end="translate-x-0"
-					x-transition:leave="transform transition-transform duration-300 ease-out"
-					x-transition:leave-start="translate-x-0"
-					x-transition:leave-end="translate-x-full"
-					@keydown.escape.window="$store.nav.mobileMenuOpen = false"
-					class="pointer-events-auto w-full flex flex-col shadow-2xl h-full"
-					style="background-color: var(--pooki-drawer-bg, #FAF7F2); color: var(--pooki-drawer-text, #292524);"
-				>
+	<!-- Drawer Panel -->
+	<div
+		x-show="$store.nav.mobileMenuOpen"
+		x-transition:enter="transform transition-transform duration-300 ease-out"
+		x-transition:enter-start="translate-x-full"
+		x-transition:enter-end="translate-x-0"
+		x-transition:leave="transform transition-transform duration-300 ease-out"
+		x-transition:leave-start="translate-x-0"
+		x-transition:leave-end="translate-x-full"
+		@keydown.escape.window="$store.nav.mobileMenuOpen = false"
+		class="fixed inset-y-0 right-0 z-[110] w-[85vw] sm:w-96 flex flex-col shadow-2xl"
+		style="background-color: var(--pooki-drawer-bg, #FAF7F2); color: var(--pooki-drawer-text, #292524);"
+	>
 					<!-- Header inside Drawer -->
 					<div class="flex items-center justify-between px-5 py-4 border-b border-stone-200/60 shrink-0">
 						<h2 class="text-lg font-bold" id="slide-over-title">منو</h2>
@@ -87,8 +83,5 @@
 						}
 						?>
 					</nav>
-				</div>
-			</div>
-		</div>
 	</div>
 </div>

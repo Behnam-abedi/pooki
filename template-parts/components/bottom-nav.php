@@ -33,8 +33,8 @@ if ( ! $has_home && ! $has_shop && ! $has_cart && ! $has_acc && ! $has_search ) 
 global $wp;
 $current_url = trailingslashit( home_url( add_query_arg( array(), $wp->request ) ) );
 
-$base_item_class = 'flex flex-col items-center justify-center gap-y-1 w-full rounded-xl py-1.5 px-1 sm:px-3 transition-colors';
-$active_item_class = $base_item_class . ' bg-[var(--pooki-bottom-nav-active-bg)] text-[var(--pooki-bottom-nav-active-text)] shadow-sm';
+$base_item_class = 'flex flex-col items-center justify-center gap-y-1 w-full rounded-xl py-2 px-4 transition-colors';
+$active_item_class = $base_item_class . ' bg-[var(--pooki-bottom-nav-active-bg)] text-[var(--pooki-bottom-nav-active-text)]';
 $inactive_item_class = $base_item_class . ' text-[var(--pooki-bottom-bar-icon-c)] hover:bg-stone-50 hover:text-[var(--pooki-bottom-bar-icon-active-c)]';
 
 $nav_items = [];
@@ -46,7 +46,7 @@ $nav_items = [];
 	class="fixed bottom-3 inset-x-3 z-40 backdrop-blur-lg border rounded-2xl flex items-center justify-around md:hidden pb-[env(safe-area-inset-bottom,0.5rem)] pt-2 px-3 transition-colors"
 	style="background-color: var(--pooki-bottom-bar-bg); border-color: var(--pooki-bottom-nav-border-c); border-width: var(--pooki-bottom-nav-border-w, 1px); box-shadow: var(--pooki-bottom-nav-shadow);"
 >
-	<nav class="flex items-center justify-around w-full">
+	<nav class="flex items-center justify-around w-full gap-2">
 		
 		<?php if ( $has_home ) : ob_start(); ?>
 		<?php $url = trailingslashit( home_url( '/' ) ); ?>
