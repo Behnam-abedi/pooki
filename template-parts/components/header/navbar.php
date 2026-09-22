@@ -28,12 +28,13 @@ $mobile_search = isset( $opts['mobile_nav_header_search'] ) ? $opts['mobile_nav_
 $mobile_phone  = isset( $opts['mobile_nav_header_phone'] ) ? $opts['mobile_nav_header_phone'] : 0;
 $mobile_phone_num = isset( $opts['mobile_nav_header_phone_number'] ) ? $opts['mobile_nav_header_phone_number'] : '02112345678';
 $mobile_burger = isset( $opts['mobile_nav_header_hamburger'] ) ? $opts['mobile_nav_header_hamburger'] : 1;
+$topbar_hide_mobile = isset( $opts['topbar_hide_mobile'] ) ? $opts['topbar_hide_mobile'] : 1;
 
 ?>
 <!-- Top Bar (Scrolls away naturally) -->
 <?php if ( ! isset( $opts['topbar_enabled'] ) || $opts['topbar_enabled'] ) : ?>
 	<div 
-		class="w-full transition-colors duration-300 flex items-center relative z-40" 
+		class="w-full transition-colors duration-300 flex items-center relative z-40 <?php echo $topbar_hide_mobile ? 'hidden md:flex' : ''; ?>" 
 		style="
 			min-height: var(--pooki-topbar-h);
 			background-color: var(--pooki-topbar-bg);
@@ -71,7 +72,8 @@ $mobile_burger = isset( $opts['mobile_nav_header_hamburger'] ) ? $opts['mobile_n
 		<div 
 			class="container mx-auto px-4 grid grid-cols-3 lg:flex lg:justify-between items-center py-2 transition-all duration-300" 
 			aria-label="Main Header" 
-			:style="{ minHeight: isSticky ? 'var(--pooki-sticky-h)' : 'var(--pooki-header-h)' }"
+			:style="{ minHeight: isSticky ? 'var(--pooki-sticky-h)' : (window.innerWidth < 1024 ? 'var(--pooki-mobile-header-h)' : 'var(--pooki-header-h)') }"
+			@resize.window="window.innerWidth < 1024 ? $el.style.minHeight = 'var(--pooki-mobile-header-h)' : $el.style.minHeight = 'var(--pooki-header-h)'"
 		>
 			
 			<!-- Right Side Mobile: Search Trigger & Phone (Hidden on Desktop) -->
@@ -91,7 +93,11 @@ $mobile_burger = isset( $opts['mobile_nav_header_hamburger'] ) ? $opts['mobile_n
 			<!-- Center Mobile / Right Desktop: Logo -->
 			<div class="flex items-center justify-center lg:justify-start lg:flex-shrink-0">
 				<!-- Logo -->
-				<div class="site-branding flex items-center transition-all duration-300" :style="{ height: isSticky ? 'var(--pooki-sticky-logo-h)' : 'var(--pooki-logo-h)' }">
+				<div 
+					class="site-branding flex items-center transition-all duration-300" 
+					:style="{ height: isSticky ? 'var(--pooki-sticky-logo-h)' : (window.innerWidth < 1024 ? 'var(--pooki-mobile-logo-h)' : 'var(--pooki-logo-h)') }"
+					@resize.window="window.innerWidth < 1024 ? $el.style.height = 'var(--pooki-mobile-logo-h)' : $el.style.height = 'var(--pooki-logo-h)'"
+				>
 					<?php if ( ! empty( $logo_url ) ) : ?>
 						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="h-full block">
 							<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" class="h-full w-auto object-contain" fetchpriority="high">
@@ -112,24 +118,17 @@ $mobile_burger = isset( $opts['mobile_nav_header_hamburger'] ) ? $opts['mobile_n
 				</div>
 			</div>
 
-			<!-- Center: Live Search -->
+			<!-- Center: Live Search (Desktop Only) -->
 			<div 
-				class="w-full max-w-2xl relative" 
-				:class="$store.nav.searchOpen ? 'absolute inset-0 z-[60] bg-white/95 backdrop-blur flex items-center px-4 lg:static lg:bg-transparent lg:flex lg:px-0 lg:mx-6' : 'hidden lg:block lg:mx-6'"
+				class="hidden lg:block w-full max-w-2xl mx-6 relative" 
 				x-data="pookiSearch()"
-				x-cloak
 			>
 				<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="relative flex items-center w-full" @submit.prevent>
 				<input type="hidden" name="post_type" value="product" />
-				<input type="search" name="s" x-model="query" x-ref="searchInput" @input.debounce.300ms="fetchResults" placeholder="جستجو در محصولات..." class="w-full pooki-search-input pr-12 pl-12 lg:pl-4">
+				<input type="search" name="s" x-model="query" @input.debounce.300ms="fetchResults" placeholder="جستجو در محصولات..." class="w-full pooki-search-input pr-12 pl-4">
 				
 				<button type="button" class="absolute right-4 text-gray-500 hover:text-pooki-blue">
 					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-				</button>
-
-				<!-- Close Search Mobile -->
-				<button type="button" class="absolute left-4 text-gray-500 hover:text-pooki-pink lg:hidden" x-show="$store.nav.searchOpen" @click="$store.nav.searchOpen = false">
-					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
 				</button>
 
 				<!-- Loading Spinner -->
