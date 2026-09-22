@@ -35,6 +35,7 @@ $nav_items = [];
 ?>
 
 <div 
+	x-data
 	class="fixed bottom-3 inset-x-3 z-40 backdrop-blur-lg border border-stone-200/80 rounded-2xl px-4 py-2.5 flex items-center justify-around md:hidden pb-[calc(0.625rem+env(safe-area-inset-bottom))] transition-colors"
 	style="background-color: var(--pooki-bottom-bar-bg); color: var(--pooki-bottom-bar-icon-c); box-shadow: var(--pooki-bottom-nav-shadow);"
 >
