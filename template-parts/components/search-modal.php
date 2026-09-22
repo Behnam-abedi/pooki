@@ -27,25 +27,25 @@
 		x-transition:leave-start="opacity-100"
 		x-transition:leave-end="opacity-0"
 		@click="$store.nav.searchOpen = false"
-		class="fixed inset-0 bg-black/40 backdrop-blur-sm"
+		class="fixed inset-0 z-[100] bg-black/50 backdrop-blur-md"
 		aria-hidden="true"
 	></div>
 
 	<div class="fixed inset-0 overflow-hidden">
 		<div class="absolute inset-0 overflow-hidden">
 			<!-- Drawer Container -->
-			<div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-[85vw] sm:max-w-md w-full">
+			<div class="pointer-events-none fixed inset-y-0 right-0 z-[110] flex w-[85vw] sm:w-96">
 				<div 
 					x-show="$store.nav.searchOpen"
-					x-transition:enter="transform transition ease-out duration-300"
+					x-transition:enter="transform transition-transform duration-300 ease-out"
 					x-transition:enter-start="translate-x-full"
 					x-transition:enter-end="translate-x-0"
-					x-transition:leave="transform transition ease-in duration-200"
+					x-transition:leave="transform transition-transform duration-300 ease-out"
 					x-transition:leave-start="translate-x-0"
 					x-transition:leave-end="translate-x-full"
 					@keydown.escape.window="$store.nav.searchOpen = false"
 					class="pointer-events-auto w-full flex flex-col shadow-2xl h-full"
-					style="background-color: var(--pooki-search-modal-bg, #FAF7F2); color: var(--pooki-search-modal-text, #292524);"
+					style="background-color: var(--pooki-drawer-bg, #FAF7F2); color: var(--pooki-drawer-text, #292524);"
 				>
 					<!-- Header -->
 					<div class="flex items-center justify-between px-5 py-4 border-b border-stone-200/60">

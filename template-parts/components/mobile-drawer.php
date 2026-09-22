@@ -18,52 +18,47 @@
 	<!-- Background Backdrop -->
 	<div
 		x-show="$store.nav.mobileMenuOpen"
-		x-transition:enter="ease-in-out duration-500"
+		x-transition:enter="transition-opacity ease-out duration-300"
 		x-transition:enter-start="opacity-0"
 		x-transition:enter-end="opacity-100"
-		x-transition:leave="ease-in-out duration-500"
+		x-transition:leave="transition-opacity ease-in duration-200"
 		x-transition:leave-start="opacity-100"
 		x-transition:leave-end="opacity-0"
-		class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-		@click="$store.nav.toggleMobileMenu()"
+		@click="$store.nav.mobileMenuOpen = false"
+		class="fixed inset-0 z-[100] bg-black/50 backdrop-blur-md"
 		aria-hidden="true"
 	></div>
 
 	<div class="fixed inset-0 overflow-hidden pointer-events-none">
 		<div class="absolute inset-0 overflow-hidden">
-			<div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full">
-				<!-- Drawer Panel (Right-aligned for RTL, but the user said left-0, so let's use left-0) -->
-				<!-- Wait, the user specifically said "left-0" which implies they want it sliding from left. I will use left-0. -->
-			</div>
-			<div class="pointer-events-none fixed inset-y-0 left-0 flex max-w-full">
+			<!-- Drawer Container -->
+			<div class="pointer-events-none fixed inset-y-0 right-0 z-[110] flex w-[85vw] sm:w-96">
 				<!-- Drawer Panel -->
 				<div
 					x-show="$store.nav.mobileMenuOpen"
-					x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
-					x-transition:enter-start="-translate-x-full"
+					x-transition:enter="transform transition-transform duration-300 ease-out"
+					x-transition:enter-start="translate-x-full"
 					x-transition:enter-end="translate-x-0"
-					x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+					x-transition:leave="transform transition-transform duration-300 ease-out"
 					x-transition:leave-start="translate-x-0"
-					x-transition:leave-end="-translate-x-full"
-					class="pointer-events-auto w-80 max-w-[85vw] bg-white shadow-2xl flex flex-col h-full"
-					@click.stop
+					x-transition:leave-end="translate-x-full"
+					@keydown.escape.window="$store.nav.mobileMenuOpen = false"
+					class="pointer-events-auto w-full flex flex-col shadow-2xl h-full"
+					style="background-color: var(--pooki-drawer-bg, #FAF7F2); color: var(--pooki-drawer-text, #292524);"
 				>
 					<!-- Header inside Drawer -->
-					<div class="flex items-center justify-between px-4 py-4 border-b border-gray-100 shrink-0">
+					<div class="flex items-center justify-between px-5 py-4 border-b border-stone-200/60 shrink-0">
+						<h2 class="text-lg font-bold" id="slide-over-title">منو</h2>
 						<button
 							type="button"
-							class="relative rounded-md text-gray-400 hover:text-gray-500 focus:outline-none bg-gray-100 hover:bg-pooki-blue hover:text-white transition-colors p-2 aspect-square flex items-center justify-center rounded-full"
-							@click="$store.nav.toggleMobileMenu()"
+							class="p-2 rounded-full transition-colors opacity-70 hover:opacity-100 bg-stone-100/50"
+							@click="$store.nav.mobileMenuOpen = false"
 							aria-label="بستن منو"
 							aria-expanded="true"
+							style="color: var(--pooki-drawer-text);"
 						>
-							<span class="absolute -inset-2.5"></span>
-							<span class="sr-only">بستن منو</span>
-							<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-							</svg>
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
 						</button>
-						<h2 class="text-lg font-bold text-gray-900" id="slide-over-title">منو</h2>
 					</div>
 
 					<!-- Navigation Links -->
