@@ -45,7 +45,7 @@ $inactive_classes = 'text-neutral-600 hover:text-amber-600';
 
         <!-- Cart Trigger Item (Drawer) -->
         <button type="button" 
-                @click="$store.cart.isOpen = true; $dispatch('pooki:open-cart')" 
+                @click="if (window.Alpine && Alpine.store('cart')) { Alpine.store('cart').isOpen = true; if (typeof Alpine.store('cart').open === 'function') Alpine.store('cart').open(); } window.dispatchEvent(new CustomEvent('pooki:open-cart'));" 
                 class="flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 text-neutral-600 hover:text-amber-600 transition-colors focus:outline-none cursor-pointer"
                 aria-label="<?php esc_attr_e( 'سبد خرید', 'pooki' ); ?>"
                 aria-haspopup="dialog">
