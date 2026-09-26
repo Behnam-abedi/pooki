@@ -36,7 +36,11 @@ $current_url = home_url( add_query_arg( array(),$wp->request ?? '' ) );
         <div class="w-px h-6 bg-neutral-200 shrink-0"></div>
 
         <!-- Cart Item -->
-        <a href="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart' ) ); ?>" class="flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 text-neutral-600 hover:text-amber-600 transition-colors">
+        <button type="button" 
+                @click="$store.cart ? $store.cart.open() : $dispatch('open-cart-drawer')" 
+                class="flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 text-neutral-600 hover:text-amber-600 transition-colors focus:outline-none"
+                aria-label="<?php esc_attr_e( 'سبد خرید', 'pooki' ); ?>"
+                aria-haspopup="dialog">
             <div class="relative inline-flex items-center justify-center mb-1">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -46,7 +50,7 @@ $current_url = home_url( add_query_arg( array(),$wp->request ?? '' ) );
                 </span>
             </div>
             <span class="text-[11px] font-medium leading-none whitespace-nowrap"><?php esc_html_e( 'سبد خرید', 'pooki' ); ?></span>
-        </a>
+        </button>
 
         <div class="w-px h-6 bg-neutral-200 shrink-0"></div>
 
