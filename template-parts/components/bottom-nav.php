@@ -20,7 +20,7 @@ $is_account_active = function_exists( 'is_account_page' ) && is_account_page();
 $active_classes   = 'text-amber-700 font-bold';
 $inactive_classes = 'text-neutral-600 hover:text-amber-600';
 ?>
-<nav class="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md bg-white/95 backdrop-blur-md border border-neutral-200/80 shadow-xl rounded-2xl p-2 select-none" aria-label="<?php esc_attr_e( 'Mobile Navigation', 'pooki' ); ?>">
+<nav x-data class="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md bg-white/95 backdrop-blur-md border border-neutral-200/80 shadow-xl rounded-2xl p-2 select-none" aria-label="<?php esc_attr_e( 'Mobile Navigation', 'pooki' ); ?>">
     <div class="flex items-center justify-around w-full">
         
         <!-- Home Item -->
@@ -45,7 +45,7 @@ $inactive_classes = 'text-neutral-600 hover:text-amber-600';
 
         <!-- Cart Trigger Item (Drawer) -->
         <button type="button" 
-                @click="if (window.Alpine && Alpine.store('cart')) { Alpine.store('cart').isOpen = true; if (typeof Alpine.store('cart').open === 'function') Alpine.store('cart').open(); } window.dispatchEvent(new CustomEvent('pooki:open-cart'));" 
+                @click="$store.cart.toggle()" 
                 class="flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 text-neutral-600 hover:text-amber-600 transition-colors focus:outline-none cursor-pointer"
                 aria-label="<?php esc_attr_e( 'سبد خرید', 'pooki' ); ?>"
                 aria-haspopup="dialog">
