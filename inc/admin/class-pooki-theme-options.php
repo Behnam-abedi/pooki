@@ -930,20 +930,46 @@ class Pooki_Theme_Options {
 								<span id="pooki-json-status" style="margin-right: 10px; font-weight: bold;"></span>
 							</div>
 							
-							<h2 style="margin-top: 30px;">استخراج پالت رنگ (Export JSON برای هوش مصنوعی)</h2>
+							<h2 style="margin-top: 30px;">استخراج پالت رنگ (Export Palette)</h2>
 							<div class="pooki-json-exporter" style="padding: 20px;">
-								<p style="color: #64748b; font-size: 13px; margin-top:0;">رنگ‌های فعلی شما. این کد را کپی کرده و به هوش مصنوعی بدهید.</p>
-								<textarea id="pooki-json-export" readonly rows="8" style="width: 100%; font-family: monospace; direction: ltr; border-radius: 6px; border: 1px solid #cbd5e1; padding: 10px; background: #f8fafc; color: #333; resize: vertical;" onclick="this.select();"><?php
+								<p style="color: #64748b; font-size: 13px; margin-top:0;">رنگ‌های فعلی شما با فرمت‌های مختلف. این کدها را می‌توانید کپی کرده و در پروژه خود استفاده کنید.</p>
+								
+								<?php
 									$opts = get_option('pooki_theme_options', []);
 									$colors = [];
 									foreach($opts as $k => $v) {
-										if (strpos($k, 'color') !== false) {
+										if (strpos($k, 'color') !== false || strpos($k, 'bg') !== false) {
 											$colors[$k] = $v;
 										}
 									}
-									echo esc_textarea(wp_json_encode($colors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-								?></textarea>
-								<button type="button" id="pooki-copy-json-btn" class="button button-primary" style="margin-top: 10px;" onclick="navigator.clipboard.writeText(document.getElementById('pooki-json-export').value); this.innerText='کپی شد!'; setTimeout(()=>this.innerText='کپی JSON در کلیپبورد', 2000);">کپی JSON در کلیپبورد</button>
+									
+									// 1. CSS Custom Properties
+									$css_output = ":root {\n";
+									foreach ($colors as $key => $value) {
+										$css_key = str_replace('_', '-', $key);
+										$css_output .= "  --pooki-{$css_key}: {$value};\n";
+									}
+									$css_output .= "}";
+									
+									// 2. Tailwind Config Format
+									$tailwind_colors = [];
+									foreach ($colors as $key => $value) {
+										// Optional: group colors or keep them flat
+										// Flattening here for simple tailwind extending
+										$tw_key = str_replace('_color', '', $key);
+										$tw_key = str_replace('_', '-', $tw_key);
+										$tailwind_colors[$tw_key] = $value;
+									}
+									$tailwind_output = "{\n  \"theme\": {\n    \"extend\": {\n      \"colors\": {\n        \"pooki\": " . wp_json_encode($tailwind_colors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . "\n      }\n    }\n  }\n}";
+								?>
+								
+								<h3 style="margin-top: 20px; font-size: 14px; font-weight: 600;">1. CSS Custom Properties</h3>
+								<textarea id="pooki-css-export" readonly rows="8" style="width: 100%; font-family: monospace; direction: ltr; border-radius: 6px; border: 1px solid #cbd5e1; padding: 10px; background: #f8fafc; color: #333; resize: vertical;" onclick="this.select();"><?php echo esc_textarea($css_output); ?></textarea>
+								<button type="button" class="button button-primary" style="margin-top: 10px;" onclick="navigator.clipboard.writeText(document.getElementById('pooki-css-export').value); this.innerText='کپی شد!'; setTimeout(()=>this.innerText='کپی CSS در کلیپبورد', 2000);">کپی CSS در کلیپبورد</button>
+
+								<h3 style="margin-top: 30px; font-size: 14px; font-weight: 600;">2. Tailwind Color Configuration</h3>
+								<textarea id="pooki-tw-export" readonly rows="8" style="width: 100%; font-family: monospace; direction: ltr; border-radius: 6px; border: 1px solid #cbd5e1; padding: 10px; background: #f8fafc; color: #333; resize: vertical;" onclick="this.select();"><?php echo esc_textarea($tailwind_output); ?></textarea>
+								<button type="button" class="button button-primary" style="margin-top: 10px;" onclick="navigator.clipboard.writeText(document.getElementById('pooki-tw-export').value); this.innerText='کپی شد!'; setTimeout(()=>this.innerText='کپی Tailwind JSON در کلیپبورد', 2000);">کپی Tailwind JSON در کلیپبورد</button>
 							</div>
 						</div>
 					</div>
