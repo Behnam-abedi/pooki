@@ -1,3 +1,5 @@
+import Swiper from 'swiper';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import Alpine from 'alpinejs';
 import './modules/single-ajax';
 
@@ -61,3 +63,6 @@ if (typeof jQuery !== 'undefined') {
     Alpine.store('cart').isOpen = true;
   });
 }
+
+window.Swiper = Swiper;
+window.SwiperModules = { Navigation, Pagination, Autoplay };

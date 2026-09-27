@@ -188,6 +188,19 @@ class Pooki_Theme_Options {
 
 		// Unified Drawer Settings
 
+		// Main Slider Section
+		add_settings_section( 'pooki_slider_section', 'تنظیمات اسلایدر اصلی', null, 'pooki-settings-header' );
+
+		add_settings_field( 'slider_enabled', 'نمایش اسلایدر', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_slider_section', [ 'id' => 'slider_enabled', 'default' => 1 ] );
+		add_settings_field( 'slider_width', 'عرض اسلایدر', [ $this, 'render_select_field' ], 'pooki-settings-header', 'pooki_slider_section', [ 'id' => 'slider_width', 'options' => [ 'container' => 'داخل کانتینر (پیش فرض)', 'full' => 'تمام عرض صفحه' ], 'default' => 'container' ] );
+		add_settings_field( 'slider_height_desktop', 'ارتفاع دسکتاپ (مثلا 500px)', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_slider_section', [ 'id' => 'slider_height_desktop', 'default' => '500px' ] );
+		add_settings_field( 'slider_height_mobile', 'ارتفاع موبایل (مثلا 300px)', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_slider_section', [ 'id' => 'slider_height_mobile', 'default' => '300px' ] );
+		add_settings_field( 'slider_border_radius', 'گردی گوشه‌ها (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_slider_section', [ 'id' => 'slider_border_radius', 'default' => 12 ] );
+		add_settings_field( 'slider_autoplay', 'پخش خودکار (Autoplay)', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_slider_section', [ 'id' => 'slider_autoplay', 'default' => 1 ] );
+		add_settings_field( 'slider_autoplay_delay', 'تاخیر پخش خودکار (میلی ثانیه)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_slider_section', [ 'id' => 'slider_autoplay_delay', 'default' => 4000 ] );
+		
+		add_settings_field( 'slider_items', 'مدیریت اسلایدها', [ $this, 'render_slider_repeater_field' ], 'pooki-settings-header', 'pooki_slider_section', [ 'id' => 'slider_items', 'class' => 'pooki-full-width-field' ] );
+
 	}
 
 
@@ -326,6 +339,19 @@ class Pooki_Theme_Options {
 	}
 
 	/**
+	 * Render Slider Repeater Field.
+	 */
+	public function render_slider_repeater_field( array $args ): void {
+		$id      = $args['id'];
+		$options = get_option( 'pooki_theme_options', [] );
+		$value   = isset( $options[ $id ] ) && is_array( $options[ $id ] ) ? $options[ $id ] : [];
+		$json_value = wp_json_encode( $value );
+
+		echo '<input type="hidden" id="pooki_slider_repeater_' . esc_attr( $id ) . '" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $json_value ) . '" />';
+		echo '<div id="pooki_slider_repeater_ui_' . esc_attr( $id ) . '"></div>';
+	}
+
+	/**
 	 * Handle AJAX import of theme options.
 	 */
 	public function ajax_import_options() {
@@ -404,6 +430,15 @@ class Pooki_Theme_Options {
 				'header_action_font_size'          => 'int',
 				'header_action_radius'             => 'int',
 				'header_action_items'              => 'repeater',
+
+				'slider_enabled'                   => 'bool',
+				'slider_width'                     => 'key',
+				'slider_height_desktop'            => 'text',
+				'slider_height_mobile'             => 'text',
+				'slider_border_radius'             => 'int',
+				'slider_autoplay'                  => 'bool',
+				'slider_autoplay_delay'            => 'int',
+				'slider_items'                     => 'repeater',
 
 				'mobile_header_height'             => 'int',
 				'mobile_logo_height'               => 'int',
@@ -871,6 +906,7 @@ class Pooki_Theme_Options {
 						<ul id="pooki-tabs-nav">
 							<li><a href="#pooki-tab-topbar" class="active" data-target="pooki-tab-topbar">نوار اعلان (Top Bar)</a></li>
 							<li><a href="#pooki-tab-header" data-target="pooki-tab-header">ساختار هدر و لوگو</a></li>
+							<li><a href="#pooki-tab-slider" data-target="pooki-tab-slider">اسلایدر اصلی</a></li>
 							<li><a href="#pooki-tab-nav" data-target="pooki-tab-nav">نوار ناوبری (منو)</a></li>
 							<li><a href="#pooki-tab-sticky" data-target="pooki-tab-sticky">هدر چسبان</a></li>
 							<li><a href="#pooki-tab-search" data-target="pooki-tab-search">جستجوی زنده</a></li>
@@ -896,6 +932,13 @@ class Pooki_Theme_Options {
 							</table>
 						</div>
 						
+						<div id="pooki-tab-slider" class="pooki-tab-pane">
+							<h2>تنظیمات اسلایدر اصلی</h2>
+							<table class="form-table" role="presentation">
+								<?php do_settings_fields( 'pooki-settings-header', 'pooki_slider_section' ); ?>
+							</table>
+						</div>
+
 						<div id="pooki-tab-nav" class="pooki-tab-pane">
 							<h2>نوار ناوبری (منو)</h2>
 							<table class="form-table" role="presentation">
@@ -1175,6 +1218,145 @@ class Pooki_Theme_Options {
 				}
 
 				renderRepeater();
+			}
+
+			// Slider Repeater Logic
+			const sliderRepeaterInput = document.getElementById('pooki_slider_repeater_slider_items');
+			const sliderRepeaterUI = document.getElementById('pooki_slider_repeater_ui_slider_items');
+			if (sliderRepeaterInput && sliderRepeaterUI) {
+				let items = [];
+				try { items = JSON.parse(sliderRepeaterInput.value) || []; } catch(e) {}
+				if (!Array.isArray(items)) items = [];
+
+				function renderSliderRepeater() {
+					sliderRepeaterUI.innerHTML = '';
+					items.forEach((item, index) => {
+						const box = document.createElement('div');
+						box.className = 'pooki-repeater-item';
+						box.style.cssText = 'border:1px solid #cbd5e1; padding:15px; margin-bottom:15px; background:#f8fafc; border-radius:8px;';
+						
+						box.innerHTML = `
+							<div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:10px;">
+								<div>
+									<label style="display:block; margin-bottom:5px; font-weight:bold;">تصویر دسکتاپ</label>
+									<div style="display:flex; gap:10px;">
+										<input type="text" class="slider-desktop-img regular-text" data-index="${index}" value="${item.desktop_img ? item.desktop_img.replace(/"/g, '&quot;') : ''}" placeholder="آدرس تصویر دسکتاپ">
+										<button type="button" class="button pooki-upload-slider-btn" data-input-index="${index}" data-type="desktop_img">انتخاب</button>
+									</div>
+								</div>
+								<div>
+									<label style="display:block; margin-bottom:5px; font-weight:bold;">تصویر موبایل (اختیاری)</label>
+									<div style="display:flex; gap:10px;">
+										<input type="text" class="slider-mobile-img regular-text" data-index="${index}" value="${item.mobile_img ? item.mobile_img.replace(/"/g, '&quot;') : ''}" placeholder="آدرس تصویر موبایل">
+										<button type="button" class="button pooki-upload-slider-btn" data-input-index="${index}" data-type="mobile_img">انتخاب</button>
+									</div>
+								</div>
+							</div>
+							<div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+								<div>
+									<label style="display:block; margin-bottom:5px; font-weight:bold;">لینک مقصد</label>
+									<input type="text" style="width:100%" class="slider-url regular-text" data-index="${index}" value="${item.url ? item.url.replace(/"/g, '&quot;') : ''}" placeholder="https://...">
+								</div>
+								<div>
+									<label style="display:block; margin-bottom:5px; font-weight:bold;">متن جایگزین (Alt)</label>
+									<input type="text" style="width:100%" class="slider-alt regular-text" data-index="${index}" value="${item.alt ? item.alt.replace(/"/g, '&quot;') : ''}" placeholder="متن جایگزین تصویر">
+								</div>
+							</div>
+							<div style="text-align: left; margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+								<div style="display: flex; gap: 5px;">
+									<button type="button" class="button button-secondary move-slider-up" data-index="${index}" ${index === 0 ? 'disabled' : ''}>▲ بالا</button>
+									<button type="button" class="button button-secondary move-slider-down" data-index="${index}" ${index === items.length - 1 ? 'disabled' : ''}>▼ پایین</button>
+								</div>
+								<button type="button" class="button button-link-delete remove-slider-item" data-index="${index}">حذف این اسلاید</button>
+							</div>
+						`;
+						sliderRepeaterUI.appendChild(box);
+					});
+
+					const addBtn = document.createElement('button');
+					addBtn.type = 'button';
+					addBtn.className = 'button button-primary';
+					addBtn.innerText = '+ افزودن اسلاید جدید';
+					addBtn.addEventListener('click', () => {
+						items.push({ desktop_img: '', mobile_img: '', url: '', alt: '' });
+						updateSliderHiddenAndRender();
+					});
+					sliderRepeaterUI.appendChild(addBtn);
+
+					// Bind text events
+					sliderRepeaterUI.querySelectorAll('.slider-desktop-img, .slider-mobile-img, .slider-url, .slider-alt').forEach(el => {
+						el.addEventListener('input', updateSliderItem);
+					});
+					
+					// Upload logic
+					if (typeof wp !== 'undefined' && wp.media) {
+						sliderRepeaterUI.querySelectorAll('.pooki-upload-slider-btn').forEach(btn => {
+							btn.addEventListener('click', function(e) {
+								e.preventDefault();
+								const idx = parseInt(this.dataset.inputIndex, 10);
+								const type = this.dataset.type; // desktop_img or mobile_img
+								
+								const frame = wp.media({
+									title: 'انتخاب تصویر اسلاید',
+									button: { text: 'استفاده از این تصویر' },
+									multiple: false
+								});
+								frame.on('select', function() {
+									const attachment = frame.state().get('selection').first().toJSON();
+									items[idx][type] = attachment.url;
+									updateSliderHiddenAndRender();
+								});
+								frame.open();
+							});
+						});
+					}
+
+					sliderRepeaterUI.querySelectorAll('.remove-slider-item').forEach(el => {
+						el.addEventListener('click', (e) => {
+							const idx = parseInt(e.target.dataset.index, 10);
+							items.splice(idx, 1);
+							updateSliderHiddenAndRender();
+						});
+					});
+					sliderRepeaterUI.querySelectorAll('.move-slider-up').forEach(el => {
+						el.addEventListener('click', (e) => {
+							const idx = parseInt(e.target.dataset.index, 10);
+							if (idx > 0) {
+								const temp = items[idx - 1];
+								items[idx - 1] = items[idx];
+								items[idx] = temp;
+								updateSliderHiddenAndRender();
+							}
+						});
+					});
+					sliderRepeaterUI.querySelectorAll('.move-slider-down').forEach(el => {
+						el.addEventListener('click', (e) => {
+							const idx = parseInt(e.target.dataset.index, 10);
+							if (idx < items.length - 1) {
+								const temp = items[idx + 1];
+								items[idx + 1] = items[idx];
+								items[idx] = temp;
+								updateSliderHiddenAndRender();
+							}
+						});
+					});
+				}
+
+				function updateSliderItem(e) {
+					const idx = parseInt(e.target.dataset.index, 10);
+					if (e.target.classList.contains('slider-desktop-img')) items[idx].desktop_img = e.target.value;
+					if (e.target.classList.contains('slider-mobile-img')) items[idx].mobile_img = e.target.value;
+					if (e.target.classList.contains('slider-url')) items[idx].url = e.target.value;
+					if (e.target.classList.contains('slider-alt')) items[idx].alt = e.target.value;
+					sliderRepeaterInput.value = JSON.stringify(items);
+				}
+
+				function updateSliderHiddenAndRender() {
+					sliderRepeaterInput.value = JSON.stringify(items);
+					renderSliderRepeater();
+				}
+
+				renderSliderRepeater();
 			}
 
 			// JSON Importer
