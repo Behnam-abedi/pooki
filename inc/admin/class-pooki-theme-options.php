@@ -190,65 +190,7 @@ class Pooki_Theme_Options {
 
 	}
 
-	/**
-	 * Render Number Field.
-	 */
-	public function render_number_field( $args ) {
-		$options = get_option( 'pooki_theme_options' );
-		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) ? $options[ $id ] : $args['default'];
-		echo '<input type="number" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" class="regular-text" />';
-	}
 
-	/**
-	 * Render Text Field.
-	 */
-	public function render_text_field( $args ) {
-		$options = get_option( 'pooki_theme_options' );
-		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) ? $options[ $id ] : $args['default'];
-		echo '<input type="text" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" class="regular-text" />';
-	}
-
-	/**
-	 * Render Textarea Field.
-	 */
-	public function render_textarea_field( $args ) {
-		$options = get_option( 'pooki_theme_options' );
-		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) ? $options[ $id ] : $args['default'];
-		echo '<textarea name="pooki_theme_options[' . esc_attr( $id ) . ']" class="large-text" rows="3" style="width:100%; border-radius:6px; border:1px solid #cbd5e1; padding:10px;">' . esc_textarea( $value ) . '</textarea>';
-	}
-
-	/**
-	 * Render Color Field.
-	 */
-	public function render_color_field( $args ) {
-		$options = get_option( 'pooki_theme_options' );
-		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) && ! empty( $options[ $id ] ) && $options[ $id ] !== 'transparent' ? $options[ $id ] : $args['default'];
-		echo '<input type="color" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" class="regular-text" />';
-	}
-
-	
-		echo '</select>';
-	}
-
-	 else {
-			echo '<span style="color: #999; font-size: 12px;">بدون تصویر</span>';
-		}
-		echo '</div>';
-		
-		echo '<div>';
-		echo '<button type="button" class="button pooki-upload-button" data-target="pooki_media_url_' . esc_attr( $id ) . '" data-preview="pooki_media_preview_' . esc_attr( $id ) . '">انتخاب تصویر</button>';
-		echo '<button type="button" class="button pooki-remove-button" style="margin-right: 5px; color: #d63638; border-color: #d63638;" data-target="pooki_media_url_' . esc_attr( $id ) . '" data-preview="pooki_media_preview_' . esc_attr( $id ) . '">حذف</button>';
-		echo '</div>';
-		echo '</div>';
-	}
-
-	
-
-	
 	/**
 	 * Render Checkbox Field.
 	 */
