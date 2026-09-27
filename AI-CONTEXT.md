@@ -95,3 +95,8 @@
  -   S t e p   5 9 :   E n f o r c e d   g l o b a l   w i n d o w   e v e n t   d i s p a t c h i n g   a n d   s a f e   s t o r e   a c c e s s   f o r   m o b i l e   b o t t o m   n a v   c a r t   d r a w e r   t r i g g e r .  
  -   S t e p   6 0 :   F i x e d   m o b i l e   b o t t o m   n a v i g a t i o n   c a r t   t r i g g e r   b y   s c o p i n g   n a v   c o n t a i n e r   w i t h   A l p i n e   ( x - d a t a )   a n d   i n v o k i n g   \ . c a r t . t o g g l e ( )   i d e n t i c a l l y   t o   t h e   w o r k i n g   d e s k t o p   a c t i o n .  
  
+### Color Management Architecture
+- Uses a Singleton ColorRegistry to manage all dynamic theme colors as a Single-Source-of-Truth.
+- New feature colors are registered seamlessly by filtering pooki_registered_colors.
+- The native Theme Options panel auto-generates UI fields based on this registry.
+- Includes full JSON Export and Import for palette synchronization, which exports a flat JSON schema: { "header_bg": "#ffffff", "menu_text": "#374151" ... }.
