@@ -100,3 +100,9 @@
 - New feature colors are registered seamlessly by filtering pooki_registered_colors.
 - The native Theme Options panel auto-generates UI fields based on this registry.
 - Includes full JSON Export and Import for palette synchronization, which exports a flat JSON schema: { "header_bg": "#ffffff", "menu_text": "#374151" ... }.
+
+### Global Settings Backup & Restore
+- Full-theme backup & restore is implemented in `inc/admin/class-pooki-theme-options.php` under a dedicated "??????????? ? ??????" tab.
+- Exports a consolidated JSON payload wrapping `pooki_theme_options` and `pooki_color_palette`.
+- Import securely validates the nonce (wp_verify_nonce), capability (manage_options), and structural integrity before updating the respective WordPress options.
+- Supports direct .json file upload and raw JSON paste.
