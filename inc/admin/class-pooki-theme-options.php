@@ -230,35 +230,11 @@ class Pooki_Theme_Options {
 		echo '<input type="color" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" class="regular-text" />';
 	}
 
-	/**
-	 * Render Select Field.
-	 */
-	public function render_select_field( $args ) {
-		$options = get_option( 'pooki_theme_options' );
-		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) ? $options[ $id ] : $args['default'];
-		echo '<select name="pooki_theme_options[' . esc_attr( $id ) . ']">';
-		foreach ( $args['options'] as $val => $label ) {
-			echo '<option value="' . esc_attr( $val ) . '" ' . selected( $val, $value, false ) . '>' . esc_html( $label ) . '</option>';
-		}
+	
 		echo '</select>';
 	}
 
-	/**
-	 * Render Media Field.
-	 */
-	public function render_media_field( $args ) {
-		$options = get_option( 'pooki_theme_options' );
-		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) ? $options[ $id ] : '';
-		
-		echo '<div class="pooki-media-wrapper" style="display: flex; gap: 15px; align-items: center;">';
-		echo '<input type="hidden" id="pooki_media_url_' . esc_attr( $id ) . '" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_url( $value ) . '" />';
-		
-		echo '<div class="pooki-media-preview" id="pooki_media_preview_' . esc_attr( $id ) . '" style="width: 150px; height: 60px; background: #f0f0f1; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; overflow: hidden;">';
-		if ( ! empty( $value ) ) {
-			echo '<img src="' . esc_url( $value ) . '" style="max-width: 100%; max-height: 100%; object-fit: contain;" />';
-		} else {
+	 else {
 			echo '<span style="color: #999; font-size: 12px;">بدون تصویر</span>';
 		}
 		echo '</div>';
@@ -270,19 +246,141 @@ class Pooki_Theme_Options {
 		echo '</div>';
 	}
 
+	
+
+	
 	/**
-	 * Render Repeater Field (JSON Based)
+	 * Render Checkbox Field.
 	 */
-	public function render_repeater_field( $args ) {
-		$options = get_option( 'pooki_theme_options' );
+	public function render_checkbox_field( array $args ): void {
+		$key     = $args['id'] ?? ($args['label_for'] ?? '');
+		$options = get_option( 'pooki_theme_options', [] );
+		$checked = ! empty( $options[ $key ] );
+		$desc    = $args['description'] ?? '';
+
+		printf(
+			'<label class="pooki-toggle-switch"><input type="checkbox" id="%1$s" name="pooki_theme_options[%1$s]" value="1" %2$s /><span class="pooki-toggle-slider"></span> %3$s</label>',
+			esc_attr( $key ),
+			checked( $checked, true, false ),
+			esc_html( $desc )
+		);
+	}
+
+	/**
+	 * Render Text Field.
+	 */
+	public function render_text_field( array $args ): void {
+		$key         = $args['id'] ?? ($args['label_for'] ?? '');
+		$options     = get_option( 'pooki_theme_options', [] );
+		$value       = $options[ $key ] ?? ( $args['default'] ?? '' );
+		$placeholder = $args['placeholder'] ?? '';
+		$desc        = $args['description'] ?? '';
+
+		printf(
+			'<input type="text" id="%1$s" name="pooki_theme_options[%1$s]" value="%2$s" placeholder="%3$s" class="regular-text" />',
+			esc_attr( $key ),
+			esc_attr( $value ),
+			esc_attr( $placeholder )
+		);
+		if ( $desc ) {
+			printf( '<p class="description">%s</p>', esc_html( $desc ) );
+		}
+	}
+
+	/**
+	 * Render Number Field.
+	 */
+	public function render_number_field( array $args ): void {
+		$key     = $args['id'] ?? ($args['label_for'] ?? '');
+		$options = get_option( 'pooki_theme_options', [] );
+		$value   = $options[ $key ] ?? ( $args['default'] ?? '' );
+		$min     = isset( $args['min'] ) ? 'min="' . esc_attr( $args['min'] ) . '"' : '';
+		$max     = isset( $args['max'] ) ? 'max="' . esc_attr( $args['max'] ) . '"' : '';
+		$step    = isset( $args['step'] ) ? 'step="' . esc_attr( $args['step'] ) . '"' : '';
+
+		printf(
+			'<input type="number" id="%1$s" name="pooki_theme_options[%1$s]" value="%2$s" class="regular-text" %3$s %4$s %5$s />',
+			esc_attr( $key ),
+			esc_attr( $value ),
+			$min,
+			$max,
+			$step
+		);
+	}
+
+	/**
+	 * Render Textarea Field.
+	 */
+	public function render_textarea_field( array $args ): void {
+		$key     = $args['id'] ?? ($args['label_for'] ?? '');
+		$options = get_option( 'pooki_theme_options', [] );
+		$value   = $options[ $key ] ?? ( $args['default'] ?? '' );
+		$class   = $args['class'] ?? 'large-text';
+
+		printf(
+			'<textarea id="%1$s" name="pooki_theme_options[%1$s]" class="%3$s" rows="4">%2$s</textarea>',
+			esc_attr( $key ),
+			esc_textarea( $value ),
+			esc_attr( $class )
+		);
+	}
+
+	/**
+	 * Render Select Field.
+	 */
+	public function render_select_field( array $args ): void {
+		$key     = $args['id'] ?? ($args['label_for'] ?? '');
+		$options = get_option( 'pooki_theme_options', [] );
+		$value   = $options[ $key ] ?? ( $args['default'] ?? '' );
+		$choices = $args['options'] ?? ($args['choices'] ?? []);
+
+		echo '<select id="' . esc_attr($key) . '" name="pooki_theme_options[' . esc_attr($key) . ']">';
+		foreach ( $choices as $val => $label ) {
+			echo '<option value="' . esc_attr( $val ) . '" ' . selected( $value, $val, false ) . '>' . esc_html( $label ) . '</option>';
+		}
+		echo '</select>';
+	}
+
+	/**
+	 * Render Image/Media Field.
+	 */
+	public function render_image_field( array $args ): void {
+		$this->render_media_field($args);
+	}
+
+	/**
+	 * Render Media Field.
+	 */
+	public function render_media_field( array $args ): void {
+		$key     = $args['id'] ?? ($args['label_for'] ?? '');
+		$options = get_option( 'pooki_theme_options', [] );
+		$value   = $options[ $key ] ?? '';
+
+		echo '<div style="display:flex; align-items:center; gap:10px;">';
+		echo '<input type="hidden" id="' . esc_attr($key) . '" name="pooki_theme_options[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" />';
+		echo '<button type="button" class="button pooki-upload-button" data-target="' . esc_attr($key) . '" data-preview="preview-' . esc_attr($key) . '">انتخاب تصویر</button>';
+		echo '<button type="button" class="button pooki-remove-button" data-target="' . esc_attr($key) . '" data-preview="preview-' . esc_attr($key) . '">حذف</button>';
+		echo '<div id="preview-' . esc_attr($key) . '" style="width: 50px; height: 50px; border: 1px solid #ddd; display: flex; justify-content: center; align-items: center; background: #fafafa;">';
+		if ( $value ) {
+			echo '<img src="' . esc_url($value) . '" style="max-width:100%; max-height:100%; object-fit:contain;" />';
+		} else {
+			echo '<span style="color:#999; font-size:12px;">بدون تصویر</span>';
+		}
+		echo '</div>';
+		echo '</div>';
+	}
+
+	/**
+	 * Render Repeater Field.
+	 */
+	public function render_repeater_field( array $args ): void {
 		$id      = $args['id'];
+		$options = get_option( 'pooki_theme_options', [] );
 		$value   = isset( $options[ $id ] ) && is_array( $options[ $id ] ) ? $options[ $id ] : [];
 		$json_value = wp_json_encode( $value );
 
 		echo '<input type="hidden" id="pooki_repeater_' . esc_attr( $id ) . '" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="' . esc_attr( $json_value ) . '" />';
 		echo '<div id="pooki_repeater_ui_' . esc_attr( $id ) . '"></div>';
-
-		// We will inject a script inside the render_admin_page to handle this securely.
 	}
 
 	/**
