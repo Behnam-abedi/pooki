@@ -409,7 +409,6 @@ class ColorRegistry {
 		echo '<h3>Tailwind Config (برای توسعه‌دهندگان)</h3>';
 		echo '<textarea readonly rows="6" style="width:100%; direction:ltr; font-family:monospace; padding:10px; background:#f8fafc;" onclick="this.select();">' . esc_textarea( $tailwind_output ) . '</textarea>';
 		echo '</div>';
-		echo '</div>';
 
 		echo '<script>
 			document.querySelectorAll(".pooki-reset-color").forEach(btn => {
