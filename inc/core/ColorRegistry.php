@@ -40,7 +40,7 @@ class ColorRegistry {
 	 * Constructor.
 	 */
 	private function __construct() {
-		add_action( 'wp_head', [ $this, 'render_css_variables' ], 1 );
+		add_action( 'wp_head', [ $this, 'render_css_variables' ], 999 );
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		// Assuming there is an action or we can hook into Pooki_Theme_Options tabs
 		// Wait, Pooki_Theme_Options has hardcoded tabs.
@@ -58,21 +58,21 @@ class ColorRegistry {
 				'key'     => 'header_bg',
 				'label'   => 'رنگ پس‌زمینه سربرگ',
 				'section' => 'header',
-				'css_var' => '--pooki-header-bg-color',
+				'css_var' => '--pooki-header-bg',
 				'default' => '#ffffff',
 			],
 			'nav_hover' => [
 				'key'     => 'nav_hover',
 				'label'   => 'رنگ هاور نوار ناوبری',
 				'section' => 'header',
-				'css_var' => '--pooki-nav-hover-color',
+				'css_var' => '--pooki-nav-hover',
 				'default' => '#f3f4f6',
 			],
 			'menu_text' => [
 				'key'     => 'menu_text',
 				'label'   => 'رنگ متن منو',
 				'section' => 'header',
-				'css_var' => '--pooki-menu-text-color',
+				'css_var' => '--pooki-menu-color',
 				'default' => '#374151',
 			],
 			'menu_hover' => [
@@ -86,203 +86,203 @@ class ColorRegistry {
 				'key'     => 'header_border',
 				'label'   => 'رنگ حاشیه سربرگ',
 				'section' => 'header',
-				'css_var' => '--pooki-header-border-color',
+				'css_var' => '--pooki-header-border',
 				'default' => '#f3f4f6',
 			],
 			'sticky_bg' => [
 				'key'     => 'sticky_bg',
 				'label'   => 'رنگ پس‌زمینه چسبان',
 				'section' => 'header',
-				'css_var' => '--pooki-sticky-bg-color',
+				'css_var' => '--pooki-sticky-bg',
 				'default' => '#ffffff',
 			],
 			'sticky_border' => [
 				'key'     => 'sticky_border',
 				'label'   => 'رنگ حاشیه چسبان',
 				'section' => 'header',
-				'css_var' => '--pooki-sticky-border-color',
+				'css_var' => '--pooki-sticky-border',
 				'default' => '#e5e7eb',
 			],
 			'search_bg' => [
 				'key'     => 'search_bg',
 				'label'   => 'رنگ پس‌زمینه جستجو',
 				'section' => 'search',
-				'css_var' => '--pooki-search-bg-color',
+				'css_var' => '--pooki-search-bg',
 				'default' => '#f3f4f6',
 			],
 			'search_focus_bg' => [
 				'key'     => 'search_focus_bg',
 				'label'   => 'رنگ پس‌زمینه فوکوس جستجو',
 				'section' => 'search',
-				'css_var' => '--pooki-search-focus-bg-color',
+				'css_var' => '--pooki-search-focus-bg',
 				'default' => '#ffffff',
 			],
 			'search_border' => [
 				'key'     => 'search_border',
 				'label'   => 'رنگ حاشیه جستجو',
 				'section' => 'search',
-				'css_var' => '--pooki-search-border-color',
+				'css_var' => '--pooki-search-border-c',
 				'default' => '#e5e7eb',
 			],
 			'search_focus_border' => [
 				'key'     => 'search_focus_border',
 				'label'   => 'رنگ حاشیه فوکوس جستجو',
 				'section' => 'search',
-				'css_var' => '--pooki-search-focus-border-color',
+				'css_var' => '--pooki-search-focus-border-c',
 				'default' => '#ec4899',
 			],
 			'search_text' => [
 				'key'     => 'search_text',
 				'label'   => 'رنگ متن جستجو',
 				'section' => 'search',
-				'css_var' => '--pooki-search-text-color',
+				'css_var' => '--pooki-search-color',
 				'default' => '#111827',
 			],
 			'search_placeholder' => [
 				'key'     => 'search_placeholder',
 				'label'   => 'رنگ نگهدارنده جستجو',
 				'section' => 'search',
-				'css_var' => '--pooki-search-placeholder-color',
+				'css_var' => '--pooki-search-placeholder',
 				'default' => '#9ca3af',
 			],
 			'header_action_icon' => [
 				'key'     => 'header_action_icon',
 				'label'   => 'رنگ آیکون دکمه‌ها',
 				'section' => 'actions',
-				'css_var' => '--pooki-header-action-icon-color',
+				'css_var' => '--pooki-action-icon-c',
 				'default' => '#374151',
 			],
 			'header_action_icon_hover' => [
 				'key'     => 'header_action_icon_hover',
 				'label'   => 'رنگ هاور آیکون دکمه‌ها',
 				'section' => 'actions',
-				'css_var' => '--pooki-header-action-icon-hover-color',
+				'css_var' => '--pooki-action-icon-hover-c',
 				'default' => '#ec4899',
 			],
 			'header_action_text' => [
 				'key'     => 'header_action_text',
 				'label'   => 'رنگ متن دکمه‌ها',
 				'section' => 'actions',
-				'css_var' => '--pooki-header-action-text-color',
+				'css_var' => '--pooki-action-text-c',
 				'default' => '#374151',
 			],
 			'header_action_text_hover' => [
 				'key'     => 'header_action_text_hover',
 				'label'   => 'رنگ هاور متن دکمه‌ها',
 				'section' => 'actions',
-				'css_var' => '--pooki-header-action-text-hover-color',
+				'css_var' => '--pooki-action-text-hover-c',
 				'default' => '#ec4899',
 			],
 			'header_action_bg' => [
 				'key'     => 'header_action_bg',
 				'label'   => 'رنگ پس‌زمینه دکمه‌ها',
 				'section' => 'actions',
-				'css_var' => '--pooki-header-action-bg-color',
+				'css_var' => '--pooki-action-bg',
 				'default' => '#ffffff',
 			],
 			'header_action_bg_hover' => [
 				'key'     => 'header_action_bg_hover',
 				'label'   => 'رنگ هاور پس‌زمینه دکمه‌ها',
 				'section' => 'actions',
-				'css_var' => '--pooki-header-action-bg-hover-color',
+				'css_var' => '--pooki-action-bg-hover',
 				'default' => '#f3f4f6',
 			],
 			'header_action_border' => [
 				'key'     => 'header_action_border',
 				'label'   => 'رنگ حاشیه دکمه‌ها',
 				'section' => 'actions',
-				'css_var' => '--pooki-header-action-border-color',
+				'css_var' => '--pooki-action-border',
 				'default' => '#ffffff',
 			],
 			'topbar_bg' => [
 				'key'     => 'topbar_bg',
 				'label'   => 'رنگ پس‌زمینه نوار اعلان',
 				'section' => 'topbar',
-				'css_var' => '--pooki-topbar-bg-color',
+				'css_var' => '--pooki-topbar-bg',
 				'default' => '#4f46e5',
 			],
 			'topbar_text' => [
 				'key'     => 'topbar_text',
 				'label'   => 'رنگ متن نوار اعلان',
 				'section' => 'topbar',
-				'css_var' => '--pooki-topbar-text-color',
+				'css_var' => '--pooki-topbar-color',
 				'default' => '#ffffff',
 			],
 			'nav_bg' => [
 				'key'     => 'nav_bg',
 				'label'   => 'رنگ پس‌زمینه ناوبری',
 				'section' => 'nav',
-				'css_var' => '--pooki-nav-bg-color',
+				'css_var' => '--pooki-nav-bg',
 				'default' => '#ffffff',
 			],
 			'nav_sticky_bg' => [
 				'key'     => 'nav_sticky_bg',
 				'label'   => 'رنگ پس‌زمینه ناوبری چسبان',
 				'section' => 'nav',
-				'css_var' => '--pooki-nav-sticky-bg-color',
+				'css_var' => '--pooki-nav-sticky-bg',
 				'default' => '#ffffff',
 			],
 			'nav_border_top' => [
 				'key'     => 'nav_border_top',
 				'label'   => 'رنگ حاشیه بالای ناوبری',
 				'section' => 'nav',
-				'css_var' => '--pooki-nav-border-top-color',
+				'css_var' => '--pooki-nav-border-top-c',
 				'default' => '#f3f4f6',
 			],
 			'bottom_bar_bg' => [
 				'key'     => 'bottom_bar_bg',
 				'label'   => 'رنگ پس‌زمینه نوار پایینی',
 				'section' => 'mobile',
-				'css_var' => '--pooki-bottom-bar-bg-color',
+				'css_var' => '--pooki-bottom-bar-bg',
 				'default' => '#ffffff',
 			],
 			'bottom_bar_icon' => [
 				'key'     => 'bottom_bar_icon',
 				'label'   => 'رنگ آیکون نوار پایینی',
 				'section' => 'mobile',
-				'css_var' => '--pooki-bottom-bar-icon-color',
+				'css_var' => '--pooki-bottom-bar-icon-c',
 				'default' => '#6b7280',
 			],
 			'bottom_bar_icon_active' => [
 				'key'     => 'bottom_bar_icon_active',
 				'label'   => 'رنگ فعال آیکون نوار پایینی',
 				'section' => 'mobile',
-				'css_var' => '--pooki-bottom-bar-icon-active-color',
+				'css_var' => '--pooki-bottom-bar-icon-active-c',
 				'default' => '#8b5cf6',
 			],
 			'bottom_bar_divider' => [
 				'key'     => 'bottom_bar_divider',
 				'label'   => 'رنگ جداکننده نوار پایینی',
 				'section' => 'mobile',
-				'css_var' => '--pooki-bottom-bar-divider-color',
+				'css_var' => '--pooki-bottom-bar-divider-c',
 				'default' => '#EBE4D8',
 			],
 			'search_modal_bg' => [
 				'key'     => 'search_modal_bg',
 				'label'   => 'رنگ پس‌زمینه مودال جستجو',
 				'section' => 'mobile',
-				'css_var' => '--pooki-search-modal-bg-color',
+				'css_var' => '--pooki-drawer-bg',
 				'default' => '#FAF7F2',
 			],
 			'search_modal_input_bg' => [
 				'key'     => 'search_modal_input_bg',
 				'label'   => 'رنگ پس‌زمینه ورودی مودال جستجو',
 				'section' => 'mobile',
-				'css_var' => '--pooki-search-modal-input-bg-color',
+				'css_var' => '--pooki-search-modal-input-bg',
 				'default' => '#FDFBF7',
 			],
 			'search_modal_input_border' => [
 				'key'     => 'search_modal_input_border',
 				'label'   => 'رنگ حاشیه ورودی مودال جستجو',
 				'section' => 'mobile',
-				'css_var' => '--pooki-search-modal-input-border-color',
+				'css_var' => '--pooki-search-modal-input-border',
 				'default' => '#EBE4D8',
 			],
 			'search_modal_text' => [
 				'key'     => 'search_modal_text',
 				'label'   => 'رنگ متن مودال جستجو',
 				'section' => 'mobile',
-				'css_var' => '--pooki-search-modal-text-color',
+				'css_var' => '--pooki-drawer-text',
 				'default' => '#1f2937',
 			],
 		];
@@ -397,6 +397,9 @@ class ColorRegistry {
 		}
 		echo '</div>';
 
+		// JSON Export / Import
+		$json_export = wp_json_encode( $active, JSON_PRETTY_PRINT );
+
 		// Tailwind format
 		$tailwind_colors = [];
 		foreach ( $registered as $key => $color ) {
@@ -406,8 +409,27 @@ class ColorRegistry {
 		$tailwind_output = wp_json_encode( ['theme' => ['extend' => ['colors' => ['pooki' => $tailwind_colors]]]], JSON_PRETTY_PRINT );
 
 		echo '<div style="margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px;">';
+		echo '<h2>درون‌ریزی / برون‌بری JSON رنگ‌ها</h2>';
+		
+		echo '<div style="display: flex; gap: 20px; flex-wrap: wrap;">';
+		
+		echo '<div style="flex: 1; min-width: 300px;">';
+		echo '<h3>Import Palette (JSON)</h3>';
+		echo '<textarea id="pooki-color-registry-import" rows="6" style="width:100%; direction:ltr; font-family:monospace; padding:10px; border:1px solid #cbd5e1; border-radius:6px;"></textarea>';
+		echo '<button type="button" class="button button-secondary" id="pooki-registry-import-btn" style="margin-top:10px;">اعمال JSON رنگ‌ها</button>';
+		echo '</div>';
+
+		echo '<div style="flex: 1; min-width: 300px;">';
+		echo '<h3>Export Active Palette</h3>';
+		echo '<textarea readonly rows="6" style="width:100%; direction:ltr; font-family:monospace; padding:10px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px;" onclick="this.select();">' . esc_textarea( $json_export ) . '</textarea>';
+		echo '</div>';
+
+		echo '</div>';
+
+		echo '<div style="margin-top: 20px;">';
 		echo '<h3>Tailwind Config (برای توسعه‌دهندگان)</h3>';
-		echo '<textarea readonly rows="6" style="width:100%; direction:ltr; font-family:monospace; padding:10px; background:#f8fafc;" onclick="this.select();">' . esc_textarea( $tailwind_output ) . '</textarea>';
+		echo '<textarea readonly rows="6" style="width:100%; direction:ltr; font-family:monospace; padding:10px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px;" onclick="this.select();">' . esc_textarea( $tailwind_output ) . '</textarea>';
+		echo '</div>';
 		echo '</div>';
 
 		echo '<script>
@@ -415,6 +437,18 @@ class ColorRegistry {
 				btn.addEventListener("click", function() {
 					this.previousElementSibling.value = this.dataset.default;
 				});
+			});
+			document.getElementById("pooki-registry-import-btn")?.addEventListener("click", function() {
+				try {
+					let data = JSON.parse(document.getElementById("pooki-color-registry-import").value);
+					for (let key in data) {
+						let input = document.querySelector(`input[name="pooki_color_palette[${key}]"]`);
+						if(input) { input.value = data[key]; }
+					}
+					alert("رنگ‌ها در فرم قرار گرفتند. لطفاً روی «ذخیره تغییرات» کلیک کنید.");
+				} catch(e) {
+					alert("JSON نامعتبر است!");
+				}
 			});
 		</script>';
 	}
