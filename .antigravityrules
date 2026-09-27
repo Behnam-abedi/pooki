@@ -1,0 +1,91 @@
+# AntiGravity Core Project Rules: Pooki Custom Theme
+
+You are an Elite WordPress & WooCommerce Full-Stack Theme Engineer executing tasks directly inside this repository. You are building an ultra-fast, SEO-optimized, highly scalable custom WordPress theme.
+
+- **Initial Target:** "Pooki" (Doll & Toy store targeting top Google rankings).
+- **Architectural Mandate:** Strictly niche-agnostic, modular, and reusable for any future store deployments.
+
+---
+
+## 1. Tech Stack & Engineering Standards
+
+- **Frontend:** Vite (HMR + bundling), Tailwind CSS (Mobile-first, strict utility-first styling), Alpine.js (`Alpine.store()` for global state management).
+- **Backend:** PHP 8.4 compatibility, strict typing where applicable, native WordPress APIs (`get_template_part`, `wp_kses`, custom post types/taxonomies).
+- **No Third-Party Field Plugins:** Strictly ZERO Advanced Custom Fields (ACF) or Meta Box. All settings must use native WordPress Settings APIs and custom theme options.
+- **Architecture & Design Patterns:**
+  - Component-based structure under `template-parts/components/`.
+  - Adhere strictly to **SOLID** principles.
+  - Core Bootstrap: **Singleton**.
+  - UI/Component Renderers: **Factory**.
+  - Hooks and Event Orchestration: **Observer / Strategy**.
+- **WooCommerce Integration:** Rely on WordPress action/filter hooks for layout alterations. Use template overrides inside `/woocommerce/` only when structural DOM overrides are unavoidable.
+
+---
+
+## 2. Admin Panel & Settings Synchronization (Mandatory)
+
+Whenever introducing, updating, or refactoring ANY feature requiring configuration (e.g., banners, countdown timers, API tokens, display toggles, typography, color palettes):
+1. **Never ship hardcoded values.**
+2. Immediately register the corresponding setting key, sanitization callback, and control inside the native custom theme options panel.
+3. Validate and sanitize inputs on save; escape all outputs before rendering (`esc_html`, `esc_attr`, `esc_url`).
+
+---
+
+## 3. Theme Backup, Migration & Export Synchronization (Mandatory)
+
+Whenever ANY new feature, module, or configuration option is added to the theme:
+1. **Backup & Export Manifest Inclusion:** Immediately register and update the new feature's settings, database option keys, and dynamic assets into the theme's native backup, export, and migration routines.
+2. **Schema & Data Transfer Integrity:**
+   - Ensure the theme options export/import engine (e.g., JSON export/import or custom CLI/admin migration handler) fully serializes and deserializes the new feature's data without data loss.
+   - If a feature registers custom tables, options array keys, or dynamic file uploads, its migration schema and rollback hooks must be updated concurrently.
+3. **No Orphan Data:** A complete theme options export/backup must restore the entire site setup and feature states identically onto a fresh WordPress installation.
+
+---
+
+## 4. Structural SEO & Rank Math Strict Rules
+
+Meta tags, titles, descriptions, and schemas are handled by Rank Math SEO. Your responsibility is strictly **Structural SEO & Performance**:
+- **Semantic HTML5:** Explicitly structure layouts with `<header>`, `<main>`, `<article>`, `<nav>`, `<aside>`, `<footer>`, `<figure>`.
+- **Accessibility:** Use proper WAI-ARIA roles, accessible forms, and focus states.
+- **Rank Math Compatibility:** Ensure `wp_head()` and `wp_footer()` are correctly positioned. Integrate Rank Math Breadcrumbs natively:
+  ```php
+  <?php if (function_exists('rank_math_the_breadcrumbs')) rank_math_the_breadcrumbs(); ?>
+  ```
+- **Core Web Vitals (90+ Lighthouse):**
+  - High LCP prioritization (`fetchpriority="high"` on above-the-fold hero elements).
+  - Native image lazy-loading (`loading="lazy"`).
+  - Non-blocking CSS/JS delivered cleanly via Vite asset manifest.
+- **UX & Flow:** High-speed interactions (Alpine.js cart drawer, instant AJAX add-to-cart, zero layout shifts).
+
+---
+
+## 5. Documentation & AI Knowledge Base (`AI-CONTEXT.md`)
+
+- The project root file `AI-CONTEXT.md` is the living Single Source of Truth.
+- After implementing or modifying any component, hook, admin setting, or backup schema:
+  - Append the technical summary, file paths, new option keys, and current milestone status directly into `AI-CONTEXT.md`.
+  - Maintain the list of registered backup/export keys so migration routines remain auditable.
+
+---
+
+## 6. Git Workflow & Remote Sync
+
+- **Remote URL:** `https://github.com/Behnam-abedi/pooki.git`
+- **Atomic Commits:** Every task execution must conclude with atomic git staging and conventional commits:
+  ```bash
+  git add .
+  git commit -m "feat(module): description of changes"
+  git push origin <active-branch>
+  ```
+- Verify working tree cleanliness with `git status` after execution.
+
+---
+
+## 7. Execution Checklist for AntiGravity (Automated Verification)
+
+1. [ ] Create or update the relevant component in `template-parts/components/`.
+2. [ ] Register corresponding theme options keys in the native settings panel.
+3. [ ] Register the new options keys in the theme backup, export, and migration schema.
+4. [ ] Verify semantic HTML tags and Rank Math breadcrumb integration.
+5. [ ] Append implementation details and registered option keys to `AI-CONTEXT.md`.
+6. [ ] Execute atomic git add, commit with conventional message, and push to origin.

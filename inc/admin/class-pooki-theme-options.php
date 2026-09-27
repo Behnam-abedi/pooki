@@ -513,7 +513,18 @@ class Pooki_Theme_Options {
 				update_option( 'pooki_color_palette', $sanitized_colors );
 			}
 
-			wp_send_json_success( [ 'message' => 'تنظیمات با موفقیت ذخیره شد!' ] );
+			$export_data = [
+				'theme'     => 'pooki',
+				'version'   => '1.0.0',
+				'timestamp' => current_time( 'mysql' ),
+				'options'   => [
+					'pooki_theme_options' => get_option( 'pooki_theme_options', [] ),
+					'pooki_color_palette' => get_option( 'pooki_color_palette', [] )
+				]
+			];
+			$json_export = wp_json_encode( $export_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
+
+			wp_send_json_success( [ 'message' => 'تنظیمات با موفقیت ذخیره شد!', 'export_json' => $json_export ] );
 		}
 
 		wp_send_json_error( 'اطلاعاتی ارسال نشد.' );
@@ -947,7 +958,7 @@ class Pooki_Theme_Options {
 							<div style="display:flex; gap:20px; flex-wrap:wrap; margin-top: 20px;">
 								<div style="flex:1; min-width:300px; padding:20px; background:#fff; border:1px solid #cbd5e1; border-radius:8px;">
 									<h3 style="margin-top:0;">برون‌بری تنظیمات (Export)</h3>
-									<p style="color:#64748b; font-size:13px;">از تمام تنظیمات قالب (رنگ‌ها، چیدمان، متن‌ها) فایل پشتیبان بگیرید.</p>
+									<p style="color:#64748b; font-size:13px;">از تمام تنظیمات قالب (رنگ‌ها، چیدمان، متن‌ها) فایل پشتیبان بگیرید. <strong>لطفا ابتدا تغییرات خود را ذخیره کنید تا در خروجی لحاظ شوند.</strong></p>
 									<textarea id="pooki-export-textarea" readonly rows="6" style="width:100%; direction:ltr; font-family:monospace; padding:10px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; resize:vertical;" onclick="this.select();"><?php echo esc_textarea( $json_export ); ?></textarea>
 									<div style="margin-top:15px; display:flex; gap:10px;">
 										<button type="button" class="button button-primary" id="pooki-download-json">دانلود فایل پشتیبان (JSON)</button>
@@ -1220,6 +1231,13 @@ class Pooki_Theme_Options {
 						toast.innerText = response.data.message || 'تنظیمات ذخیره شد.';
 						status.style.color = '#4caf50';
 						status.innerText = 'تغییرات ذخیره شد!';
+						
+						if (response.data.export_json) {
+							const exportArea = document.getElementById('pooki-export-textarea');
+							if (exportArea) {
+								exportArea.value = response.data.export_json;
+							}
+						}
 					} else {
 						toast.style.background = '#f44336';
 						toast.innerText = response.data || 'خطایی رخ داده است.';

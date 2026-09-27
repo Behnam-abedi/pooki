@@ -397,9 +397,6 @@ class ColorRegistry {
 		}
 		echo '</div>';
 
-		// JSON Export / Import
-		$json_export = wp_json_encode( $active, JSON_PRETTY_PRINT );
-
 		// Tailwind format
 		$tailwind_colors = [];
 		foreach ( $registered as $key => $color ) {
@@ -409,28 +406,9 @@ class ColorRegistry {
 		$tailwind_output = wp_json_encode( ['theme' => ['extend' => ['colors' => ['pooki' => $tailwind_colors]]]], JSON_PRETTY_PRINT );
 
 		echo '<div style="margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px;">';
-		echo '<h2>درون‌ریزی / برون‌بری JSON</h2>';
-		
-		echo '<div style="display: flex; gap: 20px; flex-wrap: wrap;">';
-		
-		echo '<div style="flex: 1; min-width: 300px;">';
-		echo '<h3>Import Palette (JSON)</h3>';
-		echo '<textarea id="pooki-color-registry-import" rows="6" style="width:100%; direction:ltr; font-family:monospace; padding:10px;"></textarea>';
-		echo '<button type="button" class="button button-secondary" id="pooki-registry-import-btn" style="margin-top:10px;">اعمال JSON</button>';
+		echo '<h3>Tailwind Config (برای توسعه‌دهندگان)</h3>';
+		echo '<textarea readonly rows="6" style="width:100%; direction:ltr; font-family:monospace; padding:10px; background:#f8fafc;" onclick="this.select();">' . esc_textarea( $tailwind_output ) . '</textarea>';
 		echo '</div>';
-
-		echo '<div style="flex: 1; min-width: 300px;">';
-		echo '<h3>Export Active Palette</h3>';
-		echo '<textarea readonly rows="6" style="width:100%; direction:ltr; font-family:monospace; padding:10px; background:#f8fafc;" onclick="this.select();">' . esc_textarea( $json_export ) . '</textarea>';
-		echo '</div>';
-
-		echo '</div>';
-
-		echo '<div style="margin-top: 20px;">';
-		echo '<h3>Tailwind Config (JSON)</h3>';
-		echo '<textarea readonly rows="12" style="width:100%; direction:ltr; font-family:monospace; padding:10px; background:#f8fafc;" onclick="this.select();">' . esc_textarea( $tailwind_output ) . '</textarea>';
-		echo '</div>';
-
 		echo '</div>';
 
 		echo '<script>
@@ -438,18 +416,6 @@ class ColorRegistry {
 				btn.addEventListener("click", function() {
 					this.previousElementSibling.value = this.dataset.default;
 				});
-			});
-			document.getElementById("pooki-registry-import-btn")?.addEventListener("click", function() {
-				try {
-					let data = JSON.parse(document.getElementById("pooki-color-registry-import").value);
-					for (let key in data) {
-						let input = document.querySelector(`input[name="pooki_color_palette[${key}]"]`);
-						if(input) { input.value = data[key]; }
-					}
-					alert("رنگ‌ها اعمال شدند. لطفاً ذخیره کنید.");
-				} catch(e) {
-					alert("JSON نامعتبر است.");
-				}
 			});
 		</script>';
 	}
