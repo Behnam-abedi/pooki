@@ -438,7 +438,7 @@ class Pooki_Theme_Options {
 				'slider_border_radius'             => 'int',
 				'slider_autoplay'                  => 'bool',
 				'slider_autoplay_delay'            => 'int',
-				'slider_items'                     => 'repeater',
+				'slider_items'                     => 'slider_repeater',
 
 				'mobile_header_height'             => 'int',
 				'mobile_logo_height'               => 'int',
@@ -532,6 +532,21 @@ class Pooki_Theme_Options {
 									'label'    => isset( $item['label'] ) ? sanitize_text_field( $item['label'] ) : '',
 									'url'      => isset( $item['url'] ) ? esc_url_raw( $item['url'] ) : '',
 									'icon_svg' => isset( $item['icon_svg'] ) ? wp_kses( $item['icon_svg'], $svg_args ) : '',
+								];
+							}
+						}
+						$options[ $field ] = $items;
+					} elseif ( 'slider_repeater' === $type ) {
+						// Process slider repeater JSON string securely
+						$json_data = json_decode( wp_unslash( $posted[ $field ] ), true );
+						$items = [];
+						if ( is_array( $json_data ) ) {
+							foreach ( $json_data as $item ) {
+								$items[] = [
+									'desktop_img' => isset( $item['desktop_img'] ) ? esc_url_raw( $item['desktop_img'] ) : '',
+									'mobile_img'  => isset( $item['mobile_img'] ) ? esc_url_raw( $item['mobile_img'] ) : '',
+									'url'         => isset( $item['url'] ) ? esc_url_raw( $item['url'] ) : '',
+									'alt'         => isset( $item['alt'] ) ? sanitize_text_field( $item['alt'] ) : '',
 								];
 							}
 						}

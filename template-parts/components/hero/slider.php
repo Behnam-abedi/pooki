@@ -14,7 +14,16 @@ if ( ! $slider_enabled ) {
 
 $items = isset( $opts['slider_items'] ) && is_array( $opts['slider_items'] ) ? $opts['slider_items'] : [];
 
-if ( empty( $items ) ) {
+$valid_items = [];
+foreach ( $items as $item ) {
+	if ( ! empty( $item['desktop_img'] ) || ! empty( $item['mobile_img'] ) ) {
+		$valid_items[] = $item;
+	}
+}
+
+$slide_count = count( $valid_items );
+
+if ( $slide_count === 0 ) {
 	return;
 }
 
@@ -39,11 +48,8 @@ if ( 'container' === $width ) {
 	<!-- Swiper Container -->
 	<div class="swiper pooki-main-slider" style="border-radius: var(--pooki-slider-radius); overflow: hidden;">
 		<div class="swiper-wrapper">
-			<?php foreach ( $items as $item ) : ?>
+			<?php foreach ( $valid_items as $item ) : ?>
 				<?php 
-				if ( empty( $item['desktop_img'] ) && empty( $item['mobile_img'] ) ) {
-					continue;
-				}
 				$desktop_img = ! empty( $item['desktop_img'] ) ? $item['desktop_img'] : $item['mobile_img'];
 				$mobile_img = ! empty( $item['mobile_img'] ) ? $item['mobile_img'] : $item['desktop_img'];
 				$url = ! empty( $item['url'] ) ? $item['url'] : '';
@@ -71,11 +77,12 @@ if ( 'container' === $width ) {
 		</div>
 		
 		<!-- Navigation Arrows -->
-		<div class="swiper-button-next" style="color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"></div>
-		<div class="swiper-button-prev" style="color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"></div>
-		
-		<!-- Pagination -->
-		<div class="swiper-pagination"></div>
+		<?php if ( $slide_count > 1 ) : ?>
+			<div class="swiper-button-next" style="color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"></div>
+			<div class="swiper-button-prev" style="color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"></div>
+			<!-- Pagination -->
+			<div class="swiper-pagination"></div>
+		<?php endif; ?>
 	</div>
 </div>
 
@@ -103,8 +110,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (typeof Swiper !== 'undefined') {
 		const swiperOpts = {
 			modules: [window.SwiperModules.Navigation, window.SwiperModules.Pagination, window.SwiperModules.Autoplay],
-			loop: true,
+			loop: <?php echo $slide_count > 1 ? 'true' : 'false'; ?>,
 			speed: 600,
+			<?php if ( $slide_count > 1 ) : ?>
 			navigation: {
 				nextEl: '.swiper-button-next',
 				prevEl: '.swiper-button-prev',
@@ -113,9 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
 				el: '.swiper-pagination',
 				clickable: true,
 			},
+			<?php endif; ?>
 		};
 		
-		<?php if ( $autoplay ) : ?>
+		<?php if ( $autoplay && $slide_count > 1 ) : ?>
 		swiperOpts.autoplay = {
 			delay: <?php echo intval( $autoplay_delay ); ?>,
 			disableOnInteraction: false,
