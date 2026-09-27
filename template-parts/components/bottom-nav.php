@@ -20,7 +20,7 @@ $is_account_active = function_exists( 'is_account_page' ) && is_account_page();
 $active_classes   = 'text-amber-700 font-bold';
 $inactive_classes = 'text-neutral-600 hover:text-amber-600';
 ?>
-<nav x-data class="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md bg-white/95 backdrop-blur-md border border-neutral-200/80 shadow-xl rounded-2xl p-2 select-none" aria-label="<?php esc_attr_e( 'Mobile Navigation', 'pooki' ); ?>">
+<nav x-data class="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md bg-white/95 backdrop-blur-md border border-neutral-200/80 shadow-xl rounded-2xl p-2 select-none md:hidden" aria-label="<?php esc_attr_e( 'Mobile Navigation', 'pooki' ); ?>">
     <div class="flex items-center justify-around w-full">
         
         <!-- Home Item -->

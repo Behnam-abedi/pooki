@@ -88,27 +88,106 @@ class Pooki_Theme_Options {
 		// Top Bar Section
 		add_settings_section( 'pooki_topbar_section', 'نوار اعلان بالای سایت (Top Bar)', null, 'pooki-settings-header' );
 
+		add_settings_field( 'topbar_enabled', 'نمایش نوار اعلان', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_topbar_section', [ 'id' => 'topbar_enabled', 'default' => 1 ] );
+		add_settings_field( 'topbar_hide_mobile', 'مخفی کردن در موبایل', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_topbar_section', [ 'id' => 'topbar_hide_mobile', 'default' => 1 ] );
+		add_settings_field( 'topbar_height', 'ارتفاع (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_topbar_section', [ 'id' => 'topbar_height', 'default' => 36 ] );
+		add_settings_field( 'topbar_content', 'محتوای نوار اعلان (HTML مجاز است)', [ $this, 'render_textarea_field' ], 'pooki-settings-header', 'pooki_topbar_section', [ 'id' => 'topbar_content', 'default' => 'تلفن تماس: ۰۲۱-۱۲۳۴۵۶۷۸ | ارسال رایگان برای خریدهای بالای ۱ میلیون تومان', 'class' => 'pooki-full-width-field' ] );
+
+		// Header Section
+		add_settings_section( 'pooki_header_section', 'تنظیمات سربرگ', null, 'pooki-settings-header' );
+
+		add_settings_field( 'logo_url', 'تصویر لوگو', [ $this, 'render_media_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'logo_url' ] );
+		add_settings_field( 'header_height', 'ارتفاع سربرگ (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'header_height', 'default' => 80 ] );
+		add_settings_field( 'logo_height', 'ارتفاع لوگو (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'logo_height', 'default' => 48 ] );
+		add_settings_field( 'header_shadow', 'سایه سربرگ', [ $this, 'render_select_field' ], 'pooki-settings-header', 'pooki_header_section', [ 'id' => 'header_shadow', 'options' => [ 'none' => 'بدون سایه', 'sm' => 'کوچک', 'md' => 'متوسط', 'lg' => 'بزرگ' ], 'default' => 'sm' ] );
+		
+
 		// Navigation Row Section
 		add_settings_section( 'pooki_nav_section', 'نوار ناوبری (منو)', null, 'pooki-settings-header' );
+
+		add_settings_field( 'nav_border_top_width', 'ضخامت حاشیه بالا (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_nav_section', [ 'id' => 'nav_border_top_width', 'default' => 1 ] );
 
 		// Sticky Header Section
 		add_settings_section( 'pooki_sticky_header_section', 'تنظیمات هدر چسبان', null, 'pooki-settings-header' );
 
+		add_settings_field( 'sticky_header_enabled', 'فعال‌سازی هدر چسبان', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_sticky_header_section', [ 'id' => 'sticky_header_enabled' ] );
+		add_settings_field( 'sticky_header_height', 'ارتفاع هدر چسبان (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_sticky_header_section', [ 'id' => 'sticky_header_height', 'default' => 64 ] );
+		add_settings_field( 'sticky_logo_height', 'ارتفاع لوگو چسبان (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_sticky_header_section', [ 'id' => 'sticky_logo_height', 'default' => 40 ] );
+		add_settings_field( 'sticky_shadow', 'سایه هدر چسبان', [ $this, 'render_select_field' ], 'pooki-settings-header', 'pooki_sticky_header_section', [ 'id' => 'sticky_shadow', 'options' => [ 'none' => 'بدون سایه', 'sm' => 'کوچک', 'md' => 'متوسط', 'lg' => 'بزرگ' ], 'default' => 'md' ] );
+
+		// Search Bar Section
+		add_settings_section( 'pooki_search_section', 'تنظیمات فرم جستجو', null, 'pooki-settings-header' );
+
+		add_settings_field( 'search_height', 'ارتفاع فرم (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_height', 'default' => 44 ] );
+		add_settings_field( 'search_font_size', 'اندازه متن (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_font_size', 'default' => 14 ] );
+		add_settings_field( 'search_border_radius', 'گردی گوشه‌ها (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_radius', 'default' => 9999 ] );
+		add_settings_field( 'search_border_width', 'ضخامت حاشیه عادی (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_width', 'default' => 1 ] );
+		add_settings_field( 'search_focus_border_width', 'ضخامت حاشیه فوکوس (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_focus_border_width', 'default' => 2 ] );
+
 		// Header Actions Section
 		add_settings_section( 'pooki_actions_section', 'تنظیمات دکمه‌های سربرگ', null, 'pooki-settings-header' );
 
-		// Bottom Nav Advanced Borders & Active States
-		// Mobile Header Heights
-		}
+		add_settings_field( 'header_action_icon_size', 'اندازه آیکون (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_icon_size', 'default' => 20 ] );
+		add_settings_field( 'header_action_font_size', 'اندازه متن (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_font_size', 'default' => 13 ] );
+		add_settings_field( 'header_action_radius', 'گردی گوشه‌ها (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_radius', 'default' => 8 ] );
+		
+		
+		
+		
+		
+		add_settings_field( 'header_action_items', 'مدیریت دکمه‌ها', [ $this, 'render_repeater_field' ], 'pooki-settings-header', 'pooki_actions_section', [ 'id' => 'header_action_items', 'class' => 'pooki-full-width-field' ] );
 
-	/**
-	 * Render Checkbox Field.
-	 */
-	public function render_checkbox_field( $args ) {
-		$options = get_option( 'pooki_theme_options' );
-		$id      = $args['id'];
-		$value   = isset( $options[ $id ] ) ? $options[ $id ] : 0;
-		echo '<input type="checkbox" name="pooki_theme_options[' . esc_attr( $id ) . ']" value="1" ' . checked( 1, $value, false ) . ' />';
+		// Mobile Navigation Section
+		add_settings_section( 'pooki_mobile_nav_section', 'تنظیمات موبایل و نوار پایینی', null, 'pooki-settings-header' );
+
+		// Mobile Header Actions
+		add_settings_field( 'mobile_header_height', 'ارتفاع هدر موبایل (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_header_height', 'default' => 60 ] );
+		add_settings_field( 'mobile_logo_height', 'حداکثر ارتفاع لوگو موبایل (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_logo_height', 'default' => 35 ] );
+		add_settings_field( 'mobile_nav_header_search', 'نمایش جستجو در هدر موبایل', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_search', 'default' => 1 ] );
+		add_settings_field( 'mobile_nav_header_phone', 'نمایش دکمه تماس در هدر موبایل', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_phone', 'default' => 0 ] );
+		add_settings_field( 'mobile_nav_header_phone_number', 'شماره تماس', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_phone_number', 'default' => '02112345678' ] );
+		add_settings_field( 'mobile_nav_header_hamburger', 'نمایش منوی همبرگری', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_hamburger', 'default' => 1 ] );
+
+		// Mobile Bottom Bar Actions
+		
+		add_settings_field( 'mobile_bottom_bar_home', 'نمایش خانه', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_home', 'default' => 1 ] );
+		add_settings_field( 'bottom_bar_label_home', 'برچسب خانه', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_label_home', 'default' => 'خانه' ] );
+		
+		add_settings_field( 'mobile_bottom_bar_shop', 'نمایش فروشگاه', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_shop', 'default' => 1 ] );
+		add_settings_field( 'bottom_bar_label_shop', 'برچسب فروشگاه', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_label_shop', 'default' => 'فروشگاه' ] );
+		
+		add_settings_field( 'mobile_bottom_bar_cart', 'نمایش سبد خرید', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_cart', 'default' => 1 ] );
+		add_settings_field( 'bottom_bar_label_cart', 'برچسب سبد خرید', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_label_cart', 'default' => 'سبد خرید' ] );
+		
+		add_settings_field( 'mobile_bottom_bar_account', 'نمایش حساب', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_account', 'default' => 1 ] );
+		add_settings_field( 'bottom_bar_label_account', 'برچسب حساب', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_label_account', 'default' => 'حساب من' ] );
+		
+		add_settings_field( 'mobile_bottom_bar_search', 'نمایش جستجو', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_bottom_bar_search', 'default' => 0 ] );
+		add_settings_field( 'bottom_bar_label_search', 'برچسب جستجو', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_label_search', 'default' => 'جستجو' ] );
+
+		add_settings_field( 'bottom_bar_shadow', 'سایه نوار پایین', [ $this, 'render_select_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 
+			'id' => 'bottom_bar_shadow', 
+			'default' => 'shadow-lg',
+			'options' => [
+				'none' => 'بدون سایه',
+				'shadow-sm' => 'نرم (Soft)',
+				'shadow-md' => 'متوسط (Medium)',
+				'shadow-lg' => 'بزرگ (Strong)',
+				'shadow-xl' => 'خیلی بزرگ (Extra Strong)'
+			]
+		] );
+		add_settings_field( 'bottom_bar_dividers', 'فعال‌سازی جداکننده‌های عمودی', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_dividers', 'default' => 0 ] );
+
+		// Bottom Nav Advanced Borders & Active States
+		add_settings_field( 'bottom_bar_border_thickness', 'ضخامت حاشیه نوار پایین', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'bottom_bar_border_thickness', 'default' => '1px' ] );
+
+		// Mobile Header Heights
+		add_settings_field( 'mobile_header_base_height', 'ارتفاع پایه هدر موبایل', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_header_base_height', 'default' => '70px' ] );
+		add_settings_field( 'mobile_header_sticky_height', 'ارتفاع هدر موبایل چسبان', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_header_sticky_height', 'default' => '60px' ] );
+		add_settings_field( 'mobile_logo_max_height', 'حداکثر ارتفاع لوگو موبایل', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_logo_max_height', 'default' => '40px' ] );
+
+		// Unified Drawer Settings
+
 	}
 
 	/**
