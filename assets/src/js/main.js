@@ -27,7 +27,7 @@ document.addEventListener('alpine:init', () => {
     }
   });
 
-  Alpine.data('pookiLiveSearch', () => ({
+  Alpine.store('search', {
     query: '',
     results: [],
     isLoading: false,
@@ -51,7 +51,22 @@ document.addEventListener('alpine:init', () => {
       } finally {
         this.isLoading = false;
       }
+    },
+    goToSearch() {
+      if (this.query.trim().length > 0) {
+        window.location.href = `/?s=${encodeURIComponent(this.query)}&post_type=product`;
+      }
     }
+  });
+
+  Alpine.data('pookiLiveSearch', () => ({
+    get query() { return Alpine.store('search').query; },
+    set query(val) { Alpine.store('search').query = val; },
+    get results() { return Alpine.store('search').results; },
+    set results(val) { Alpine.store('search').results = val; },
+    get isLoading() { return Alpine.store('search').isLoading; },
+    fetchResults() { return Alpine.store('search').fetchResults(); },
+    goToSearch() { return Alpine.store('search').goToSearch(); }
   }));
 });
 

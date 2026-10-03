@@ -17,10 +17,38 @@ $is_shop_active    = ( function_exists( 'is_shop' ) && is_shop() ) ||
                      ( function_exists( 'is_product' ) && is_product() );
 $is_account_active = function_exists( 'is_account_page' ) && is_account_page();
 
-$active_classes   = 'text-amber-700 font-bold';
-$inactive_classes = 'text-neutral-600 hover:text-amber-600';
+$active_classes   = 'pooki-bnav-active font-bold';
+$inactive_classes = 'pooki-bnav-inactive';
 ?>
-<nav x-data class="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md bg-white/95 backdrop-blur-md border border-neutral-200/80 shadow-xl rounded-2xl p-2 select-none md:hidden" aria-label="<?php esc_attr_e( 'Mobile Navigation', 'pooki' ); ?>">
+<style>
+.pooki-bnav-container {
+    background-color: var(--pooki-bottom-bar-bg, rgba(255, 255, 255, 0.95));
+    border-color: var(--pooki-bottom-nav-border-c, rgba(229, 231, 235, 0.8));
+    border-width: var(--pooki-bottom-nav-border-w, 1px);
+    box-shadow: var(--pooki-bottom-nav-shadow, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04));
+}
+.pooki-bnav-active {
+    color: var(--pooki-bottom-bar-icon-active-c, #b45309);
+    background-color: var(--pooki-bottom-nav-active-bg, transparent);
+    border-radius: 0.5rem;
+}
+.pooki-bnav-active span {
+    color: inherit;
+}
+.pooki-bnav-inactive {
+    color: var(--pooki-bottom-bar-icon-c, #525252);
+}
+.pooki-bnav-inactive:hover {
+    color: var(--pooki-bottom-bar-icon-active-c, #d97706);
+}
+.pooki-bnav-inactive:hover span {
+    color: inherit;
+}
+.pooki-bnav-divider {
+    background-color: var(--pooki-bottom-bar-divider, #e5e7eb);
+}
+</style>
+<nav x-data class="pooki-bnav-container fixed left-4 right-4 z-40 mx-auto max-w-md backdrop-blur-md rounded-2xl p-2 select-none md:hidden" aria-label="<?php esc_attr_e( 'Mobile Navigation', 'pooki' ); ?>" style="bottom: max(4px, env(safe-area-inset-bottom));">
     <div class="flex items-center justify-around w-full">
         
         <!-- Home Item -->
@@ -31,7 +59,7 @@ $inactive_classes = 'text-neutral-600 hover:text-amber-600';
             <span class="text-[11px] leading-none whitespace-nowrap"><?php esc_html_e( 'خانه', 'pooki' ); ?></span>
         </a>
 
-        <div class="w-px h-6 bg-neutral-200 shrink-0"></div>
+        <div class="w-px h-6 pooki-bnav-divider shrink-0"></div>
 
         <!-- Shop Item -->
         <a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop' ) ); ?>" class="flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 <?php echo $is_shop_active ? esc_attr( $active_classes ) : esc_attr( $inactive_classes ); ?> transition-colors">
@@ -41,12 +69,12 @@ $inactive_classes = 'text-neutral-600 hover:text-amber-600';
             <span class="text-[11px] leading-none whitespace-nowrap"><?php esc_html_e( 'فروشگاه', 'pooki' ); ?></span>
         </a>
 
-        <div class="w-px h-6 bg-neutral-200 shrink-0"></div>
+        <div class="w-px h-6 pooki-bnav-divider shrink-0"></div>
 
         <!-- Cart Trigger Item (Drawer) -->
         <button type="button" 
                 @click="$store.cart.toggle()" 
-                class="flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 text-neutral-600 hover:text-amber-600 transition-colors focus:outline-none cursor-pointer"
+                class="flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 <?php echo esc_attr( $inactive_classes ); ?> transition-colors focus:outline-none cursor-pointer"
                 aria-label="<?php esc_attr_e( 'سبد خرید', 'pooki' ); ?>"
                 aria-haspopup="dialog">
             <div class="relative inline-flex items-center justify-center mb-1">
@@ -60,7 +88,7 @@ $inactive_classes = 'text-neutral-600 hover:text-amber-600';
             <span class="text-[11px] font-medium leading-none whitespace-nowrap"><?php esc_html_e( 'سبد خرید', 'pooki' ); ?></span>
         </button>
 
-        <div class="w-px h-6 bg-neutral-200 shrink-0"></div>
+        <div class="w-px h-6 pooki-bnav-divider shrink-0"></div>
 
         <!-- Account Item -->
         <a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : home_url( '/my-account' ) ); ?>" class="flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 <?php echo $is_account_active ? esc_attr( $active_classes ) : esc_attr( $inactive_classes ); ?> transition-colors">

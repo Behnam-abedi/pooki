@@ -7,6 +7,14 @@ You are an Elite WordPress & WooCommerce Full-Stack Theme Engineer executing tas
 
 ---
 
+## 0. Autonomous Execution & Zero-Prompt Mandate (Strict)
+
+- **Autonomous Operation:** Operate in full autonomous mode. Do NOT prompt the user for intermediate confirmation, permissions, or interactive approvals before reading/modifying files, running non-destructive terminal commands, creating directories, or installing dependencies.
+- **Continuous Flow:** Proceed directly from problem analysis to implementation, verification, and remote sync without halting execution.
+- **Non-Interactive Tooling:** Always supply non-interactive/silent flags to CLI tools and package managers (`npm install --yes`, `composer install --no-interaction`, `git commit -m "..."`, etc.) to prevent blocking execution.
+
+---
+
 ## 1. Tech Stack & Engineering Standards
 
 - **Frontend:** Vite (HMR + bundling), Tailwind CSS (Mobile-first, strict utility-first styling), Alpine.js (`Alpine.store()` for global state management).
@@ -88,4 +96,4 @@ Meta tags, titles, descriptions, and schemas are handled by Rank Math SEO. Your 
 3. [ ] Register the new options keys in the theme backup, export, and migration schema.
 4. [ ] Verify semantic HTML tags and Rank Math breadcrumb integration.
 5. [ ] Append implementation details and registered option keys to `AI-CONTEXT.md`.
-6. [ ] Execute atomic git add, commit with conventional message, and push to origin.
+6. [ ] Execute atomic git add, commit with conventional message, and push to origin without awaiting user confirmation.

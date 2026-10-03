@@ -257,6 +257,21 @@ class ColorRegistry {
 				'css_var' => '--pooki-bottom-bar-divider-c',
 				'default' => '#EBE4D8',
 			],
+			'bottom_bar_active_bg' => [
+				'key'     => 'bottom_bar_active_bg',
+				'label'   => 'رنگ پس‌زمینه دکمه فعال',
+				'section' => 'mobile',
+				'css_var' => '--pooki-bottom-nav-active-bg',
+				'default' => 'transparent',
+			],
+			'bottom_bar_active_text' => [
+				'key'     => 'bottom_bar_active_text',
+				'label'   => 'رنگ آیکون دکمه فعال',
+				'section' => 'mobile',
+				'css_var' => '--pooki-bottom-nav-active-text',
+				'default' => '#b45309',
+			],
+
 			'search_modal_bg' => [
 				'key'     => 'search_modal_bg',
 				'label'   => 'رنگ پس‌زمینه مودال جستجو',

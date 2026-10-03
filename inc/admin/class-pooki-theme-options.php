@@ -118,9 +118,12 @@ class Pooki_Theme_Options {
 		// Search Bar Section
 		add_settings_section( 'pooki_search_section', 'تنظیمات فرم جستجو', null, 'pooki-settings-header' );
 
-		add_settings_field( 'search_height', 'ارتفاع فرم (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_height', 'default' => 44 ] );
-		add_settings_field( 'search_font_size', 'اندازه متن (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_font_size', 'default' => 14 ] );
-		add_settings_field( 'search_border_radius', 'گردی گوشه‌ها (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_radius', 'default' => 9999 ] );
+		add_settings_field( 'search_height', 'ارتفاع فرم دسکتاپ (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_height', 'default' => 44 ] );
+		add_settings_field( 'search_height_mobile', 'ارتفاع فرم موبایل (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_height_mobile', 'default' => 40 ] );
+		add_settings_field( 'search_font_size', 'اندازه متن دسکتاپ (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_font_size', 'default' => 14 ] );
+		add_settings_field( 'search_font_size_mobile', 'اندازه متن موبایل (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_font_size_mobile', 'default' => 13 ] );
+		add_settings_field( 'search_border_radius', 'گردی گوشه‌ها دسکتاپ (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_radius', 'default' => 9999 ] );
+		add_settings_field( 'search_border_radius_mobile', 'گردی گوشه‌ها موبایل (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_radius_mobile', 'default' => 9999 ] );
 		add_settings_field( 'search_border_width', 'ضخامت حاشیه عادی (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_border_width', 'default' => 1 ] );
 		add_settings_field( 'search_focus_border_width', 'ضخامت حاشیه فوکوس (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_search_section', [ 'id' => 'search_focus_border_width', 'default' => 2 ] );
 
@@ -140,9 +143,6 @@ class Pooki_Theme_Options {
 		// Mobile Navigation Section
 		add_settings_section( 'pooki_mobile_nav_section', 'تنظیمات موبایل و نوار پایینی', null, 'pooki-settings-header' );
 
-		// Mobile Header Actions
-		add_settings_field( 'mobile_header_height', 'ارتفاع هدر موبایل (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_header_height', 'default' => 60 ] );
-		add_settings_field( 'mobile_logo_height', 'حداکثر ارتفاع لوگو موبایل (px)', [ $this, 'render_number_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_logo_height', 'default' => 35 ] );
 		add_settings_field( 'mobile_nav_header_search', 'نمایش جستجو در هدر موبایل', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_search', 'default' => 1 ] );
 		add_settings_field( 'mobile_nav_header_phone', 'نمایش دکمه تماس در هدر موبایل', [ $this, 'render_checkbox_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_phone', 'default' => 0 ] );
 		add_settings_field( 'mobile_nav_header_phone_number', 'شماره تماس', [ $this, 'render_text_field' ], 'pooki-settings-header', 'pooki_mobile_nav_section', [ 'id' => 'mobile_nav_header_phone_number', 'default' => '02112345678' ] );
@@ -422,8 +422,11 @@ class Pooki_Theme_Options {
 				'sticky_shadow'         => 'key',
 				
 				'search_height'         => 'int',
+				'search_height_mobile'  => 'int',
 				'search_font_size'      => 'int',
+				'search_font_size_mobile' => 'int',
 				'search_border_radius'  => 'int',
+				'search_border_radius_mobile' => 'int',
 				'search_border_width'   => 'int',
 				'search_focus_border_width' => 'int',
 				'header_action_icon_size'          => 'int',
@@ -440,8 +443,6 @@ class Pooki_Theme_Options {
 				'slider_autoplay_delay'            => 'int',
 				'slider_items'                     => 'slider_repeater',
 
-				'mobile_header_height'             => 'int',
-				'mobile_logo_height'               => 'int',
 				'mobile_nav_header_search'         => 'bool',
 				'mobile_nav_header_phone'          => 'bool',
 				'mobile_nav_header_phone_number'   => 'text',
@@ -493,7 +494,7 @@ class Pooki_Theme_Options {
 						$options[ $field ] = wp_kses_post( $posted[ $field ] );
 					} elseif ( 'repeater' === $type ) {
 						// Process repeater JSON string securely
-						$json_data = json_decode( wp_unslash( $posted[ $field ] ), true );
+						$json_data = json_decode( $posted[ $field ], true );
 						$items = [];
 						if ( is_array( $json_data ) ) {
 							// Allowed SVG tags
@@ -538,7 +539,7 @@ class Pooki_Theme_Options {
 						$options[ $field ] = $items;
 					} elseif ( 'slider_repeater' === $type ) {
 						// Process slider repeater JSON string securely
-						$json_data = json_decode( wp_unslash( $posted[ $field ] ), true );
+						$json_data = json_decode( $posted[ $field ], true );
 						$items = [];
 						if ( is_array( $json_data ) ) {
 							foreach ( $json_data as $item ) {
@@ -592,8 +593,7 @@ class Pooki_Theme_Options {
 
 		$header_height    = absint( isset( $opts['header_height'] ) ? $opts['header_height'] : 80 );
 		$logo_height      = absint( isset( $opts['logo_height'] ) ? $opts['logo_height'] : 48 );
-		$mobile_header_h  = absint( isset( $opts['mobile_header_height'] ) ? $opts['mobile_header_height'] : 60 );
-		$mobile_logo_h    = absint( isset( $opts['mobile_logo_height'] ) ? $opts['mobile_logo_height'] : 35 );
+
 		
 		$header_bg        = sanitize_hex_color( isset( $opts['header_bg_color'] ) ? $opts['header_bg_color'] : '#ffffff' );
 		$header_border    = sanitize_hex_color( isset( $opts['header_border_color'] ) ? $opts['header_border_color'] : '#f3f4f6' );
@@ -612,12 +612,15 @@ class Pooki_Theme_Options {
 		$nav_border_top_c = sanitize_hex_color( isset( $opts['nav_border_top_color'] ) ? $opts['nav_border_top_color'] : '#f3f4f6' );
 
 		$search_height         = absint( isset( $opts['search_height'] ) ? $opts['search_height'] : 44 );
+		$search_height_mobile  = absint( isset( $opts['search_height_mobile'] ) ? $opts['search_height_mobile'] : 40 );
 		$search_font_size      = absint( isset( $opts['search_font_size'] ) ? $opts['search_font_size'] : 14 );
+		$search_font_size_mobile = absint( isset( $opts['search_font_size_mobile'] ) ? $opts['search_font_size_mobile'] : 13 );
 		$search_text_color     = sanitize_hex_color( isset( $opts['search_text_color'] ) ? $opts['search_text_color'] : '#111827' );
 		$search_placeholder    = sanitize_hex_color( isset( $opts['search_placeholder_color'] ) ? $opts['search_placeholder_color'] : '#9ca3af' );
 		$search_bg             = sanitize_hex_color( isset( $opts['search_bg_color'] ) ? $opts['search_bg_color'] : '#f3f4f6' );
 		$search_focus_bg       = sanitize_hex_color( isset( $opts['search_focus_bg_color'] ) ? $opts['search_focus_bg_color'] : '#ffffff' );
 		$search_radius         = absint( isset( $opts['search_border_radius'] ) ? $opts['search_border_radius'] : 9999 );
+		$search_radius_mobile  = absint( isset( $opts['search_border_radius_mobile'] ) ? $opts['search_border_radius_mobile'] : 9999 );
 		$search_border_w       = absint( isset( $opts['search_border_width'] ) ? $opts['search_border_width'] : 1 );
 		$search_focus_border_w = absint( isset( $opts['search_focus_border_width'] ) ? $opts['search_focus_border_width'] : 2 );
 		$search_border_c       = sanitize_hex_color( isset( $opts['search_border_color'] ) ? $opts['search_border_color'] : '#e5e7eb' );
@@ -666,8 +669,7 @@ class Pooki_Theme_Options {
 
 		echo '--pooki-header-h: ' . esc_attr( $header_height ) . 'px;';
 		echo '--pooki-logo-h: ' . esc_attr( $logo_height ) . 'px;';
-		echo '--pooki-mobile-header-h: ' . esc_attr( $mobile_header_h ) . 'px;';
-		echo '--pooki-mobile-logo-h: ' . esc_attr( $mobile_logo_h ) . 'px;';
+
 		echo '--pooki-header-bg: ' . esc_attr( $header_bg ) . ';';
 		echo '--pooki-header-border: ' . esc_attr( $header_border ) . ';';
 
@@ -730,12 +732,19 @@ class Pooki_Theme_Options {
 
 		echo '--pooki-mobile-header-h: ' . esc_attr( $mobile_hdr_base_h ) . ';';
 		echo '--pooki-mobile-header-sticky-h: ' . esc_attr( $mobile_hdr_sticky_h ) . ';';
-		echo '--pooki-mobile-logo-max-h: ' . esc_attr( $mobile_logo_max_h ) . ';';
+		echo '--pooki-mobile-logo-h: ' . esc_attr( $mobile_logo_max_h ) . ';';
 
 		echo '--pooki-drawer-bg: ' . esc_attr( $drawer_bg ) . ';';
 		echo '--pooki-drawer-text: ' . esc_attr( $drawer_text ) . ';';
 		echo '--pooki-search-modal-input-bg: ' . esc_attr( $search_modal_input_bg ) . ';';
 		echo '--pooki-search-modal-input-border: ' . esc_attr( $search_modal_input_border ) . ';';
+		echo '}';
+		echo '@media (max-width: 1023px) {';
+		echo ':root {';
+		echo '--pooki-search-h: ' . esc_attr( $search_height_mobile ) . 'px;';
+		echo '--pooki-search-font-size: ' . esc_attr( $search_font_size_mobile ) . 'px;';
+		echo '--pooki-search-radius: ' . esc_attr( $search_radius_mobile ) . 'px;';
+		echo '}';
 		echo '}';
 		echo '</style>';
 	}
