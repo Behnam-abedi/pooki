@@ -3,7 +3,8 @@ import { __ } from '@wordpress/i18n';
 import { 
 	InspectorControls,
 	MediaUpload,
-	MediaUploadCheck
+	MediaUploadCheck,
+	useBlockProps
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -65,8 +66,12 @@ registerBlockType( metadata.name, {
 			setActiveSlide( targetIndex );
 		};
 
+		const blockProps = useBlockProps( {
+			className: 'pooki-hero-slider-editor'
+		} );
+
 		return (
-			<div className="pooki-hero-slider-editor">
+			<div { ...blockProps }>
 				<InspectorControls>
 					<PanelBody title={ __( 'Slider Settings', 'pooki' ) }>
 						<TextControl

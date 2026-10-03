@@ -100,7 +100,10 @@
         setAttributes({ slides: newSlides });
         setActiveSlide(targetIndex);
       };
-      return /* @__PURE__ */ wp.element.createElement("div", { className: "pooki-hero-slider-editor" }, /* @__PURE__ */ wp.element.createElement(import_block_editor.InspectorControls, null, /* @__PURE__ */ wp.element.createElement(import_components.PanelBody, { title: (0, import_i18n.__)("Slider Settings", "pooki") }, /* @__PURE__ */ wp.element.createElement(
+      const blockProps = (0, import_block_editor.useBlockProps)({
+        className: "pooki-hero-slider-editor"
+      });
+      return /* @__PURE__ */ wp.element.createElement("div", { ...blockProps }, /* @__PURE__ */ wp.element.createElement(import_block_editor.InspectorControls, null, /* @__PURE__ */ wp.element.createElement(import_components.PanelBody, { title: (0, import_i18n.__)("Slider Settings", "pooki") }, /* @__PURE__ */ wp.element.createElement(
         import_components.TextControl,
         {
           label: (0, import_i18n.__)("Desktop Aspect Ratio (e.g. 21/9, 16/9, auto)", "pooki"),
