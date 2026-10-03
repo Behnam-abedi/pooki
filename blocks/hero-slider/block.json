@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pooki/hero-slider",
+  "version": "1.0.0",
+  "title": "Pooki Hero Slider",
+  "category": "design",
+  "icon": "images-alt2",
+  "description": "A customizable hero slider with separate desktop and mobile settings.",
+  "supports": {
+    "html": false,
+    "align": ["full", "wide"]
+  },
+  "attributes": {
+    "slides": {
+      "type": "array",
+      "default": []
+    },
+    "desktopHeight": {
+      "type": "string",
+      "default": "600px"
+    },
+    "mobileHeight": {
+      "type": "string",
+      "default": "400px"
+    },
+    "autoplayDelay": {
+      "type": "number",
+      "default": 5000
+    }
+  },
+  "textdomain": "pooki",
+  "editorScript": "file:./build/index.js",
+  "render": "file:./render.php"
+}

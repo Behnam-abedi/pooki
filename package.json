@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "build:blocks": "npx esbuild blocks/hero-slider/src/index.jsx --bundle --outfile=blocks/hero-slider/build/index.js --external:@wordpress/* --format=iife --jsx-factory=wp.element.createElement --jsx-fragment=wp.element.Fragment && node fix_build.cjs"
   },
   "repository": {
     "type": "git",

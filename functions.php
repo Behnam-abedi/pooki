@@ -78,6 +78,9 @@ final class Pooki_Theme_Init {
 		require_once get_template_directory() . '/inc/core/class-pooki-woocommerce-account.php';
 		new Pooki_WooCommerce_Account();
 
+		require_once get_template_directory() . '/inc/core/class-pooki-blocks.php';
+		new Pooki_Blocks();
+
 		require_once get_template_directory() . '/inc/Core/ColorRegistry.php';
 		\Pooki\Core\ColorRegistry::get_instance();
 
