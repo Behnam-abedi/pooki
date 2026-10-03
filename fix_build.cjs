@@ -1,5 +1,7 @@
 const fs = require('fs');
 const file = 'blocks/hero-slider/build/index.js';
+const assetFile = 'blocks/hero-slider/build/index.asset.php';
+
 let content = fs.readFileSync(file, 'utf8');
 
 content = content.replace(/__require\("@wordpress\/blocks"\)/g, 'wp.blocks');
@@ -10,3 +12,18 @@ content = content.replace(/__require\("@wordpress\/element"\)/g, 'wp.element');
 
 fs.writeFileSync(file, content, 'utf8');
 console.log('Fixed WP globals in build file.');
+
+const assetContent = `<?php
+return array(
+	'dependencies' => array(
+		'wp-blocks',
+		'wp-element',
+		'wp-i18n',
+		'wp-block-editor',
+		'wp-components',
+	),
+	'version' => filemtime( __DIR__ . '/index.js' ),
+);
+`;
+fs.writeFileSync(assetFile, assetContent, 'utf8');
+console.log('Generated index.asset.php.');
