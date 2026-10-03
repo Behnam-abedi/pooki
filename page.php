@@ -13,12 +13,7 @@ get_header();
 	if ( have_posts() ) :
 		while ( have_posts() ) :
 			the_post();
-			?>
-			<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center"><?php the_title(); ?></h1>
-			<div class="pooki-page-content text-gray-700 leading-relaxed space-y-6">
-				<?php the_content(); ?>
-			</div>
-			<?php
+			get_template_part( 'template-parts/content/content', 'page' );
 		endwhile;
 	endif;
 	?>
