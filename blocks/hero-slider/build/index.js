@@ -32,17 +32,25 @@
         type: "array",
         default: []
       },
-      desktopHeight: {
+      desktopAspectRatio: {
         type: "string",
-        default: "600px"
+        default: "21/9"
       },
-      mobileHeight: {
+      mobileAspectRatio: {
         type: "string",
-        default: "400px"
+        default: "1/1"
       },
       autoplayDelay: {
         type: "number",
         default: 5e3
+      },
+      arrowColor: {
+        type: "string",
+        default: "#ffffff"
+      },
+      paginationColor: {
+        type: "string",
+        default: "#ec4899"
       }
     },
     textdomain: "pooki",
@@ -53,32 +61,32 @@
   // blocks/hero-slider/src/index.jsx
   (0, import_blocks.registerBlockType)(block_default.name, {
     edit: ({ attributes, setAttributes }) => {
-      const { slides, desktopHeight, mobileHeight, autoplayDelay } = attributes;
+      const { slides, desktopAspectRatio, mobileAspectRatio, autoplayDelay, arrowColor, paginationColor } = attributes;
+      const [activeSlide, setActiveSlide] = (0, import_element.useState)(null);
       const updateSlide = (index, key, value) => {
         const newSlides = [...slides];
         newSlides[index][key] = value;
         setAttributes({ slides: newSlides });
       };
       const addSlide = () => {
-        setAttributes({
-          slides: [
-            ...slides,
-            {
-              id: Date.now().toString(),
-              desktopImageId: 0,
-              desktopImageUrl: "",
-              mobileImageId: 0,
-              mobileImageUrl: "",
-              linkUrl: "",
-              altText: ""
-            }
-          ]
-        });
+        const newSlides = [
+          ...slides,
+          {
+            id: Date.now().toString(),
+            imageId: 0,
+            imageUrl: "",
+            linkUrl: "",
+            altText: ""
+          }
+        ];
+        setAttributes({ slides: newSlides });
+        setActiveSlide(newSlides.length - 1);
       };
       const removeSlide = (index) => {
         const newSlides = [...slides];
         newSlides.splice(index, 1);
         setAttributes({ slides: newSlides });
+        if (activeSlide === index) setActiveSlide(null);
       };
       const moveSlide = (index, direction) => {
         if (direction === "up" && index === 0 || direction === "down" && index === slides.length - 1) {
@@ -90,20 +98,21 @@
         newSlides[index] = newSlides[targetIndex];
         newSlides[targetIndex] = temp;
         setAttributes({ slides: newSlides });
+        setActiveSlide(targetIndex);
       };
       return /* @__PURE__ */ wp.element.createElement("div", { className: "pooki-hero-slider-editor" }, /* @__PURE__ */ wp.element.createElement(import_block_editor.InspectorControls, null, /* @__PURE__ */ wp.element.createElement(import_components.PanelBody, { title: (0, import_i18n.__)("Slider Settings", "pooki") }, /* @__PURE__ */ wp.element.createElement(
         import_components.TextControl,
         {
-          label: (0, import_i18n.__)("Desktop Height (e.g. 600px, 100vh)", "pooki"),
-          value: desktopHeight,
-          onChange: (val) => setAttributes({ desktopHeight: val })
+          label: (0, import_i18n.__)("Desktop Aspect Ratio (e.g. 21/9, 16/9, auto)", "pooki"),
+          value: desktopAspectRatio,
+          onChange: (val) => setAttributes({ desktopAspectRatio: val })
         }
       ), /* @__PURE__ */ wp.element.createElement(
         import_components.TextControl,
         {
-          label: (0, import_i18n.__)("Mobile Height (e.g. 400px, 80vh)", "pooki"),
-          value: mobileHeight,
-          onChange: (val) => setAttributes({ mobileHeight: val })
+          label: (0, import_i18n.__)("Mobile Aspect Ratio (e.g. 1/1, 4/3, auto)", "pooki"),
+          value: mobileAspectRatio,
+          onChange: (val) => setAttributes({ mobileAspectRatio: val })
         }
       ), /* @__PURE__ */ wp.element.createElement(
         import_components.RangeControl,
@@ -115,72 +124,60 @@
           max: 1e4,
           step: 500
         }
-      ))), /* @__PURE__ */ wp.element.createElement("div", { style: { padding: "20px", background: "#f0f0f0", border: "1px solid #ccc" } }, /* @__PURE__ */ wp.element.createElement("h3", { style: { marginTop: 0 } }, (0, import_i18n.__)("Hero Slider Slides", "pooki")), slides.length === 0 && /* @__PURE__ */ wp.element.createElement(import_components.Notice, { status: "warning", isDismissible: false }, (0, import_i18n.__)('No slides added yet. Click "Add Slide" to begin.', "pooki")), slides.map((slide, index) => /* @__PURE__ */ wp.element.createElement("div", { key: slide.id, style: { background: "#fff", padding: "15px", marginBottom: "15px", border: "1px solid #ddd" } }, /* @__PURE__ */ wp.element.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: "10px" } }, /* @__PURE__ */ wp.element.createElement("strong", null, (0, import_i18n.__)("Slide", "pooki"), " ", index + 1), /* @__PURE__ */ wp.element.createElement("div", null, /* @__PURE__ */ wp.element.createElement(
-        import_components.Button,
-        {
-          isSmall: true,
-          disabled: index === 0,
-          onClick: () => moveSlide(index, "up")
-        },
-        "\u2191"
       ), /* @__PURE__ */ wp.element.createElement(
-        import_components.Button,
-        {
-          isSmall: true,
-          disabled: index === slides.length - 1,
-          onClick: () => moveSlide(index, "down"),
-          style: { marginLeft: "5px" }
-        },
-        "\u2193"
-      ), /* @__PURE__ */ wp.element.createElement(
-        import_components.Button,
-        {
-          isSmall: true,
-          isDestructive: true,
-          onClick: () => removeSlide(index),
-          style: { marginLeft: "10px" }
-        },
-        (0, import_i18n.__)("Remove", "pooki")
-      ))), /* @__PURE__ */ wp.element.createElement("div", { style: { display: "flex", gap: "15px", marginBottom: "15px" } }, /* @__PURE__ */ wp.element.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ wp.element.createElement("p", { style: { margin: "0 0 5px 0" } }, /* @__PURE__ */ wp.element.createElement("strong", null, (0, import_i18n.__)("Desktop Image", "pooki"))), /* @__PURE__ */ wp.element.createElement(import_block_editor.MediaUploadCheck, null, /* @__PURE__ */ wp.element.createElement(
-        import_block_editor.MediaUpload,
-        {
-          onSelect: (media) => {
-            updateSlide(index, "desktopImageId", media.id);
-            updateSlide(index, "desktopImageUrl", media.url);
-            if (!slide.altText && media.alt) {
-              updateSlide(index, "altText", media.alt);
-            }
-          },
-          allowedTypes: ["image"],
-          value: slide.desktopImageId,
-          render: ({ open }) => /* @__PURE__ */ wp.element.createElement("div", { onClick: open, style: { cursor: "pointer", background: "#eee", height: "100px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" } }, slide.desktopImageUrl ? /* @__PURE__ */ wp.element.createElement("img", { src: slide.desktopImageUrl, style: { maxWidth: "100%", maxHeight: "100%" } }) : /* @__PURE__ */ wp.element.createElement(import_components.Button, { isSecondary: true }, (0, import_i18n.__)("Select Desktop Image", "pooki")))
-        }
-      ))), /* @__PURE__ */ wp.element.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ wp.element.createElement("p", { style: { margin: "0 0 5px 0" } }, /* @__PURE__ */ wp.element.createElement("strong", null, (0, import_i18n.__)("Mobile Image", "pooki"))), /* @__PURE__ */ wp.element.createElement(import_block_editor.MediaUploadCheck, null, /* @__PURE__ */ wp.element.createElement(
-        import_block_editor.MediaUpload,
-        {
-          onSelect: (media) => {
-            updateSlide(index, "mobileImageId", media.id);
-            updateSlide(index, "mobileImageUrl", media.url);
-          },
-          allowedTypes: ["image"],
-          value: slide.mobileImageId,
-          render: ({ open }) => /* @__PURE__ */ wp.element.createElement("div", { onClick: open, style: { cursor: "pointer", background: "#eee", height: "100px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" } }, slide.mobileImageUrl ? /* @__PURE__ */ wp.element.createElement("img", { src: slide.mobileImageUrl, style: { maxWidth: "100%", maxHeight: "100%" } }) : /* @__PURE__ */ wp.element.createElement(import_components.Button, { isSecondary: true }, (0, import_i18n.__)("Select Mobile Image", "pooki")))
-        }
-      )))), /* @__PURE__ */ wp.element.createElement(
         import_components.TextControl,
         {
-          label: (0, import_i18n.__)("Link URL (optional)", "pooki"),
-          value: slide.linkUrl,
-          onChange: (val) => updateSlide(index, "linkUrl", val)
+          label: (0, import_i18n.__)("Arrows Color", "pooki"),
+          value: arrowColor,
+          onChange: (val) => setAttributes({ arrowColor: val })
         }
       ), /* @__PURE__ */ wp.element.createElement(
         import_components.TextControl,
         {
-          label: (0, import_i18n.__)("Alt Text", "pooki"),
-          value: slide.altText,
-          onChange: (val) => updateSlide(index, "altText", val)
+          label: (0, import_i18n.__)("Pagination Color", "pooki"),
+          value: paginationColor,
+          onChange: (val) => setAttributes({ paginationColor: val })
         }
-      ))), /* @__PURE__ */ wp.element.createElement(import_components.Button, { isPrimary: true, onClick: addSlide }, (0, import_i18n.__)("Add Slide", "pooki"))));
+      ))), /* @__PURE__ */ wp.element.createElement("div", { style: { padding: "20px", background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: "8px" } }, /* @__PURE__ */ wp.element.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" } }, /* @__PURE__ */ wp.element.createElement("h3", { style: { margin: 0, fontSize: "18px", fontWeight: "bold" } }, (0, import_i18n.__)("Hero Slider", "pooki")), /* @__PURE__ */ wp.element.createElement(import_components.Button, { isPrimary: true, onClick: addSlide }, (0, import_i18n.__)("Add New Slide", "pooki"))), slides.length === 0 && /* @__PURE__ */ wp.element.createElement(import_components.Notice, { status: "info", isDismissible: false }, (0, import_i18n.__)('No slides added yet. Click "Add New Slide" to begin.', "pooki")), slides.map((slide, index) => {
+        const isActive = activeSlide === index;
+        return /* @__PURE__ */ wp.element.createElement("div", { key: slide.id, style: { background: "#fff", marginBottom: "10px", border: "1px solid #e5e7eb", borderRadius: "6px", overflow: "hidden" } }, /* @__PURE__ */ wp.element.createElement(
+          "div",
+          {
+            style: { padding: "12px 15px", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer", background: isActive ? "#f3f4f6" : "#fff", borderBottom: isActive ? "1px solid #e5e7eb" : "none" },
+            onClick: () => setActiveSlide(isActive ? null : index)
+          },
+          /* @__PURE__ */ wp.element.createElement("div", { style: { display: "flex", alignItems: "center", gap: "10px" } }, /* @__PURE__ */ wp.element.createElement("strong", { style: { fontSize: "14px" } }, (0, import_i18n.__)("Slide", "pooki"), " ", index + 1), slide.imageUrl && /* @__PURE__ */ wp.element.createElement("img", { src: slide.imageUrl, style: { width: "40px", height: "24px", objectFit: "cover", borderRadius: "4px" } })),
+          /* @__PURE__ */ wp.element.createElement("div", { style: { display: "flex", gap: "4px" }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ wp.element.createElement(import_components.Button, { isSmall: true, disabled: index === 0, onClick: () => moveSlide(index, "up"), icon: "arrow-up-alt2", label: "Move Up" }), /* @__PURE__ */ wp.element.createElement(import_components.Button, { isSmall: true, disabled: index === slides.length - 1, onClick: () => moveSlide(index, "down"), icon: "arrow-down-alt2", label: "Move Down" }), /* @__PURE__ */ wp.element.createElement(import_components.Button, { isSmall: true, isDestructive: true, onClick: () => removeSlide(index), icon: "trash", label: "Remove" }))
+        ), isActive && /* @__PURE__ */ wp.element.createElement("div", { style: { padding: "20px" } }, /* @__PURE__ */ wp.element.createElement("div", { style: { marginBottom: "15px" } }, /* @__PURE__ */ wp.element.createElement("p", { style: { margin: "0 0 8px 0", fontSize: "13px", fontWeight: "600" } }, (0, import_i18n.__)("Slide Image", "pooki")), /* @__PURE__ */ wp.element.createElement(import_block_editor.MediaUploadCheck, null, /* @__PURE__ */ wp.element.createElement(
+          import_block_editor.MediaUpload,
+          {
+            onSelect: (media) => {
+              updateSlide(index, "imageId", media.id);
+              updateSlide(index, "imageUrl", media.url);
+              if (!slide.altText && media.alt) {
+                updateSlide(index, "altText", media.alt);
+              }
+            },
+            allowedTypes: ["image"],
+            value: slide.imageId,
+            render: ({ open }) => /* @__PURE__ */ wp.element.createElement("div", { onClick: open, style: { cursor: "pointer", background: "#f3f4f6", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", overflow: "hidden", border: "1px dashed #d1d5db" } }, slide.imageUrl ? /* @__PURE__ */ wp.element.createElement("img", { src: slide.imageUrl, style: { width: "100%", height: "100%", objectFit: "contain" } }) : /* @__PURE__ */ wp.element.createElement(import_components.Button, { isSecondary: true, icon: "format-image" }, (0, import_i18n.__)("Select Image", "pooki")))
+          }
+        ))), /* @__PURE__ */ wp.element.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" } }, /* @__PURE__ */ wp.element.createElement(
+          import_components.TextControl,
+          {
+            label: (0, import_i18n.__)("Link URL (optional)", "pooki"),
+            value: slide.linkUrl,
+            onChange: (val) => updateSlide(index, "linkUrl", val)
+          }
+        ), /* @__PURE__ */ wp.element.createElement(
+          import_components.TextControl,
+          {
+            label: (0, import_i18n.__)("Alt Text", "pooki"),
+            value: slide.altText,
+            onChange: (val) => updateSlide(index, "altText", val)
+          }
+        ))));
+      })));
     },
     save: () => {
       return null;

@@ -16,17 +16,25 @@
       "type": "array",
       "default": []
     },
-    "desktopHeight": {
+    "desktopAspectRatio": {
       "type": "string",
-      "default": "600px"
+      "default": "21/9"
     },
-    "mobileHeight": {
+    "mobileAspectRatio": {
       "type": "string",
-      "default": "400px"
+      "default": "1/1"
     },
     "autoplayDelay": {
       "type": "number",
       "default": 5000
+    },
+    "arrowColor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "paginationColor": {
+      "type": "string",
+      "default": "#ec4899"
     }
   },
   "textdomain": "pooki",

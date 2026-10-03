@@ -18,7 +18,8 @@ import metadata from '../block.json';
 
 registerBlockType( metadata.name, {
 	edit: ( { attributes, setAttributes } ) => {
-		const { slides, desktopHeight, mobileHeight, autoplayDelay } = attributes;
+		const { slides, desktopAspectRatio, mobileAspectRatio, autoplayDelay, arrowColor, paginationColor } = attributes;
+		const [ activeSlide, setActiveSlide ] = useState( null );
 
 		const updateSlide = ( index, key, value ) => {
 			const newSlides = [ ...slides ];
@@ -27,26 +28,25 @@ registerBlockType( metadata.name, {
 		};
 
 		const addSlide = () => {
-			setAttributes( {
-				slides: [
-					...slides,
-					{
-						id: Date.now().toString(),
-						desktopImageId: 0,
-						desktopImageUrl: '',
-						mobileImageId: 0,
-						mobileImageUrl: '',
-						linkUrl: '',
-						altText: ''
-					}
-				]
-			} );
+			const newSlides = [
+				...slides,
+				{
+					id: Date.now().toString(),
+					imageId: 0,
+					imageUrl: '',
+					linkUrl: '',
+					altText: ''
+				}
+			];
+			setAttributes( { slides: newSlides } );
+			setActiveSlide( newSlides.length - 1 );
 		};
 
 		const removeSlide = ( index ) => {
 			const newSlides = [ ...slides ];
 			newSlides.splice( index, 1 );
 			setAttributes( { slides: newSlides } );
+			if ( activeSlide === index ) setActiveSlide( null );
 		};
 
 		const moveSlide = ( index, direction ) => {
@@ -62,6 +62,7 @@ registerBlockType( metadata.name, {
 			newSlides[ index ] = newSlides[ targetIndex ];
 			newSlides[ targetIndex ] = temp;
 			setAttributes( { slides: newSlides } );
+			setActiveSlide( targetIndex );
 		};
 
 		return (
@@ -69,14 +70,14 @@ registerBlockType( metadata.name, {
 				<InspectorControls>
 					<PanelBody title={ __( 'Slider Settings', 'pooki' ) }>
 						<TextControl
-							label={ __( 'Desktop Height (e.g. 600px, 100vh)', 'pooki' ) }
-							value={ desktopHeight }
-							onChange={ ( val ) => setAttributes( { desktopHeight: val } ) }
+							label={ __( 'Desktop Aspect Ratio (e.g. 21/9, 16/9, auto)', 'pooki' ) }
+							value={ desktopAspectRatio }
+							onChange={ ( val ) => setAttributes( { desktopAspectRatio: val } ) }
 						/>
 						<TextControl
-							label={ __( 'Mobile Height (e.g. 400px, 80vh)', 'pooki' ) }
-							value={ mobileHeight }
-							onChange={ ( val ) => setAttributes( { mobileHeight: val } ) }
+							label={ __( 'Mobile Aspect Ratio (e.g. 1/1, 4/3, auto)', 'pooki' ) }
+							value={ mobileAspectRatio }
+							onChange={ ( val ) => setAttributes( { mobileAspectRatio: val } ) }
 						/>
 						<RangeControl
 							label={ __( 'Autoplay Delay (ms)', 'pooki' ) }
@@ -86,116 +87,97 @@ registerBlockType( metadata.name, {
 							max={ 10000 }
 							step={ 500 }
 						/>
+						<TextControl
+							label={ __( 'Arrows Color', 'pooki' ) }
+							value={ arrowColor }
+							onChange={ ( val ) => setAttributes( { arrowColor: val } ) }
+						/>
+						<TextControl
+							label={ __( 'Pagination Color', 'pooki' ) }
+							value={ paginationColor }
+							onChange={ ( val ) => setAttributes( { paginationColor: val } ) }
+						/>
 					</PanelBody>
 				</InspectorControls>
 
-				<div style={{ padding: '20px', background: '#f0f0f0', border: '1px solid #ccc' }}>
-					<h3 style={{ marginTop: 0 }}>{ __( 'Hero Slider Slides', 'pooki' ) }</h3>
+				<div style={{ padding: '20px', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+						<h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>{ __( 'Hero Slider', 'pooki' ) }</h3>
+						<Button isPrimary onClick={ addSlide }>
+							{ __( 'Add New Slide', 'pooki' ) }
+						</Button>
+					</div>
 					
 					{ slides.length === 0 && (
-						<Notice status="warning" isDismissible={ false }>
-							{ __( 'No slides added yet. Click "Add Slide" to begin.', 'pooki' ) }
+						<Notice status="info" isDismissible={ false }>
+							{ __( 'No slides added yet. Click "Add New Slide" to begin.', 'pooki' ) }
 						</Notice>
 					) }
 
-					{ slides.map( ( slide, index ) => (
-						<div key={ slide.id } style={{ background: '#fff', padding: '15px', marginBottom: '15px', border: '1px solid #ddd' }}>
-							<div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-								<strong>{ __( 'Slide', 'pooki' ) } { index + 1 }</strong>
-								<div>
-									<Button 
-										isSmall
-										disabled={ index === 0 }
-										onClick={ () => moveSlide( index, 'up' ) }
-									>
-										&uarr;
-									</Button>
-									<Button 
-										isSmall
-										disabled={ index === slides.length - 1 }
-										onClick={ () => moveSlide( index, 'down' ) }
-										style={{ marginLeft: '5px' }}
-									>
-										&darr;
-									</Button>
-									<Button 
-										isSmall 
-										isDestructive
-										onClick={ () => removeSlide( index ) }
-										style={{ marginLeft: '10px' }}
-									>
-										{ __( 'Remove', 'pooki' ) }
-									</Button>
+					{ slides.map( ( slide, index ) => {
+						const isActive = activeSlide === index;
+						return (
+							<div key={ slide.id } style={{ background: '#fff', marginBottom: '10px', border: '1px solid #e5e7eb', borderRadius: '6px', overflow: 'hidden' }}>
+								<div 
+									style={{ padding: '12px 15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', background: isActive ? '#f3f4f6' : '#fff', borderBottom: isActive ? '1px solid #e5e7eb' : 'none' }}
+									onClick={ () => setActiveSlide( isActive ? null : index ) }
+								>
+									<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+										<strong style={{ fontSize: '14px' }}>{ __( 'Slide', 'pooki' ) } { index + 1 }</strong>
+										{ slide.imageUrl && <img src={ slide.imageUrl } style={{ width: '40px', height: '24px', objectFit: 'cover', borderRadius: '4px' }} /> }
+									</div>
+									<div style={{ display: 'flex', gap: '4px' }} onClick={ e => e.stopPropagation() }>
+										<Button isSmall disabled={ index === 0 } onClick={ () => moveSlide( index, 'up' ) } icon="arrow-up-alt2" label="Move Up" />
+										<Button isSmall disabled={ index === slides.length - 1 } onClick={ () => moveSlide( index, 'down' ) } icon="arrow-down-alt2" label="Move Down" />
+										<Button isSmall isDestructive onClick={ () => removeSlide( index ) } icon="trash" label="Remove" />
+									</div>
 								</div>
-							</div>
 
-							<div style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
-								<div style={{ flex: 1 }}>
-									<p style={{ margin: '0 0 5px 0' }}><strong>{ __( 'Desktop Image', 'pooki' ) }</strong></p>
-									<MediaUploadCheck>
-										<MediaUpload
-											onSelect={ ( media ) => {
-												updateSlide( index, 'desktopImageId', media.id );
-												updateSlide( index, 'desktopImageUrl', media.url );
-												if( !slide.altText && media.alt ) {
-													updateSlide( index, 'altText', media.alt );
-												}
-											} }
-											allowedTypes={ [ 'image' ] }
-											value={ slide.desktopImageId }
-											render={ ( { open } ) => (
-												<div onClick={ open } style={{ cursor: 'pointer', background: '#eee', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-													{ slide.desktopImageUrl ? (
-														<img src={ slide.desktopImageUrl } style={{ maxWidth: '100%', maxHeight: '100%' }} />
-													) : (
-														<Button isSecondary>{ __( 'Select Desktop Image', 'pooki' ) }</Button>
+								{ isActive && (
+									<div style={{ padding: '20px' }}>
+										<div style={{ marginBottom: '15px' }}>
+											<p style={{ margin: '0 0 8px 0', fontSize: '13px', fontWeight: '600' }}>{ __( 'Slide Image', 'pooki' ) }</p>
+											<MediaUploadCheck>
+												<MediaUpload
+													onSelect={ ( media ) => {
+														updateSlide( index, 'imageId', media.id );
+														updateSlide( index, 'imageUrl', media.url );
+														if( !slide.altText && media.alt ) {
+															updateSlide( index, 'altText', media.alt );
+														}
+													} }
+													allowedTypes={ [ 'image' ] }
+													value={ slide.imageId }
+													render={ ( { open } ) => (
+														<div onClick={ open } style={{ cursor: 'pointer', background: '#f3f4f6', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px', overflow: 'hidden', border: '1px dashed #d1d5db' }}>
+															{ slide.imageUrl ? (
+																<img src={ slide.imageUrl } style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+															) : (
+																<Button isSecondary icon="format-image">{ __( 'Select Image', 'pooki' ) }</Button>
+															) }
+														</div>
 													) }
-												</div>
-											) }
-										/>
-									</MediaUploadCheck>
-								</div>
-								
-								<div style={{ flex: 1 }}>
-									<p style={{ margin: '0 0 5px 0' }}><strong>{ __( 'Mobile Image', 'pooki' ) }</strong></p>
-									<MediaUploadCheck>
-										<MediaUpload
-											onSelect={ ( media ) => {
-												updateSlide( index, 'mobileImageId', media.id );
-												updateSlide( index, 'mobileImageUrl', media.url );
-											} }
-											allowedTypes={ [ 'image' ] }
-											value={ slide.mobileImageId }
-											render={ ( { open } ) => (
-												<div onClick={ open } style={{ cursor: 'pointer', background: '#eee', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-													{ slide.mobileImageUrl ? (
-														<img src={ slide.mobileImageUrl } style={{ maxWidth: '100%', maxHeight: '100%' }} />
-													) : (
-														<Button isSecondary>{ __( 'Select Mobile Image', 'pooki' ) }</Button>
-													) }
-												</div>
-											) }
-										/>
-									</MediaUploadCheck>
-								</div>
+												/>
+											</MediaUploadCheck>
+										</div>
+
+										<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+											<TextControl
+												label={ __( 'Link URL (optional)', 'pooki' ) }
+												value={ slide.linkUrl }
+												onChange={ ( val ) => updateSlide( index, 'linkUrl', val ) }
+											/>
+											<TextControl
+												label={ __( 'Alt Text', 'pooki' ) }
+												value={ slide.altText }
+												onChange={ ( val ) => updateSlide( index, 'altText', val ) }
+											/>
+										</div>
+									</div>
+								) }
 							</div>
-
-							<TextControl
-								label={ __( 'Link URL (optional)', 'pooki' ) }
-								value={ slide.linkUrl }
-								onChange={ ( val ) => updateSlide( index, 'linkUrl', val ) }
-							/>
-							<TextControl
-								label={ __( 'Alt Text', 'pooki' ) }
-								value={ slide.altText }
-								onChange={ ( val ) => updateSlide( index, 'altText', val ) }
-							/>
-						</div>
-					) ) }
-
-					<Button isPrimary onClick={ addSlide }>
-						{ __( 'Add Slide', 'pooki' ) }
-					</Button>
+						);
+					} ) }
 				</div>
 			</div>
 		);

@@ -10,9 +10,11 @@
  */
 
 $slides = isset( $attributes['slides'] ) ? $attributes['slides'] : [];
-$desktopHeight = isset( $attributes['desktopHeight'] ) ? $attributes['desktopHeight'] : '600px';
-$mobileHeight = isset( $attributes['mobileHeight'] ) ? $attributes['mobileHeight'] : '400px';
+$desktopAspectRatio = isset( $attributes['desktopAspectRatio'] ) ? $attributes['desktopAspectRatio'] : '21/9';
+$mobileAspectRatio = isset( $attributes['mobileAspectRatio'] ) ? $attributes['mobileAspectRatio'] : '1/1';
 $autoplayDelay = isset( $attributes['autoplayDelay'] ) ? $attributes['autoplayDelay'] : 5000;
+$arrowColor = isset( $attributes['arrowColor'] ) ? $attributes['arrowColor'] : '#ffffff';
+$paginationColor = isset( $attributes['paginationColor'] ) ? $attributes['paginationColor'] : '#ec4899';
 
 if ( empty( $slides ) ) {
 	return '';
@@ -24,15 +26,33 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 
 $unique_id = wp_unique_id( 'pooki-hero-swiper-' );
 
-// Custom styles for height variables
+// Determine height classes or styles based on aspect ratio input
+// We will use inline styles for aspect-ratio since tailwind classes like aspect-[21/9] might not be safelisted
 $style = sprintf(
-	'--slider-height-desktop: %s; --slider-height-mobile: %s;',
-	esc_attr( $desktopHeight ),
-	esc_attr( $mobileHeight )
+	'--slider-aspect-desktop: %s; --slider-aspect-mobile: %s; --swiper-navigation-color: %s; --swiper-pagination-color: %s;',
+	esc_attr( $desktopAspectRatio ),
+	esc_attr( $mobileAspectRatio ),
+	esc_attr( $arrowColor ),
+	esc_attr( $paginationColor )
 );
 ?>
 <div <?php echo $wrapper_attributes; ?> style="<?php echo esc_attr( $style ); ?>">
-	<div class="swiper <?php echo esc_attr( $unique_id ); ?> h-[var(--slider-height-mobile)] md:h-[var(--slider-height-desktop)] w-full">
+	<style>
+		.<?php echo esc_attr( $unique_id ); ?> {
+			aspect-ratio: var(--slider-aspect-mobile);
+		}
+		@media (min-width: 768px) {
+			.<?php echo esc_attr( $unique_id ); ?> {
+				aspect-ratio: var(--slider-aspect-desktop);
+			}
+		}
+		/* Customize Swiper dots */
+		.<?php echo esc_attr( $unique_id ); ?> .swiper-pagination-bullet-active {
+			background: var(--swiper-pagination-color) !important;
+		}
+	</style>
+
+	<div class="swiper <?php echo esc_attr( $unique_id ); ?> w-full h-full">
 		<div class="swiper-wrapper">
 			<?php foreach ( $slides as $index => $slide ) : ?>
 				<?php
@@ -41,36 +61,19 @@ $style = sprintf(
 				$link_attr = $has_link ? 'href="' . esc_url( $slide['linkUrl'] ) . '"' : '';
 				?>
 				<<?php echo $slide_tag; ?> <?php echo $link_attr; ?> class="swiper-slide block relative w-full h-full">
-					
-					<!-- Desktop Image -->
-					<?php if ( ! empty( $slide['desktopImageUrl'] ) ) : ?>
-						<img src="<?php echo esc_url( $slide['desktopImageUrl'] ); ?>" 
+					<?php if ( ! empty( $slide['imageUrl'] ) ) : ?>
+						<img src="<?php echo esc_url( $slide['imageUrl'] ); ?>" 
 						     alt="<?php echo esc_attr( isset($slide['altText']) ? $slide['altText'] : '' ); ?>"
-						     class="absolute inset-0 w-full h-full object-cover hidden md:block"
+						     class="absolute inset-0 w-full h-full object-cover"
 						     <?php echo $index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'; ?> />
 					<?php endif; ?>
-
-					<!-- Mobile Image -->
-					<?php if ( ! empty( $slide['mobileImageUrl'] ) ) : ?>
-						<img src="<?php echo esc_url( $slide['mobileImageUrl'] ); ?>" 
-						     alt="<?php echo esc_attr( isset($slide['altText']) ? $slide['altText'] : '' ); ?>"
-						     class="absolute inset-0 w-full h-full object-cover md:hidden"
-						     <?php echo $index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'; ?> />
-					<?php elseif ( ! empty( $slide['desktopImageUrl'] ) ) : ?>
-						<!-- Fallback to desktop for mobile if no mobile image -->
-						<img src="<?php echo esc_url( $slide['desktopImageUrl'] ); ?>" 
-						     alt="<?php echo esc_attr( isset($slide['altText']) ? $slide['altText'] : '' ); ?>"
-						     class="absolute inset-0 w-full h-full object-cover md:hidden"
-						     <?php echo $index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'; ?> />
-					<?php endif; ?>
-					
 				</<?php echo $slide_tag; ?>>
 			<?php endforeach; ?>
 		</div>
 		
 		<?php if ( count( $slides ) > 1 ) : ?>
-			<div class="swiper-button-next !text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md"></div>
-			<div class="swiper-button-prev !text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md"></div>
+			<div class="swiper-button-next opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md"></div>
+			<div class="swiper-button-prev opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md"></div>
 			<div class="swiper-pagination !bottom-4"></div>
 		<?php endif; ?>
 	</div>
