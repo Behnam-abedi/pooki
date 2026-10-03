@@ -127,9 +127,9 @@ registerBlockType( metadata.name, {
 										{ slide.imageUrl && <img src={ slide.imageUrl } style={{ width: '40px', height: '24px', objectFit: 'cover', borderRadius: '4px' }} /> }
 									</div>
 									<div style={{ display: 'flex', gap: '4px' }} onClick={ e => e.stopPropagation() }>
-										<Button isSmall disabled={ index === 0 } onClick={ () => moveSlide( index, 'up' ) } icon="arrow-up-alt2" label="Move Up" />
-										<Button isSmall disabled={ index === slides.length - 1 } onClick={ () => moveSlide( index, 'down' ) } icon="arrow-down-alt2" label="Move Down" />
-										<Button isSmall isDestructive onClick={ () => removeSlide( index ) } icon="trash" label="Remove" />
+										<Button isSmall disabled={ index === 0 } onClick={ () => moveSlide( index, 'up' ) }>{ __( 'Up', 'pooki' ) }</Button>
+										<Button isSmall disabled={ index === slides.length - 1 } onClick={ () => moveSlide( index, 'down' ) }>{ __( 'Down', 'pooki' ) }</Button>
+										<Button isSmall isDestructive onClick={ () => removeSlide( index ) }>{ __( 'Remove', 'pooki' ) }</Button>
 									</div>
 								</div>
 
@@ -153,7 +153,7 @@ registerBlockType( metadata.name, {
 															{ slide.imageUrl ? (
 																<img src={ slide.imageUrl } style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
 															) : (
-																<Button isSecondary icon="format-image">{ __( 'Select Image', 'pooki' ) }</Button>
+																<Button isSecondary>{ __( 'Select Image', 'pooki' ) }</Button>
 															) }
 														</div>
 													) }
